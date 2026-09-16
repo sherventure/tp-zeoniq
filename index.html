@@ -20,8 +20,7 @@
     background:linear-gradient(160deg,#2f6b45,#173a24);color:#fff;font-size:14.5px;font-weight:700}
   #tp-login button:hover{filter:brightness(1.06)}
   #tp-err{color:#c0392b;font-size:12.5px;min-height:16px;margin-top:10px}
-  #tp-app{display:none}
-  #tp-app.on{display:block}
+  #tp-app{display:none} #tp-app.on{display:block}
 </style>
 </head>
 <body>
@@ -463,10 +462,6 @@ const DASHBOARD_DATA = {
   "defaultView": "day",
   "history": [
     {
-      "date": "2026-08-14",
-      "net": 31280.7
-    },
-    {
       "date": "2026-08-15",
       "net": 66743.0
     },
@@ -621,186 +616,154 @@ const DASHBOARD_DATA = {
       "cost": 14703.36,
       "covrev": 34373.0,
       "coverage": 61.2
+    },
+    {
+      "date": "2026-09-14",
+      "net": 12157.3,
+      "gp": 3893.74,
+      "cost": 2617.26,
+      "covrev": 6511.0,
+      "coverage": 53.6
+    },
+    {
+      "date": "2026-09-15",
+      "net": 48336.0,
+      "gp": 14961.1,
+      "cost": 11863.9,
+      "covrev": 26825.0,
+      "coverage": 55.5
     }
   ],
   "views": {
     "day": {
       "scope": "day",
-      "dateLabel": "Saturday, 12 September 2026",
-      "source": "Zeoniq daily export · 12 Sep 2026 · refreshed 16 sep 8:32am",
-      "transactions": 169,
+      "dateLabel": "Tuesday, 15 September 2026",
+      "source": "Zeoniq daily export · 15 Sep 2026 · refreshed 16 sep 10:33am",
+      "transactions": 153,
       "depositAdj": 0.0,
-      "pax": 591,
-      "avgPerPax": 95.09,
-      "yesterdayNet": 27782.5,
+      "pax": 523,
+      "avgPerPax": 92.42,
+      "yesterdayNet": 12157.3,
       "tablesMode": "guests",
       "topTables": [
         {
           "table": "S8",
-          "net": 3312.0,
-          "bills": 2
+          "net": 4528.8,
+          "bills": 1
         },
         {
-          "table": "S5",
-          "net": 2435.4,
+          "table": "F4",
+          "net": 1888.7,
+          "bills": 5,
+          "name": "Sam",
+          "phone": "••••9434",
+          "pax": 7,
+          "status": "Book",
+          "more": 1
+        },
+        {
+          "table": "S7",
+          "net": 1822.3,
           "bills": 1,
-          "name": "JJ",
-          "phone": "••••1321",
-          "pax": 12,
-          "status": "Walk in"
+          "name": "JWP(Min3000)",
+          "phone": "••••3172",
+          "pax": 25,
+          "status": "Book",
+          "more": 1
         },
         {
-          "table": "F8",
-          "net": 2155.8,
-          "bills": 2,
-          "name": "Davis",
-          "phone": "••••7495",
+          "table": "M13",
+          "net": 1314.7,
+          "bills": 3,
+          "name": "Cheryl",
+          "phone": "••••6860",
           "pax": 8,
-          "status": "Walk in"
-        },
-        {
-          "table": "M31",
-          "net": 1483.9,
-          "bills": 2,
-          "name": "Sim",
-          "phone": "••••6266",
-          "pax": 9,
           "status": "Book"
         },
         {
-          "table": "S2",
-          "net": 1203.8,
-          "bills": 1,
-          "name": "Steve",
-          "phone": "••••9926",
-          "pax": 6,
-          "status": "Book"
+          "table": "M23",
+          "net": 1248.0,
+          "bills": 3
         }
       ],
       "categories": [
         {
           "name": "Food (Kitchen)",
           "bucket": "food",
-          "net": 13683.2
+          "net": 13494.0
         },
         {
           "name": "Beer — Bottled & Bucket",
           "bucket": "alcohol",
-          "net": 13622.0
+          "net": 14615.0
         },
         {
           "name": "Beer — Draught",
           "bucket": "alcohol",
-          "net": 12449.0
+          "net": 12443.0
         },
         {
           "name": "Spirits & Liquor",
           "bucket": "alcohol",
-          "net": 7856.0
-        },
-        {
-          "name": "Wine & Champagne",
-          "bucket": "alcohol",
-          "net": 2392.0
+          "net": 2970.0
         },
         {
           "name": "Cocktails",
           "bucket": "alcohol",
-          "net": 3480.0
+          "net": 2958.0
         },
         {
           "name": "Soft Drinks & Mixers",
           "bucket": "others",
-          "net": 2591.0
+          "net": 2408.0
         },
         {
           "name": "Others (Misc)",
           "bucket": "others",
-          "net": 274.0
+          "net": 48.0
         },
         {
           "name": "Deposits",
           "bucket": "others",
-          "net": -150.0
+          "net": -600.0
         }
       ],
-      "grossProfit": 19669.64,
-      "cost": 14703.36,
-      "grossProfitPct": 57.2,
-      "costCoverage": 61.2
+      "grossProfit": 14961.1,
+      "cost": 11863.9,
+      "grossProfitPct": 55.8,
+      "costCoverage": 55.5
     },
     "mtd": {
       "scope": "mtd",
-      "dateLabel": "Sep 1–13",
-      "source": "Zeoniq month-to-date · Sep 1–13 · refreshed 16 sep 8:32am",
-      "transactions": 831,
+      "dateLabel": "Sep 1–15",
+      "source": "Zeoniq month-to-date · Sep 1–15 · refreshed 16 sep 10:33am",
+      "transactions": 1033,
       "depositAdj": 0.0,
-      "pax": 3009,
-      "avgPerPax": 84.34,
+      "pax": 3707,
+      "avgPerPax": 84.78,
       "yesterdayNet": 0,
       "tablesMode": "spenders",
-      "topTables": [
-        {
-          "table": "S6",
-          "name": "JUNY(jun)",
-          "phone": "••••8230",
-          "pax": 29,
-          "net": 5399.2,
-          "visits": 1
-        },
-        {
-          "table": "S6",
-          "name": "Stepanie",
-          "phone": "••••3168",
-          "pax": 12,
-          "net": 3110.8,
-          "visits": 2
-        },
-        {
-          "table": "S5",
-          "name": "JJ",
-          "phone": "••••1321",
-          "pax": 24,
-          "net": 2971.2,
-          "visits": 2
-        },
-        {
-          "table": "S1",
-          "name": "waynie(min",
-          "phone": "••••0520",
-          "pax": 20,
-          "net": 2295.8,
-          "visits": 1
-        },
-        {
-          "table": "M10",
-          "name": "Boom",
-          "phone": "••••5525",
-          "pax": 13,
-          "net": 2221.7,
-          "visits": 1
-        }
-      ],
+      "topTables": [],
       "categories": [
         {
           "name": "Food (Kitchen)",
           "bucket": "food",
-          "net": 61000.5
+          "net": 77680.8
         },
         {
           "name": "Beer — Bottled & Bucket",
           "bucket": "alcohol",
-          "net": 79708.0
+          "net": 98031.0
         },
         {
           "name": "Beer — Draught",
           "bucket": "alcohol",
-          "net": 61047.0
+          "net": 75951.0
         },
         {
           "name": "Spirits & Liquor",
           "bucket": "alcohol",
-          "net": 20214.0
+          "net": 23812.0
         },
         {
           "name": "Wine & Champagne",
@@ -810,29 +773,29 @@ const DASHBOARD_DATA = {
         {
           "name": "Cocktails",
           "bucket": "alcohol",
-          "net": 15754.0
+          "net": 19925.0
         },
         {
           "name": "Soft Drinks & Mixers",
           "bucket": "others",
-          "net": 11779.0
+          "net": 14832.0
         },
         {
           "name": "Others (Misc)",
           "bucket": "others",
-          "net": 771.6
+          "net": 835.6
         },
         {
           "name": "Deposits",
           "bucket": "others",
-          "net": 550.0
+          "net": 250.0
         }
       ],
-      "charges": 25245.85,
-      "grossProfit": 85684.86,
-      "cost": 65098.14,
+      "charges": 31318.78,
+      "grossProfit": 104539.7,
+      "cost": 79579.3,
       "grossProfitPct": 56.8,
-      "costCoverage": 59.4
+      "costCoverage": 58.6
     }
   },
   "comparison": [
@@ -863,16 +826,16 @@ const DASHBOARD_DATA = {
       "partial": true
     },
     {
-      "month": "Sep 1–13",
-      "food": 61000.5,
-      "drinks": 191458.0,
-      "other": 1321.6,
-      "total": 253780.1,
-      "foodPct": 24.0,
-      "drinksPct": 75.4,
-      "otherPct": 0.5,
-      "pax": 3009,
-      "avgPerPax": 84.34,
+      "month": "Sep 1–15",
+      "food": 77680.8,
+      "drinks": 235507.0,
+      "other": 1085.6,
+      "total": 314273.4,
+      "foodPct": 24.7,
+      "drinksPct": 74.9,
+      "otherPct": 0.3,
+      "pax": 3707,
+      "avgPerPax": 84.78,
       "partial": true
     }
   ],
@@ -897,17 +860,9 @@ const DASHBOARD_DATA = {
       "table": "L4",
       "name": "Robin",
       "phone": "••••7029",
-      "pax": 55,
-      "net": 5603.2,
-      "visits": 30
-    },
-    {
-      "table": "S6",
-      "name": "JUNY(jun)",
-      "phone": "••••8230",
-      "pax": 29,
-      "net": 5399.2,
-      "visits": 1
+      "pax": 51,
+      "net": 5042.2,
+      "visits": 28
     },
     {
       "table": "M31",
@@ -950,28 +905,36 @@ const DASHBOARD_DATA = {
       "visits": 4
     },
     {
-      "table": "M3",
-      "name": "Joan(Min",
-      "phone": "••••0780",
-      "pax": 23,
-      "net": 3661.1,
-      "visits": 3
+      "table": "F13",
+      "name": "Darren",
+      "phone": "••••3804",
+      "pax": 17,
+      "net": 3279.5,
+      "visits": 2
+    },
+    {
+      "table": "F13",
+      "name": "Jayden",
+      "phone": "••••0402",
+      "pax": 20,
+      "net": 3210.6,
+      "visits": 2
     }
   ],
   "weekday": [
     {
       "day": "Mon",
-      "days": 14,
-      "avgNet": 13996.11,
-      "avgPax": 172,
-      "spendPerPax": 81.17
+      "days": 15,
+      "avgNet": 13873.53,
+      "avgPax": 173,
+      "spendPerPax": 80.38
     },
     {
       "day": "Tue",
-      "days": 13,
-      "avgNet": 12052.76,
-      "avgPax": 153,
-      "spendPerPax": 79.01
+      "days": 14,
+      "avgNet": 14644.42,
+      "avgPax": 179,
+      "spendPerPax": 81.81
     },
     {
       "day": "Wed",
@@ -1621,13 +1584,25 @@ const DASHBOARD_DATA = {
       "net": 0.0,
       "pax": 8,
       "spendPerPax": 0.0
+    },
+    {
+      "date": "2026-09-14",
+      "net": 12157.3,
+      "pax": 175,
+      "spendPerPax": 69.47
+    },
+    {
+      "date": "2026-09-15",
+      "net": 48336.0,
+      "pax": 523,
+      "spendPerPax": 92.42
     }
   ],
   "categoryTrend": {
     "months": [
       "Jul 2026",
       "Aug 1–30",
-      "Sep 1–13"
+      "Sep 1–15"
     ],
     "partial": [
       false,
@@ -1641,7 +1616,7 @@ const DASHBOARD_DATA = {
         "values": [
           247349.0,
           271857.4,
-          79708.0
+          98031.0
         ]
       },
       {
@@ -1650,7 +1625,7 @@ const DASHBOARD_DATA = {
         "values": [
           181112.26,
           202892.24,
-          61000.5
+          77680.8
         ]
       },
       {
@@ -1659,7 +1634,7 @@ const DASHBOARD_DATA = {
         "values": [
           154944.0,
           166103.0,
-          61047.0
+          75951.0
         ]
       },
       {
@@ -1668,7 +1643,7 @@ const DASHBOARD_DATA = {
         "values": [
           79441.6,
           63256.0,
-          20214.0
+          23812.0
         ]
       },
       {
@@ -1677,7 +1652,7 @@ const DASHBOARD_DATA = {
         "values": [
           41951.0,
           42346.0,
-          15754.0
+          19925.0
         ]
       },
       {
@@ -1686,7 +1661,7 @@ const DASHBOARD_DATA = {
         "values": [
           36948.4,
           39191.4,
-          11779.0
+          14832.0
         ]
       },
       {
@@ -1704,7 +1679,7 @@ const DASHBOARD_DATA = {
         "values": [
           3193.8,
           1257.2,
-          771.6
+          835.6
         ]
       },
       {
@@ -1713,7 +1688,7 @@ const DASHBOARD_DATA = {
         "values": [
           400.0,
           100.0,
-          550.0
+          250.0
         ]
       }
     ]
@@ -2265,31 +2240,18 @@ render();
 </div>
 <script>
 (function(){
-  // NOTE: casual access gate only. The dashboard data is embedded in this page,
-  // so this login is a convenience barrier, not real security. Change AUTH_USER /
-  // AUTH_PASS below to update the credentials.
-  var AUTH_USER = "tangping";
-  var AUTH_PASS = "TangPing2026!";
-  var KEY = "tp_admin_ok";
-  function reveal(){
-    document.getElementById("tp-login").style.display="none";
-    document.getElementById("tp-app").classList.add("on");
-    window.scrollTo(0,0);
-    window.dispatchEvent(new Event("resize"));
-  }
+  var AUTH_USER="tangping", AUTH_PASS="TangPing2026!", KEY="tp_admin_ok";
+  function reveal(){document.getElementById("tp-login").style.display="none";
+    document.getElementById("tp-app").classList.add("on");window.scrollTo(0,0);
+    window.dispatchEvent(new Event("resize"));}
   try{ if(sessionStorage.getItem(KEY)==="1") reveal(); }catch(e){}
   document.getElementById("tp-form").addEventListener("submit",function(ev){
     ev.preventDefault();
-    var u=document.getElementById("tp-user").value.trim();
-    var p=document.getElementById("tp-pass").value;
-    if(u===AUTH_USER && p===AUTH_PASS){
-      try{ sessionStorage.setItem(KEY,"1"); }catch(e){}
-      document.getElementById("tp-err").textContent="";
-      reveal();
-    } else {
-      document.getElementById("tp-err").textContent="Incorrect username or password.";
-      document.getElementById("tp-pass").value="";
-    }
+    var u=document.getElementById("tp-user").value.trim(), p=document.getElementById("tp-pass").value;
+    if(u===AUTH_USER&&p===AUTH_PASS){try{sessionStorage.setItem(KEY,"1");}catch(e){}
+      document.getElementById("tp-err").textContent="";reveal();}
+    else{document.getElementById("tp-err").textContent="Incorrect username or password.";
+      document.getElementById("tp-pass").value="";}
   });
 })();
 </script>
