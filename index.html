@@ -7,17 +7,13 @@
 <style>
   #tp-login{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
     background:linear-gradient(160deg,#1b3a26,#0f2417);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-  #tp-login .box{background:#fff;border-radius:18px;padding:34px 30px;width:min(360px,90vw);
-    box-shadow:0 24px 60px rgba(0,0,0,.35);text-align:center}
-  #tp-login .logo{width:52px;height:52px;border-radius:14px;margin:0 auto 14px;display:flex;align-items:center;
-    justify-content:center;background:linear-gradient(160deg,#2f6b45,#173a24);color:#fff;font-size:26px}
+  #tp-login .box{background:#fff;border-radius:18px;padding:34px 30px;width:min(360px,90vw);box-shadow:0 24px 60px rgba(0,0,0,.35);text-align:center}
+  #tp-login .logo{width:52px;height:52px;border-radius:14px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#2f6b45,#173a24);color:#fff;font-size:26px}
   #tp-login h1{font-size:18px;margin:0 0 4px;color:#173a24;font-weight:800}
   #tp-login p{font-size:12.5px;color:#6b7280;margin:0 0 20px}
-  #tp-login input{width:100%;box-sizing:border-box;padding:11px 13px;margin:6px 0;border:1px solid #d7dde2;
-    border-radius:10px;font-size:14px;outline:none}
+  #tp-login input{width:100%;box-sizing:border-box;padding:11px 13px;margin:6px 0;border:1px solid #d7dde2;border-radius:10px;font-size:14px;outline:none}
   #tp-login input:focus{border-color:#2f6b45;box-shadow:0 0 0 3px rgba(47,107,69,.15)}
-  #tp-login button{width:100%;padding:12px;margin-top:12px;border:0;border-radius:10px;cursor:pointer;
-    background:linear-gradient(160deg,#2f6b45,#173a24);color:#fff;font-size:14.5px;font-weight:700}
+  #tp-login button{width:100%;padding:12px;margin-top:12px;border:0;border-radius:10px;cursor:pointer;background:linear-gradient(160deg,#2f6b45,#173a24);color:#fff;font-size:14.5px;font-weight:700}
   #tp-login button:hover{filter:brightness(1.06)}
   #tp-err{color:#c0392b;font-size:12.5px;min-height:16px;margin-top:10px}
   #tp-app{display:none} #tp-app.on{display:block}
@@ -172,6 +168,10 @@
   .metrics.six .metric{padding:13px}
   .metrics.six .metric .val{font-size:18px;letter-spacing:-.03em}
   .metrics.six .chip{width:32px;height:32px}
+  .metrics.many{grid-template-columns:repeat(4,1fr);gap:12px}
+  .metrics.many .metric{padding:13px}
+  .metrics.many .metric .val{font-size:18px;letter-spacing:-.03em}
+  .metrics.many .chip{width:32px;height:32px}
   .metric{padding:16px;display:flex;flex-direction:column;gap:10px}
   .metric .top{display:flex;align-items:center;justify-content:space-between}
   .chip{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:#fff}
@@ -275,7 +275,7 @@
   @media (max-width:1080px){.content{grid-template-columns:1fr}.col-r{flex-direction:row;flex-wrap:wrap}.col-r>.card{flex:1 1 300px}}
   @media (max-width:720px){
     .app{grid-template-columns:60px 1fr}
-    .metrics,.metrics.five,.metrics.six{grid-template-columns:1fr 1fr}
+    .metrics,.metrics.five,.metrics.six,.metrics.many{grid-template-columns:1fr 1fr}
     .search{order:5;max-width:none;flex-basis:100%}
     .content{padding:10px 16px 32px}
     .topbar{padding:14px 16px 4px}
@@ -638,7 +638,7 @@ const DASHBOARD_DATA = {
     "day": {
       "scope": "day",
       "dateLabel": "Tuesday, 15 September 2026",
-      "source": "Zeoniq daily export · 15 Sep 2026 · refreshed 16 sep 10:33am",
+      "source": "Zeoniq daily export · 15 Sep 2026 · refreshed 16 sep 10:56am",
       "transactions": 153,
       "depositAdj": 0.0,
       "pax": 523,
@@ -731,12 +731,14 @@ const DASHBOARD_DATA = {
       "grossProfit": 14961.1,
       "cost": 11863.9,
       "grossProfitPct": 55.8,
-      "costCoverage": 55.5
+      "costCoverage": 55.5,
+      "stageCost": 3480.0,
+      "operatingProfit": 11481.1
     },
     "mtd": {
       "scope": "mtd",
       "dateLabel": "Sep 1–15",
-      "source": "Zeoniq month-to-date · Sep 1–15 · refreshed 16 sep 10:33am",
+      "source": "Zeoniq month-to-date · Sep 1–15 · refreshed 16 sep 10:56am",
       "transactions": 1033,
       "depositAdj": 0.0,
       "pax": 3707,
@@ -795,7 +797,9 @@ const DASHBOARD_DATA = {
       "grossProfit": 104539.7,
       "cost": 79579.3,
       "grossProfitPct": 56.8,
-      "costCoverage": 58.6
+      "costCoverage": 58.6,
+      "stageCost": 50140.0,
+      "operatingProfit": 54399.7
     }
   },
   "comparison": [
@@ -1725,7 +1729,9 @@ function render(){
     alcohol:'<path d="M6 3h12l-1 6a5 5 0 0 1-10 0Z"/><path d="M12 14v5M8 21h8"/>',
     others:'<path d="M6 8h12l-1 12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1Z"/><path d="M9 8V5a3 3 0 0 1 6 0v3"/>',
     charges:'<path d="M6 2h9l3 3v15l-2.5-1.5L13 20l-2.5-1.5L8 20l-2-1.5V2Z"/><path d="M9 8h6M9 12h5"/>',
-    gp:'<path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'
+    gp:'<path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+    stage:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+    op:'<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>'
   };
   const cards = [
     {k:"total", label:"Total Net Sales", color:"linear-gradient(160deg,#2f6b45,#173a24)", val:money(total), cur:true,
@@ -1743,9 +1749,21 @@ function render(){
       val:money(d.grossProfit), cur:true, chipStat:`<span class="pct">${d.grossProfitPct}% margin</span>`,
       note: d.costCoverage!=null ? `costed items · ${d.costCoverage}% of sales` : "costed items"});
   }
+  if(d.stageCost!=null){
+    cards.push({k:"stage", label:"Stage Cost", color:"linear-gradient(160deg,#7b5ea7,#4b3a6b)",
+      val:money(d.stageCost), cur:true, chipStat:`<span class="pct">${p1(d.stageCost,total)} of sales</span>`,
+      note:"musicians + technician + singers"});
+  }
+  if(d.operatingProfit!=null){
+    const opNeg = d.operatingProfit < 0;
+    cards.push({k:"op", label:"Operating Profit", color: opNeg ? "linear-gradient(160deg,#b1493a,#7a2f24)" : "linear-gradient(160deg,#0e8a6b,#0a5a46)",
+      val:money(d.operatingProfit), cur:true, chipStat:`<span class="pct">${p1(d.operatingProfit,total)} of sales</span>`,
+      note:"gross profit − stage cost"});
+  }
   const metricsEl=document.getElementById("metrics");
   metricsEl.classList.toggle("five", cards.length===5);
   metricsEl.classList.toggle("six", cards.length===6);
+  metricsEl.classList.toggle("many", cards.length>6);
   metricsEl.innerHTML = cards.map(c=>`
     <div class="metric card">
       <div class="top">
@@ -2242,16 +2260,14 @@ render();
 (function(){
   var AUTH_USER="tangping", AUTH_PASS="TangPing2026!", KEY="tp_admin_ok";
   function reveal(){document.getElementById("tp-login").style.display="none";
-    document.getElementById("tp-app").classList.add("on");window.scrollTo(0,0);
-    window.dispatchEvent(new Event("resize"));}
+    document.getElementById("tp-app").classList.add("on");window.scrollTo(0,0);window.dispatchEvent(new Event("resize"));}
   try{ if(sessionStorage.getItem(KEY)==="1") reveal(); }catch(e){}
   document.getElementById("tp-form").addEventListener("submit",function(ev){
     ev.preventDefault();
     var u=document.getElementById("tp-user").value.trim(), p=document.getElementById("tp-pass").value;
     if(u===AUTH_USER&&p===AUTH_PASS){try{sessionStorage.setItem(KEY,"1");}catch(e){}
       document.getElementById("tp-err").textContent="";reveal();}
-    else{document.getElementById("tp-err").textContent="Incorrect username or password.";
-      document.getElementById("tp-pass").value="";}
+    else{document.getElementById("tp-err").textContent="Incorrect username or password.";document.getElementById("tp-pass").value="";}
   });
 })();
 </script>
