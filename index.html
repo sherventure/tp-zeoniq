@@ -1,0 +1,2297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tang Ping Sales Admin</title>
+<style>
+  #tp-login{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,#1b3a26,#0f2417);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  #tp-login .box{background:#fff;border-radius:18px;padding:34px 30px;width:min(360px,90vw);
+    box-shadow:0 24px 60px rgba(0,0,0,.35);text-align:center}
+  #tp-login .logo{width:52px;height:52px;border-radius:14px;margin:0 auto 14px;display:flex;align-items:center;
+    justify-content:center;background:linear-gradient(160deg,#2f6b45,#173a24);color:#fff;font-size:26px}
+  #tp-login h1{font-size:18px;margin:0 0 4px;color:#173a24;font-weight:800}
+  #tp-login p{font-size:12.5px;color:#6b7280;margin:0 0 20px}
+  #tp-login input{width:100%;box-sizing:border-box;padding:11px 13px;margin:6px 0;border:1px solid #d7dde2;
+    border-radius:10px;font-size:14px;outline:none}
+  #tp-login input:focus{border-color:#2f6b45;box-shadow:0 0 0 3px rgba(47,107,69,.15)}
+  #tp-login button{width:100%;padding:12px;margin-top:12px;border:0;border-radius:10px;cursor:pointer;
+    background:linear-gradient(160deg,#2f6b45,#173a24);color:#fff;font-size:14.5px;font-weight:700}
+  #tp-login button:hover{filter:brightness(1.06)}
+  #tp-err{color:#c0392b;font-size:12.5px;min-height:16px;margin-top:10px}
+  #tp-app{display:none}
+  #tp-app.on{display:block}
+</style>
+</head>
+<body>
+<div id="tp-login">
+  <form class="box" id="tp-form" autocomplete="off">
+    <div class="logo">🌿</div>
+    <h1>Tang Ping Sales Admin</h1>
+    <p>Please sign in to view the dashboard</p>
+    <input id="tp-user" type="text" placeholder="Username" autocomplete="username">
+    <input id="tp-pass" type="password" placeholder="Password" autocomplete="current-password">
+    <button type="submit">Sign in</button>
+    <div id="tp-err"></div>
+  </form>
+</div>
+<div id="tp-app">
+<title>Tang Ping Sales Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+
+<style>
+  :root{
+    --page:#ffffff;
+    --page-2:#ffffff;
+    --surface:#ffffff;
+    --surface-soft:#f1f7ea;
+    --ink:#1f5130;
+    --ink-soft:#356b48;
+    --muted:#5f7a66;
+    --border:#e4ecda;
+    --border-strong:#d3e0c4;
+
+    --sidebar:#173a24;
+    --sidebar-2:#0f2b1a;
+    --sidebar-ink:#bfd6c0;
+    --accent:#6cbf4a;
+    --accent-deep:#4d9a34;
+    --accent-soft:#e7f5dc;
+
+    --food:#3f8f5b;   --food-soft:#e3f1e5;
+    --alcohol:#d9932f;--alcohol-soft:#f8ecd6;
+    --others:#9a5b8f; --others-soft:#f0e4ee;
+
+    --up:#3f9b57; --down:#c65a4e;
+    --shadow:0 1px 2px rgba(24,43,32,.05), 0 10px 30px rgba(24,43,32,.07);
+    --shadow-soft:0 1px 2px rgba(24,43,32,.05), 0 4px 14px rgba(24,43,32,.05);
+    --radius:20px;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --page:#0f1712; --page-2:#111c14;
+    --surface:#17211a; --surface-soft:#1c2820;
+    --ink:#e8f1e6; --ink-soft:#c3d2c2; --muted:#8fa390;
+    --border:#26342a; --border-strong:#32432f;
+    --sidebar:#0e241717; --sidebar:#102a1a; --sidebar-2:#0a1f13;
+    --sidebar-ink:#a9c4ab; --accent:#7fd05c; --accent-deep:#6cbf4a; --accent-soft:#1e3320;
+    --food:#5cb377; --food-soft:#20342a;
+    --alcohol:#e6a94b; --alcohol-soft:#33291a;
+    --others:#c186b6; --others-soft:#2f2130;
+    --up:#63c07c; --down:#e88b7f;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4);
+    --shadow-soft:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.3);
+  }}
+  :root[data-theme="dark"]{
+    --page:#0f1712; --page-2:#111c14; --surface:#17211a; --surface-soft:#1c2820;
+    --ink:#e8f1e6; --ink-soft:#c3d2c2; --muted:#8fa390; --border:#26342a; --border-strong:#32432f;
+    --sidebar:#102a1a; --sidebar-2:#0a1f13; --sidebar-ink:#a9c4ab; --accent:#7fd05c; --accent-deep:#6cbf4a; --accent-soft:#1e3320;
+    --food:#5cb377; --food-soft:#20342a; --alcohol:#e6a94b; --alcohol-soft:#33291a; --others:#c186b6; --others-soft:#2f2130;
+    --up:#63c07c; --down:#e88b7f;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4);
+    --shadow-soft:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.3);
+  }
+
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;min-height:100vh;
+    background:radial-gradient(1100px 500px at 85% -8%, var(--page-2), transparent 60%), var(--page);
+    color:var(--ink);
+    font-family:"Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-feature-settings:"cv11","ss01";
+    font-variant-numeric:tabular-nums;line-height:1.5;-webkit-font-smoothing:antialiased;
+  }
+  #leaves{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  .app{position:relative;z-index:1;display:grid;grid-template-columns:74px 1fr;min-height:100vh}
+
+  /* ---------------- Sidebar ---------------- */
+  .side{
+    background:linear-gradient(180deg,var(--sidebar),var(--sidebar-2));
+    display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 0 0;
+    position:sticky;top:0;height:100vh;
+  }
+  .side .logo{
+    width:42px;height:42px;border-radius:13px;display:grid;place-items:center;margin-bottom:12px;
+    background:linear-gradient(160deg,var(--accent),var(--accent-deep));box-shadow:0 6px 14px rgba(0,0,0,.25);
+  }
+  .nav{display:flex;flex-direction:column;gap:4px;width:100%;align-items:center;flex:1}
+  .nav a{
+    width:44px;height:44px;border-radius:13px;display:grid;place-items:center;color:var(--sidebar-ink);
+    opacity:.7;transition:.18s;position:relative;
+  }
+  .nav a:hover{opacity:1;background:rgba(255,255,255,.06)}
+  .nav a.active{opacity:1;color:#fff;background:rgba(108,191,74,.22)}
+  .nav a.active::before{content:"";position:absolute;left:-16px;top:11px;bottom:11px;width:3px;border-radius:3px;background:var(--accent)}
+  .nav a svg{width:21px;height:21px}
+  .side .trees{width:100%;margin-top:auto;opacity:.9}
+  .side .me{width:34px;height:34px;border-radius:50%;margin:10px 0 16px;background:
+    conic-gradient(from 200deg,var(--accent),#2f6b45);display:grid;place-items:center;color:#fff;font-family:"Inter";font-size:14px}
+
+  /* ---------------- Topbar ---------------- */
+  .main{display:flex;flex-direction:column;min-width:0}
+  .topbar{display:flex;align-items:center;gap:16px;padding:18px 26px 6px;flex-wrap:wrap}
+  .switch{display:flex;align-items:center;gap:10px}
+  .switch .t{font-family:"Inter";font-weight:800;font-size:20px;letter-spacing:-.02em}
+  .switch .chev{color:var(--muted)}
+  .search{
+    flex:1;min-width:180px;max-width:420px;display:flex;align-items:center;gap:9px;
+    background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:9px 13px;color:var(--muted);
+    box-shadow:var(--shadow-soft);
+  }
+  .search input{border:0;background:none;outline:none;color:var(--ink);font:inherit;width:100%}
+  .datebtn{
+    display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;padding:9px 14px;font-weight:700;font-size:13.5px;box-shadow:var(--shadow-soft);white-space:nowrap;
+  }
+  .datebtn .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .vtoggle{display:inline-flex;background:var(--surface-soft);border:1px solid var(--border);border-radius:12px;padding:3px;gap:2px}
+  .vtoggle[hidden]{display:none}
+  .vtoggle button{border:0;background:none;font:inherit;font-weight:800;font-size:13px;color:var(--muted);padding:7px 14px;border-radius:9px;cursor:pointer;transition:.15s}
+  .vtoggle button.on{background:var(--surface);color:var(--accent-deep);box-shadow:var(--shadow-soft)}
+
+  .content{padding:12px 26px 40px;display:grid;grid-template-columns:minmax(0,1fr) 328px;gap:20px;align-items:start}
+  .col-l{display:flex;flex-direction:column;gap:20px;min-width:0}
+  .col-r{display:flex;flex-direction:column;gap:20px}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-soft)}
+  .card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 0}
+  .card-h h3{font-family:"Inter";font-weight:700;font-size:16px;margin:0;letter-spacing:-.01em}
+  .card-h .sub{font-size:12.5px;color:var(--muted);font-weight:700}
+
+  /* ---------------- Metric cards ---------------- */
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .metrics.five{grid-template-columns:repeat(5,1fr);gap:12px}
+  .metrics.five .metric{padding:14px}
+  .metrics.five .metric .val{font-size:20px;letter-spacing:-.03em}
+  .metrics.five .chip{width:34px;height:34px}
+  .metrics.six{grid-template-columns:repeat(6,1fr);gap:10px}
+  .metrics.six .metric{padding:13px}
+  .metrics.six .metric .val{font-size:18px;letter-spacing:-.03em}
+  .metrics.six .chip{width:32px;height:32px}
+  .metric{padding:16px;display:flex;flex-direction:column;gap:10px}
+  .metric .top{display:flex;align-items:center;justify-content:space-between}
+  .chip{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:#fff}
+  .chip svg{width:20px;height:20px}
+  .metric .pct{font-weight:800;font-size:12.5px;padding:3px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-deep)}
+  .metric .val{font-family:"Inter";font-weight:800;font-size:26px;line-height:1;letter-spacing:-.02em;color:var(--ink)}
+  .metric .val .cur{font-size:.55em;color:var(--muted);margin-right:3px}
+  .metric .lbl{font-size:12.5px;color:var(--muted);font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .metric .sublbl{display:block;flex-basis:100%;font-size:10.5px;font-weight:600;color:var(--muted);opacity:.75;margin-top:1px}
+  .delta{font-weight:800}.delta.up{color:var(--up)}.delta.down{color:var(--down)}
+
+  /* ---------------- Analytics chart ---------------- */
+  .analytics{padding-bottom:8px}
+  .legend-inline{display:flex;gap:14px;align-items:center;font-size:12px;font-weight:700;color:var(--muted)}
+  .legend-inline .k{display:inline-flex;align-items:center;gap:6px}
+  .legend-inline .sw{width:10px;height:10px;border-radius:3px}
+  .chartwrap{position:relative;padding:6px 8px 4px}
+  .chartwrap svg{display:block;width:100%;height:auto;overflow:visible}
+  .tip{
+    position:absolute;transform:translate(-50%,-115%);background:var(--ink);color:#fff;border-radius:10px;
+    padding:7px 10px;font-size:12px;font-weight:700;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .12s;
+    box-shadow:0 6px 18px rgba(0,0,0,.25);z-index:5;
+  }
+  .tip b{font-family:"Inter";font-weight:600}
+  .tip small{display:block;color:#bfe0b0;font-weight:700}
+
+  /* ---------------- Category table ---------------- */
+  .tbl{width:100%;border-collapse:collapse}
+  .tbl th{text-align:left;font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);font-weight:800;padding:12px 18px}
+  .tbl td{padding:11px 18px;border-top:1px solid var(--border);font-size:13.5px;font-weight:700;color:var(--ink-soft)}
+  .tbl tr:hover td{background:var(--surface-soft)}
+  .tbl .name{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:800}
+  .dotc{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+  .tbar{height:8px;border-radius:5px;background:var(--surface-soft);border:1px solid var(--border);overflow:hidden;min-width:70px}
+  .tbar>i{display:block;height:100%;border-radius:5px}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:800}
+  .num{font-family:"Inter";font-weight:700;color:var(--ink)}
+  .rt{text-align:right}
+  .rank{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:7px;background:var(--accent-soft);color:var(--accent-deep);font-weight:800;font-size:12px}
+  .rank.g1{background:var(--accent);color:#fff}
+  .guest b{color:var(--ink)}
+  .guest .ph{color:var(--muted);font-weight:700;font-size:12.5px;margin-top:1px}
+  .guest .none{color:var(--muted);font-weight:700}
+  .tag{font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.3px;vertical-align:middle}
+  .tag.book{background:var(--accent-soft);color:var(--accent-deep)}
+  .tag.walk{background:var(--others-soft);color:var(--others)}
+  .hint-note{margin:2px 18px 16px;font-size:12px;color:var(--muted);font-weight:700;line-height:1.5;
+    background:var(--surface-soft);border:1px dashed var(--border-strong);border-radius:12px;padding:9px 12px;display:flex;gap:7px;align-items:flex-start}
+  .hint-note:empty{display:none}
+
+  /* ---------------- Right rail ---------------- */
+  .donutwrap{display:flex;align-items:center;gap:16px;padding:14px 18px 18px}
+  .donut{position:relative;width:132px;height:132px;flex:0 0 auto}
+  .donut .center{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+  .donut .center b{font-family:"Inter";font-weight:800;font-size:22px;display:block;line-height:1;letter-spacing:-.02em}
+  .donut .center span{font-size:11px;color:var(--muted);font-weight:700}
+  .dlegend{display:flex;flex-direction:column;gap:9px;flex:1;min-width:0}
+  .dlegend .row{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+  .dlegend .row .v{margin-left:auto;font-weight:800;color:var(--ink)}
+
+  .gauge{padding:14px 18px 18px;display:flex;flex-direction:column;gap:14px}
+  .gauge .big{display:flex;align-items:baseline;gap:8px}
+  .gauge .big b{font-family:"Inter";font-weight:800;font-size:40px;line-height:1;letter-spacing:-.03em;color:var(--ink)}
+  .gauge .big span{font-size:12.5px;color:var(--muted);font-weight:700}
+  .bars{display:flex;flex-direction:column;gap:11px}
+  .barrow{display:grid;grid-template-columns:78px 1fr auto;align-items:center;gap:10px;font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+  .barrow .track{height:9px;border-radius:6px;background:var(--surface-soft);border:1px solid var(--border);overflow:hidden}
+  .barrow .track>i{display:block;height:100%;border-radius:6px}
+  .barrow .p{font-weight:800;color:var(--ink);min-width:44px;text-align:right}
+
+  .activity{padding:6px 6px 10px}
+  .act{display:flex;gap:12px;padding:11px 12px;border-radius:14px}
+  .act:hover{background:var(--surface-soft)}
+  .act .ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;flex:0 0 auto;color:#fff}
+  .act .tx{font-size:13px;font-weight:700;color:var(--ink-soft)}
+  .act .tx b{color:var(--ink);font-weight:800}
+  .act .tx small{display:block;color:var(--muted);font-weight:700;font-size:11.5px;margin-top:1px}
+
+  .foot{grid-column:1/-1;margin:4px 2px 0;font-size:12px;color:var(--muted);font-weight:600;display:flex;gap:8px;align-items:flex-start}
+
+  /* ---------------- 3-month comparison ---------------- */
+  .cmp-wrap{padding:12px 26px 40px;display:flex;flex-direction:column;gap:20px;max-width:900px}
+  .cmpchart{padding:14px 12px 2px}
+  .cmpchart svg{display:block;width:100%;height:auto;overflow:visible}
+  .cmp-legend{display:flex;gap:18px;padding:2px 18px 16px;font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+  .cmp-legend .k{display:inline-flex;align-items:center;gap:7px}
+  .cmp-legend .k i{width:12px;height:12px;border-radius:4px}
+  .daily-block{padding:2px 0 8px;border-top:1px solid var(--border);margin-top:2px}
+  .daily-block:first-of-type{border-top:0}
+  .daily-t{display:flex;align-items:center;gap:8px;padding:12px 18px 2px;font-weight:800;font-size:13.5px;color:var(--ink)}
+  .daily-t .sw{width:11px;height:11px;border-radius:3px}
+
+  /* ---------------- Animations ---------------- */
+  @keyframes sway{0%,100%{transform:rotate(-2.2deg)}50%{transform:rotate(2.2deg)}}
+  @keyframes sway2{0%,100%{transform:rotate(1.8deg)}50%{transform:rotate(-1.8deg)}}
+  .tree-foliage{transform-origin:50% 100%;animation:sway 5.5s ease-in-out infinite}
+  .tree-foliage.b{animation:sway2 6.8s ease-in-out infinite}
+  .grow{animation:growbar .7s cubic-bezier(.2,.8,.3,1) both}
+  @keyframes growbar{from{transform:scaleX(0);transform-origin:left}to{transform:scaleX(1)}}
+
+  @media (max-width:1080px){.content{grid-template-columns:1fr}.col-r{flex-direction:row;flex-wrap:wrap}.col-r>.card{flex:1 1 300px}}
+  @media (max-width:720px){
+    .app{grid-template-columns:60px 1fr}
+    .metrics,.metrics.five,.metrics.six{grid-template-columns:1fr 1fr}
+    .search{order:5;max-width:none;flex-basis:100%}
+    .content{padding:10px 16px 32px}
+    .topbar{padding:14px 16px 4px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<canvas id="leaves" aria-hidden="true"></canvas>
+
+<div class="app">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="side">
+    <div class="logo" title="Tang Ping">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f4fbef" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M12 12C12 7 9 4 4 3c-1 5 2 8 8 9Z" fill="#f4fbef" fill-opacity=".3"/><path d="M12 10c0-5 3-8 8-9 1 5-2 9-8 9Z" fill="#f4fbef" fill-opacity=".3"/></svg>
+    </div>
+    <nav class="nav">
+      <a class="active" title="Dashboard" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></a>
+      <a title="Sales" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></a>
+      <a title="Menu items" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></a>
+      <a title="Tables" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg></a>
+      <a title="Reports" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></a>
+      <a title="Settings" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2 2 2 0 1 1-4 0 1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 2.6 15a2 2 0 1 1 0-4 1.7 1.7 0 0 0 1.5-2.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 9 4.6a2 2 0 1 1 4 0 1.7 1.7 0 0 0 2.9 1.5l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 21.4 11a2 2 0 1 1 0 4Z"/></svg></a>
+    </nav>
+    <!-- swaying forest -->
+    <svg class="trees" viewBox="0 0 74 66" fill="none" aria-hidden="true">
+      <g class="tree-foliage">
+        <path d="M20 40 L13 40 L20 24 L15 24 L23 10 L18 10 L26 -2 L34 10 L29 10 L37 24 L32 24 L39 40 L32 40 Z" fill="#2f6b45"/>
+      </g>
+      <rect x="24" y="40" width="4" height="12" rx="1.5" fill="#5b3d24"/>
+      <g class="tree-foliage b">
+        <path d="M48 44 L43 44 L49 32 L45 32 L51 21 L47 21 L53 12 L59 21 L55 21 L61 32 L57 32 L63 44 L58 44 Z" fill="#3f8f5b"/>
+      </g>
+      <rect x="51" y="44" width="4" height="10" rx="1.5" fill="#5b3d24"/>
+      <rect x="0" y="52" width="74" height="14" fill="#0f2b1a" opacity=".55"/>
+    </svg>
+    <div class="me">TP</div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="switch"><span class="t">Tang Ping</span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <label class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input placeholder="Search category, item…" aria-label="Search">
+      </label>
+      <div class="vtoggle" id="viewToggle" hidden>
+        <button type="button" data-v="day" class="on">Day</button>
+        <button type="button" data-v="mtd">Month</button>
+        <button type="button" data-v="cmp">3-Month</button>
+      </div>
+      <span class="datebtn"><span class="dot"></span><span id="dateLabel">—</span></span>
+    </div>
+
+    <div class="content" id="dashView">
+      <div class="col-l">
+        <!-- metric cards -->
+        <div class="metrics" id="metrics"></div>
+
+        <!-- analytics -->
+        <section class="card analytics">
+          <div class="card-h">
+            <h3>Sales Analytics</h3>
+            <div class="legend-inline" id="analyticsLegend"><span class="k"><span class="sw" style="background:var(--accent)"></span>Net sales / day</span></div>
+          </div>
+          <div class="cmp-legend" id="analyticsWkLegend" hidden style="flex-wrap:wrap;padding:2px 18px 0"></div>
+          <div class="chartwrap" id="chartwrap"></div>
+        </section>
+
+        <!-- category table -->
+        <section class="card">
+          <div class="card-h"><h3>Sales by Item Category</h3><span class="sub" id="catSub">—</span></div>
+          <div style="overflow-x:auto">
+            <table class="tbl">
+              <thead><tr><th>Category</th><th>Type</th><th>Share</th><th class="rt">Net sales</th><th class="rt">% total</th></tr></thead>
+              <tbody id="catBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- top 5 tables -->
+        <section class="card">
+          <div class="card-h"><h3 id="tablesTitle">Top 5 Tables by Sales</h3><span class="sub" id="tablesSub">highest-spending tables</span></div>
+          <div style="overflow-x:auto" id="tablesWrap"></div>
+          <p class="hint-note" id="tablesNote"></p>
+        </section>
+      </div>
+
+      <div class="col-r">
+        <!-- donut -->
+        <section class="card">
+          <div class="card-h"><h3>Total Performance</h3><span class="sub">by type</span></div>
+          <div class="donutwrap">
+            <div class="donut"><svg id="donut" width="132" height="132" viewBox="0 0 132 132"></svg>
+              <div class="center"><b id="donutTop">—</b><span>net sales</span></div>
+            </div>
+            <div class="dlegend" id="dlegend"></div>
+          </div>
+        </section>
+
+        <!-- gauge -->
+        <section class="card">
+          <div class="card-h"><h3>Sales Mix</h3><span class="sub">of every ringgit</span></div>
+          <div class="gauge">
+            <div class="big"><b id="gaugePct">—</b><span>came from<br>Alcohol 🍺</span></div>
+            <div class="bars" id="mixBars"></div>
+          </div>
+        </section>
+
+        <!-- activity -->
+        <section class="card">
+          <div class="card-h"><h3>Highlights</h3></div>
+          <div class="activity" id="activity"></div>
+        </section>
+      </div>
+
+      <div class="foot">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span id="footNote"></span>
+      </div>
+    </div>
+
+    <!-- ============ 3-MONTH COMPARISON VIEW ============ -->
+    <div id="cmpView" class="cmp-wrap" hidden>
+      <section class="card">
+        <div class="card-h"><h3>Food vs Drinks — last 3 months</h3><span class="sub">share of net sales</span></div>
+        <div class="cmpchart" id="cmpChart"></div>
+        <div class="cmp-legend">
+          <span class="k"><i style="background:var(--food)"></i>Food</span>
+          <span class="k"><i style="background:var(--alcohol)"></i>Drinks (all beverages)</span>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h3>Item category sales — last 3 months</h3><span class="sub">net sales per category</span></div>
+        <div class="daily-block">
+          <div class="daily-t" id="catMajorTitle">Top categories</div>
+          <div class="cmp-legend" id="catMajorLegend" style="flex-wrap:wrap"></div>
+          <div class="cmpchart" id="catMajorChart"></div>
+        </div>
+        <div class="daily-block">
+          <div class="daily-t" id="catMinorTitle">Smaller categories</div>
+          <div class="cmp-legend" id="catMinorLegend" style="flex-wrap:wrap"></div>
+          <div class="cmpchart" id="catMinorChart"></div>
+        </div>
+        <p class="hint-note" id="catTrendNote"></p>
+      </section>
+      <section class="card">
+        <div class="card-h"><h3>By weekday, week over week</h3><span class="sub" id="dailySub"></span></div>
+        <div class="cmp-legend" id="dailyLegend" style="flex-wrap:wrap"></div>
+        <div class="daily-block"><div class="daily-t">Net sales — each weekday across the weeks</div><div class="cmpchart" id="dNet"></div></div>
+        <div class="daily-block"><div class="daily-t">Pax — reserved, excl. no-shows</div><div class="cmpchart" id="dPax"></div></div>
+        <div class="daily-block"><div class="daily-t">Spend per pax</div><div class="cmpchart" id="dSpp"></div><p class="hint-note" id="dSppNote"></p></div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h3>Monthly breakdown</h3><span class="sub">sales, share &amp; spend per pax</span></div>
+        <div style="overflow-x:auto" id="cmpTable"></div>
+        <p class="hint-note" id="cmpNote"></p>
+      </section>
+      <section class="card">
+        <div class="card-h"><h3>By day of week</h3><span class="sub" id="cmpWeekSub">avg spend per pax · last 3 months</span></div>
+        <div class="cmpchart" id="cmpWeekChart"></div>
+        <div style="overflow-x:auto" id="cmpWeekTable"></div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h3>Top 10 Spenders — last 3 months</h3><span class="sub">identified guests by total spend</span></div>
+        <div style="overflow-x:auto" id="cmp3mSpenders"></div>
+        <p class="hint-note" id="cmp3mNote"></p>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   TANG PING — DAILY SALES DATA
+   The daily job rewrites everything between the DATA markers.
+   categories[].bucket is "food" | "alcohol" | "others".
+   history[] powers the Sales Analytics trend (grows one point per day).
+   ===================================================================== */
+/*DATA-START*/
+const DASHBOARD_DATA = {
+  "defaultView": "day",
+  "history": [
+    {
+      "date": "2026-08-14",
+      "net": 31280.7
+    },
+    {
+      "date": "2026-08-15",
+      "net": 66743.0
+    },
+    {
+      "date": "2026-08-16",
+      "net": 6916.7
+    },
+    {
+      "date": "2026-08-17",
+      "net": 16633.96
+    },
+    {
+      "date": "2026-08-18",
+      "net": 11343.5
+    },
+    {
+      "date": "2026-08-19",
+      "net": 10844.2
+    },
+    {
+      "date": "2026-08-20",
+      "net": 11657.7
+    },
+    {
+      "date": "2026-08-21",
+      "net": 36857.7
+    },
+    {
+      "date": "2026-08-22",
+      "net": 51057.5
+    },
+    {
+      "date": "2026-08-23",
+      "net": 14675.46
+    },
+    {
+      "date": "2026-08-24",
+      "net": 36487.9
+    },
+    {
+      "date": "2026-08-25",
+      "net": 15874.2
+    },
+    {
+      "date": "2026-08-26",
+      "net": 8921.9
+    },
+    {
+      "date": "2026-08-27",
+      "net": 20016.0
+    },
+    {
+      "date": "2026-08-28",
+      "net": 46956.2
+    },
+    {
+      "date": "2026-08-29",
+      "net": 50900.3
+    },
+    {
+      "date": "2026-08-30",
+      "net": 71576.83
+    },
+    {
+      "date": "2026-08-31",
+      "net": 17711.7
+    },
+    {
+      "date": "2026-09-02",
+      "net": 7374.8,
+      "gp": 1964.1,
+      "cost": 1370.9,
+      "covrev": 3335.0,
+      "coverage": 45.2
+    },
+    {
+      "date": "2026-09-03",
+      "net": 11607.0,
+      "gp": 3991.4,
+      "cost": 2930.6,
+      "covrev": 6922.0,
+      "coverage": 59.6
+    },
+    {
+      "date": "2026-09-04",
+      "net": 40335.9,
+      "gp": 13981.22,
+      "cost": 11052.78,
+      "covrev": 25034.0,
+      "coverage": 62.1
+    },
+    {
+      "date": "2026-09-05",
+      "net": 53313.2,
+      "gp": 17656.39,
+      "cost": 14072.61,
+      "covrev": 31729.0,
+      "coverage": 59.5
+    },
+    {
+      "date": "2026-09-06",
+      "net": 8603.6,
+      "gp": 3420.73,
+      "cost": 2140.27,
+      "covrev": 5561.0,
+      "coverage": 64.6
+    },
+    {
+      "date": "2026-09-07",
+      "net": 9662.7,
+      "gp": 3734.61,
+      "cost": 2569.39,
+      "covrev": 6304.0,
+      "coverage": 65.2
+    },
+    {
+      "date": "2026-09-08",
+      "net": 17546.7,
+      "gp": 6337.13,
+      "cost": 4613.87,
+      "covrev": 10951.0,
+      "coverage": 62.4
+    },
+    {
+      "date": "2026-09-09",
+      "net": 12949.9,
+      "gp": 4332.9,
+      "cost": 3720.1,
+      "covrev": 8053.0,
+      "coverage": 62.2
+    },
+    {
+      "date": "2026-09-10",
+      "net": 8406.6,
+      "gp": 2230.91,
+      "cost": 1368.09,
+      "covrev": 3599.0,
+      "coverage": 42.8
+    },
+    {
+      "date": "2026-09-11",
+      "net": 27782.5,
+      "gp": 8365.83,
+      "cost": 6556.17,
+      "covrev": 14922.0,
+      "coverage": 53.7
+    },
+    {
+      "date": "2026-09-12",
+      "net": 56197.2,
+      "gp": 19669.64,
+      "cost": 14703.36,
+      "covrev": 34373.0,
+      "coverage": 61.2
+    }
+  ],
+  "views": {
+    "day": {
+      "scope": "day",
+      "dateLabel": "Saturday, 12 September 2026",
+      "source": "Zeoniq daily export · 12 Sep 2026 · refreshed 16 sep 8:32am",
+      "transactions": 169,
+      "depositAdj": 0.0,
+      "pax": 591,
+      "avgPerPax": 95.09,
+      "yesterdayNet": 27782.5,
+      "tablesMode": "guests",
+      "topTables": [
+        {
+          "table": "S8",
+          "net": 3312.0,
+          "bills": 2
+        },
+        {
+          "table": "S5",
+          "net": 2435.4,
+          "bills": 1,
+          "name": "JJ",
+          "phone": "••••1321",
+          "pax": 12,
+          "status": "Walk in"
+        },
+        {
+          "table": "F8",
+          "net": 2155.8,
+          "bills": 2,
+          "name": "Davis",
+          "phone": "••••7495",
+          "pax": 8,
+          "status": "Walk in"
+        },
+        {
+          "table": "M31",
+          "net": 1483.9,
+          "bills": 2,
+          "name": "Sim",
+          "phone": "••••6266",
+          "pax": 9,
+          "status": "Book"
+        },
+        {
+          "table": "S2",
+          "net": 1203.8,
+          "bills": 1,
+          "name": "Steve",
+          "phone": "••••9926",
+          "pax": 6,
+          "status": "Book"
+        }
+      ],
+      "categories": [
+        {
+          "name": "Food (Kitchen)",
+          "bucket": "food",
+          "net": 13683.2
+        },
+        {
+          "name": "Beer — Bottled & Bucket",
+          "bucket": "alcohol",
+          "net": 13622.0
+        },
+        {
+          "name": "Beer — Draught",
+          "bucket": "alcohol",
+          "net": 12449.0
+        },
+        {
+          "name": "Spirits & Liquor",
+          "bucket": "alcohol",
+          "net": 7856.0
+        },
+        {
+          "name": "Wine & Champagne",
+          "bucket": "alcohol",
+          "net": 2392.0
+        },
+        {
+          "name": "Cocktails",
+          "bucket": "alcohol",
+          "net": 3480.0
+        },
+        {
+          "name": "Soft Drinks & Mixers",
+          "bucket": "others",
+          "net": 2591.0
+        },
+        {
+          "name": "Others (Misc)",
+          "bucket": "others",
+          "net": 274.0
+        },
+        {
+          "name": "Deposits",
+          "bucket": "others",
+          "net": -150.0
+        }
+      ],
+      "grossProfit": 19669.64,
+      "cost": 14703.36,
+      "grossProfitPct": 57.2,
+      "costCoverage": 61.2
+    },
+    "mtd": {
+      "scope": "mtd",
+      "dateLabel": "Sep 1–13",
+      "source": "Zeoniq month-to-date · Sep 1–13 · refreshed 16 sep 8:32am",
+      "transactions": 831,
+      "depositAdj": 0.0,
+      "pax": 3009,
+      "avgPerPax": 84.34,
+      "yesterdayNet": 0,
+      "tablesMode": "spenders",
+      "topTables": [
+        {
+          "table": "S6",
+          "name": "JUNY(jun)",
+          "phone": "••••8230",
+          "pax": 29,
+          "net": 5399.2,
+          "visits": 1
+        },
+        {
+          "table": "S6",
+          "name": "Stepanie",
+          "phone": "••••3168",
+          "pax": 12,
+          "net": 3110.8,
+          "visits": 2
+        },
+        {
+          "table": "S5",
+          "name": "JJ",
+          "phone": "••••1321",
+          "pax": 24,
+          "net": 2971.2,
+          "visits": 2
+        },
+        {
+          "table": "S1",
+          "name": "waynie(min",
+          "phone": "••••0520",
+          "pax": 20,
+          "net": 2295.8,
+          "visits": 1
+        },
+        {
+          "table": "M10",
+          "name": "Boom",
+          "phone": "••••5525",
+          "pax": 13,
+          "net": 2221.7,
+          "visits": 1
+        }
+      ],
+      "categories": [
+        {
+          "name": "Food (Kitchen)",
+          "bucket": "food",
+          "net": 61000.5
+        },
+        {
+          "name": "Beer — Bottled & Bucket",
+          "bucket": "alcohol",
+          "net": 79708.0
+        },
+        {
+          "name": "Beer — Draught",
+          "bucket": "alcohol",
+          "net": 61047.0
+        },
+        {
+          "name": "Spirits & Liquor",
+          "bucket": "alcohol",
+          "net": 20214.0
+        },
+        {
+          "name": "Wine & Champagne",
+          "bucket": "alcohol",
+          "net": 2956.0
+        },
+        {
+          "name": "Cocktails",
+          "bucket": "alcohol",
+          "net": 15754.0
+        },
+        {
+          "name": "Soft Drinks & Mixers",
+          "bucket": "others",
+          "net": 11779.0
+        },
+        {
+          "name": "Others (Misc)",
+          "bucket": "others",
+          "net": 771.6
+        },
+        {
+          "name": "Deposits",
+          "bucket": "others",
+          "net": 550.0
+        }
+      ],
+      "charges": 25245.85,
+      "grossProfit": 85684.86,
+      "cost": 65098.14,
+      "grossProfitPct": 56.8,
+      "costCoverage": 59.4
+    }
+  },
+  "comparison": [
+    {
+      "month": "Jul 2026",
+      "food": 181112.26,
+      "drinks": 570830.0,
+      "other": 3593.8,
+      "total": 755536.06,
+      "foodPct": 24.0,
+      "drinksPct": 75.6,
+      "otherPct": 0.5,
+      "pax": 8200,
+      "avgPerPax": 92.14,
+      "partial": false
+    },
+    {
+      "month": "Aug 1–30",
+      "food": 202892.24,
+      "drinks": 594217.8,
+      "other": 1357.2,
+      "total": 798467.24,
+      "foodPct": 25.4,
+      "drinksPct": 74.4,
+      "otherPct": 0.2,
+      "pax": 9539,
+      "avgPerPax": 83.71,
+      "partial": true
+    },
+    {
+      "month": "Sep 1–13",
+      "food": 61000.5,
+      "drinks": 191458.0,
+      "other": 1321.6,
+      "total": 253780.1,
+      "foodPct": 24.0,
+      "drinksPct": 75.4,
+      "otherPct": 0.5,
+      "pax": 3009,
+      "avgPerPax": 84.34,
+      "partial": true
+    }
+  ],
+  "topSpenders3m": [
+    {
+      "table": "M35",
+      "name": "Kenzo(m35)",
+      "phone": "••••3224",
+      "pax": 32,
+      "net": 6301.6,
+      "visits": 5
+    },
+    {
+      "table": "M15",
+      "name": "Soon",
+      "phone": "••••1116",
+      "pax": 51,
+      "net": 5973.7,
+      "visits": 5
+    },
+    {
+      "table": "L4",
+      "name": "Robin",
+      "phone": "••••7029",
+      "pax": 55,
+      "net": 5603.2,
+      "visits": 30
+    },
+    {
+      "table": "S6",
+      "name": "JUNY(jun)",
+      "phone": "••••8230",
+      "pax": 29,
+      "net": 5399.2,
+      "visits": 1
+    },
+    {
+      "table": "M31",
+      "name": "Michelle",
+      "phone": "••••5527",
+      "pax": 19,
+      "net": 4385.6,
+      "visits": 4
+    },
+    {
+      "table": "S6",
+      "name": "Heng",
+      "phone": "••••7008",
+      "pax": 39,
+      "net": 4294.0,
+      "visits": 2
+    },
+    {
+      "table": "S6",
+      "name": "ALAN",
+      "phone": "••••7813",
+      "pax": 46,
+      "net": 4292.8,
+      "visits": 4
+    },
+    {
+      "table": "S6",
+      "name": "PEGGY",
+      "phone": "••••2628",
+      "pax": 84,
+      "net": 3972.9,
+      "visits": 4
+    },
+    {
+      "table": "M13",
+      "name": "Josh",
+      "phone": "••••7756",
+      "pax": 14,
+      "net": 3664.8,
+      "visits": 4
+    },
+    {
+      "table": "M3",
+      "name": "Joan(Min",
+      "phone": "••••0780",
+      "pax": 23,
+      "net": 3661.1,
+      "visits": 3
+    }
+  ],
+  "weekday": [
+    {
+      "day": "Mon",
+      "days": 14,
+      "avgNet": 13996.11,
+      "avgPax": 172,
+      "spendPerPax": 81.17
+    },
+    {
+      "day": "Tue",
+      "days": 13,
+      "avgNet": 12052.76,
+      "avgPax": 153,
+      "spendPerPax": 79.01
+    },
+    {
+      "day": "Wed",
+      "days": 15,
+      "avgNet": 11738.41,
+      "avgPax": 138,
+      "spendPerPax": 84.82
+    },
+    {
+      "day": "Thu",
+      "days": 14,
+      "avgNet": 17674.45,
+      "avgPax": 165,
+      "spendPerPax": 107.4
+    },
+    {
+      "day": "Fri",
+      "days": 15,
+      "avgNet": 44098.63,
+      "avgPax": 505,
+      "spendPerPax": 87.39
+    },
+    {
+      "day": "Sat",
+      "days": 15,
+      "avgNet": 57023.19,
+      "avgPax": 677,
+      "spendPerPax": 84.21
+    },
+    {
+      "day": "Sun",
+      "days": 14,
+      "avgNet": 16148.8,
+      "avgPax": 201,
+      "spendPerPax": 80.2
+    }
+  ],
+  "daily3m": [
+    {
+      "date": "2026-06-01",
+      "net": 26760.6,
+      "pax": 337,
+      "spendPerPax": 79.41
+    },
+    {
+      "date": "2026-06-02",
+      "net": 10228.5,
+      "pax": 170,
+      "spendPerPax": 60.17
+    },
+    {
+      "date": "2026-06-03",
+      "net": 14227.2,
+      "pax": 212,
+      "spendPerPax": 67.11
+    },
+    {
+      "date": "2026-06-04",
+      "net": 12229.6,
+      "pax": 146,
+      "spendPerPax": 83.76
+    },
+    {
+      "date": "2026-06-05",
+      "net": 58298.0,
+      "pax": 576,
+      "spendPerPax": 101.21
+    },
+    {
+      "date": "2026-06-06",
+      "net": 62327.3,
+      "pax": 681,
+      "spendPerPax": 91.52
+    },
+    {
+      "date": "2026-06-07",
+      "net": 13294.0,
+      "pax": 187,
+      "spendPerPax": 71.09
+    },
+    {
+      "date": "2026-06-08",
+      "net": 8710.5,
+      "pax": 135,
+      "spendPerPax": 64.52
+    },
+    {
+      "date": "2026-06-09",
+      "net": 12773.0,
+      "pax": 104,
+      "spendPerPax": 122.82
+    },
+    {
+      "date": "2026-06-10",
+      "net": 17415.5,
+      "pax": 213,
+      "spendPerPax": 81.76
+    },
+    {
+      "date": "2026-06-11",
+      "net": 16217.7,
+      "pax": 164,
+      "spendPerPax": 98.89
+    },
+    {
+      "date": "2026-06-12",
+      "net": 46974.4,
+      "pax": 574,
+      "spendPerPax": 81.84
+    },
+    {
+      "date": "2026-06-13",
+      "net": 61177.9,
+      "pax": 685,
+      "spendPerPax": 89.31
+    },
+    {
+      "date": "2026-06-14",
+      "net": 8183.3,
+      "pax": 143,
+      "spendPerPax": 57.23
+    },
+    {
+      "date": "2026-06-15",
+      "net": 7815.4,
+      "pax": 115,
+      "spendPerPax": 67.96
+    },
+    {
+      "date": "2026-06-16",
+      "net": 29341.5,
+      "pax": 361,
+      "spendPerPax": 81.28
+    },
+    {
+      "date": "2026-06-17",
+      "net": 7248.8,
+      "pax": 108,
+      "spendPerPax": 67.12
+    },
+    {
+      "date": "2026-06-18",
+      "net": 20647.0,
+      "pax": 256,
+      "spendPerPax": 80.65
+    },
+    {
+      "date": "2026-06-19",
+      "net": 55615.9,
+      "pax": 637,
+      "spendPerPax": 87.31
+    },
+    {
+      "date": "2026-06-20",
+      "net": 51413.9,
+      "pax": 675,
+      "spendPerPax": 76.17
+    },
+    {
+      "date": "2026-06-21",
+      "net": 16513.79,
+      "pax": 223,
+      "spendPerPax": 74.05
+    },
+    {
+      "date": "2026-06-22",
+      "net": 4962.5,
+      "pax": 109,
+      "spendPerPax": 45.53
+    },
+    {
+      "date": "2026-06-23",
+      "net": 8951.4,
+      "pax": 97,
+      "spendPerPax": 92.28
+    },
+    {
+      "date": "2026-06-24",
+      "net": 5018.9,
+      "pax": 74,
+      "spendPerPax": 67.82
+    },
+    {
+      "date": "2026-06-25",
+      "net": 0.0,
+      "pax": 69,
+      "spendPerPax": 0.0
+    },
+    {
+      "date": "2026-06-26",
+      "net": 46152.23,
+      "pax": 475,
+      "spendPerPax": 97.16
+    },
+    {
+      "date": "2026-06-27",
+      "net": 52684.56,
+      "pax": 670,
+      "spendPerPax": 78.63
+    },
+    {
+      "date": "2026-06-28",
+      "net": 10448.43,
+      "pax": 134,
+      "spendPerPax": 77.97
+    },
+    {
+      "date": "2026-06-29",
+      "net": 11976.7,
+      "pax": 138,
+      "spendPerPax": 86.79
+    },
+    {
+      "date": "2026-06-30",
+      "net": 13668.5,
+      "pax": 183,
+      "spendPerPax": 74.69
+    },
+    {
+      "date": "2026-07-01",
+      "net": 16264.5,
+      "pax": 180,
+      "spendPerPax": 90.36
+    },
+    {
+      "date": "2026-07-02",
+      "net": 14781.4,
+      "pax": 143,
+      "spendPerPax": 103.37
+    },
+    {
+      "date": "2026-07-03",
+      "net": 37126.3,
+      "pax": 454,
+      "spendPerPax": 81.78
+    },
+    {
+      "date": "2026-07-04",
+      "net": 54574.0,
+      "pax": 658,
+      "spendPerPax": 82.94
+    },
+    {
+      "date": "2026-07-05",
+      "net": 11116.4,
+      "pax": 127,
+      "spendPerPax": 87.53
+    },
+    {
+      "date": "2026-07-06",
+      "net": 9558.7,
+      "pax": 142,
+      "spendPerPax": 67.31
+    },
+    {
+      "date": "2026-07-07",
+      "net": 12344.0,
+      "pax": 166,
+      "spendPerPax": 74.36
+    },
+    {
+      "date": "2026-07-08",
+      "net": 9663.6,
+      "pax": 126,
+      "spendPerPax": 76.7
+    },
+    {
+      "date": "2026-07-09",
+      "net": 22423.6,
+      "pax": 237,
+      "spendPerPax": 94.61
+    },
+    {
+      "date": "2026-07-10",
+      "net": 34964.5,
+      "pax": 415,
+      "spendPerPax": 84.25
+    },
+    {
+      "date": "2026-07-11",
+      "net": 51146.03,
+      "pax": 588,
+      "spendPerPax": 86.98
+    },
+    {
+      "date": "2026-07-12",
+      "net": 11463.2,
+      "pax": 162,
+      "spendPerPax": 70.76
+    },
+    {
+      "date": "2026-07-13",
+      "net": 11569.5,
+      "pax": 113,
+      "spendPerPax": 102.38
+    },
+    {
+      "date": "2026-07-14",
+      "net": 8720.3,
+      "pax": 124,
+      "spendPerPax": 70.32
+    },
+    {
+      "date": "2026-07-15",
+      "net": 15905.4,
+      "pax": 157,
+      "spendPerPax": 101.31
+    },
+    {
+      "date": "2026-07-16",
+      "net": 48079.3,
+      "pax": 24,
+      "spendPerPax": 2003.3
+    },
+    {
+      "date": "2026-07-17",
+      "net": 55997.1,
+      "pax": 551,
+      "spendPerPax": 101.63
+    },
+    {
+      "date": "2026-07-18",
+      "net": 63448.7,
+      "pax": 695,
+      "spendPerPax": 91.29
+    },
+    {
+      "date": "2026-07-19",
+      "net": 7779.1,
+      "pax": 110,
+      "spendPerPax": 70.72
+    },
+    {
+      "date": "2026-07-20",
+      "net": 7122.63,
+      "pax": 92,
+      "spendPerPax": 77.42
+    },
+    {
+      "date": "2026-07-21",
+      "net": 63.8,
+      "pax": 0,
+      "spendPerPax": 0
+    },
+    {
+      "date": "2026-07-22",
+      "net": 11157.9,
+      "pax": 158,
+      "spendPerPax": 70.62
+    },
+    {
+      "date": "2026-07-23",
+      "net": 19809.0,
+      "pax": 239,
+      "spendPerPax": 82.88
+    },
+    {
+      "date": "2026-07-24",
+      "net": 37453.0,
+      "pax": 551,
+      "spendPerPax": 67.97
+    },
+    {
+      "date": "2026-07-25",
+      "net": 61166.2,
+      "pax": 736,
+      "spendPerPax": 83.11
+    },
+    {
+      "date": "2026-07-26",
+      "net": 12653.6,
+      "pax": 160,
+      "spendPerPax": 79.09
+    },
+    {
+      "date": "2026-07-27",
+      "net": 9730.5,
+      "pax": 104,
+      "spendPerPax": 93.56
+    },
+    {
+      "date": "2026-07-28",
+      "net": 13240.0,
+      "pax": 160,
+      "spendPerPax": 82.75
+    },
+    {
+      "date": "2026-07-29",
+      "net": 12051.5,
+      "pax": 132,
+      "spendPerPax": 91.3
+    },
+    {
+      "date": "2026-07-30",
+      "net": 13957.4,
+      "pax": 164,
+      "spendPerPax": 85.11
+    },
+    {
+      "date": "2026-07-31",
+      "net": 60204.9,
+      "pax": 532,
+      "spendPerPax": 113.17
+    },
+    {
+      "date": "2026-08-01",
+      "net": 60680.3,
+      "pax": 746,
+      "spendPerPax": 81.34
+    },
+    {
+      "date": "2026-08-02",
+      "net": 13717.03,
+      "pax": 184,
+      "spendPerPax": 74.55
+    },
+    {
+      "date": "2026-08-03",
+      "net": 14086.9,
+      "pax": 114,
+      "spendPerPax": 123.57
+    },
+    {
+      "date": "2026-08-04",
+      "net": 8076.1,
+      "pax": 106,
+      "spendPerPax": 76.19
+    },
+    {
+      "date": "2026-08-05",
+      "net": 14779.5,
+      "pax": 153,
+      "spendPerPax": 96.6
+    },
+    {
+      "date": "2026-08-06",
+      "net": 20055.1,
+      "pax": 214,
+      "spendPerPax": 93.72
+    },
+    {
+      "date": "2026-08-07",
+      "net": 45480.13,
+      "pax": 557,
+      "spendPerPax": 81.65
+    },
+    {
+      "date": "2026-08-08",
+      "net": 58517.8,
+      "pax": 758,
+      "spendPerPax": 77.2
+    },
+    {
+      "date": "2026-08-09",
+      "net": 19141.73,
+      "pax": 258,
+      "spendPerPax": 74.19
+    },
+    {
+      "date": "2026-08-10",
+      "net": 20867.1,
+      "pax": 248,
+      "spendPerPax": 84.14
+    },
+    {
+      "date": "2026-08-11",
+      "net": 10388.6,
+      "pax": 135,
+      "spendPerPax": 76.95
+    },
+    {
+      "date": "2026-08-12",
+      "net": 12252.5,
+      "pax": 149,
+      "spendPerPax": 82.23
+    },
+    {
+      "date": "2026-08-13",
+      "net": 7554.9,
+      "pax": 92,
+      "spendPerPax": 82.12
+    },
+    {
+      "date": "2026-08-14",
+      "net": 31280.7,
+      "pax": 396,
+      "spendPerPax": 78.99
+    },
+    {
+      "date": "2026-08-15",
+      "net": 66743.0,
+      "pax": 751,
+      "spendPerPax": 88.87
+    },
+    {
+      "date": "2026-08-16",
+      "net": 6916.7,
+      "pax": 76,
+      "spendPerPax": 91.01
+    },
+    {
+      "date": "2026-08-17",
+      "net": 16633.96,
+      "pax": 192,
+      "spendPerPax": 86.64
+    },
+    {
+      "date": "2026-08-18",
+      "net": 11343.5,
+      "pax": 140,
+      "spendPerPax": 81.03
+    },
+    {
+      "date": "2026-08-19",
+      "net": 10844.2,
+      "pax": 129,
+      "spendPerPax": 84.06
+    },
+    {
+      "date": "2026-08-20",
+      "net": 11657.7,
+      "pax": 127,
+      "spendPerPax": 91.79
+    },
+    {
+      "date": "2026-08-21",
+      "net": 36857.7,
+      "pax": 468,
+      "spendPerPax": 78.76
+    },
+    {
+      "date": "2026-08-22",
+      "net": 51057.5,
+      "pax": 669,
+      "spendPerPax": 76.32
+    },
+    {
+      "date": "2026-08-23",
+      "net": 14675.46,
+      "pax": 211,
+      "spendPerPax": 69.55
+    },
+    {
+      "date": "2026-08-24",
+      "net": 36487.9,
+      "pax": 429,
+      "spendPerPax": 85.05
+    },
+    {
+      "date": "2026-08-26",
+      "net": 8921.9,
+      "pax": 89,
+      "spendPerPax": 100.25
+    },
+    {
+      "date": "2026-08-27",
+      "net": 20016.0,
+      "pax": 215,
+      "spendPerPax": 93.1
+    },
+    {
+      "date": "2026-08-28",
+      "net": 46956.2,
+      "pax": 559,
+      "spendPerPax": 84.0
+    },
+    {
+      "date": "2026-08-29",
+      "net": 50900.3,
+      "pax": 637,
+      "spendPerPax": 79.91
+    },
+    {
+      "date": "2026-08-30",
+      "net": 71576.83,
+      "pax": 737,
+      "spendPerPax": 97.12
+    },
+    {
+      "date": "2026-09-02",
+      "net": 7374.8,
+      "pax": 81,
+      "spendPerPax": 91.05
+    },
+    {
+      "date": "2026-09-03",
+      "net": 11607.0,
+      "pax": 138,
+      "spendPerPax": 84.11
+    },
+    {
+      "date": "2026-09-04",
+      "net": 40335.9,
+      "pax": 444,
+      "spendPerPax": 90.85
+    },
+    {
+      "date": "2026-09-05",
+      "net": 53313.2,
+      "pax": 617,
+      "spendPerPax": 86.41
+    },
+    {
+      "date": "2026-09-06",
+      "net": 8603.6,
+      "pax": 107,
+      "spendPerPax": 80.41
+    },
+    {
+      "date": "2026-09-07",
+      "net": 9662.7,
+      "pax": 146,
+      "spendPerPax": 66.18
+    },
+    {
+      "date": "2026-09-08",
+      "net": 17546.7,
+      "pax": 237,
+      "spendPerPax": 74.04
+    },
+    {
+      "date": "2026-09-09",
+      "net": 12949.9,
+      "pax": 115,
+      "spendPerPax": 112.61
+    },
+    {
+      "date": "2026-09-10",
+      "net": 8406.6,
+      "pax": 145,
+      "spendPerPax": 57.98
+    },
+    {
+      "date": "2026-09-11",
+      "net": 27782.5,
+      "pax": 380,
+      "spendPerPax": 73.11
+    },
+    {
+      "date": "2026-09-12",
+      "net": 56197.2,
+      "pax": 591,
+      "spendPerPax": 95.09
+    },
+    {
+      "date": "2026-09-13",
+      "net": 0.0,
+      "pax": 8,
+      "spendPerPax": 0.0
+    }
+  ],
+  "categoryTrend": {
+    "months": [
+      "Jul 2026",
+      "Aug 1–30",
+      "Sep 1–13"
+    ],
+    "partial": [
+      false,
+      true,
+      true
+    ],
+    "series": [
+      {
+        "name": "Beer — Bottled & Bucket",
+        "bucket": "alcohol",
+        "values": [
+          247349.0,
+          271857.4,
+          79708.0
+        ]
+      },
+      {
+        "name": "Food (Kitchen)",
+        "bucket": "food",
+        "values": [
+          181112.26,
+          202892.24,
+          61000.5
+        ]
+      },
+      {
+        "name": "Beer — Draught",
+        "bucket": "alcohol",
+        "values": [
+          154944.0,
+          166103.0,
+          61047.0
+        ]
+      },
+      {
+        "name": "Spirits & Liquor",
+        "bucket": "alcohol",
+        "values": [
+          79441.6,
+          63256.0,
+          20214.0
+        ]
+      },
+      {
+        "name": "Cocktails",
+        "bucket": "alcohol",
+        "values": [
+          41951.0,
+          42346.0,
+          15754.0
+        ]
+      },
+      {
+        "name": "Soft Drinks & Mixers",
+        "bucket": "others",
+        "values": [
+          36948.4,
+          39191.4,
+          11779.0
+        ]
+      },
+      {
+        "name": "Wine & Champagne",
+        "bucket": "alcohol",
+        "values": [
+          10196.0,
+          11464.0,
+          2956.0
+        ]
+      },
+      {
+        "name": "Others (Misc)",
+        "bucket": "others",
+        "values": [
+          3193.8,
+          1257.2,
+          771.6
+        ]
+      },
+      {
+        "name": "Deposits",
+        "bucket": "others",
+        "values": [
+          400.0,
+          100.0,
+          550.0
+        ]
+      }
+    ]
+  },
+  "contactsMasked": true
+};
+/*DATA-END*/
+
+const BUCKETS = {
+  food:    {label:"Food",    emo:"🍜", color:"var(--food)"},
+  alcohol: {label:"Alcohol", emo:"🍺", color:"var(--alcohol)"},
+  others:  {label:"Others",  emo:"🧋", color:"var(--others)"},
+};
+const money  = n => n.toLocaleString("en-MY",{maximumFractionDigits:0});
+const money2 = n => n.toLocaleString("en-MY",{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct = (n,t)=> t? n/t*100 : 0;
+const p1  = (n,t)=> pct(n,t).toFixed(1)+"%";
+const cssVar = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+const DATA = DASHBOARD_DATA;
+let currentView = (DATA.views && DATA.views[DATA.defaultView]) ? DATA.defaultView : "day";
+
+function render(){
+  const d = DATA.views[currentView];
+  const total = d.categories.reduce((s,c)=>s+c.net,0);
+  const order = ["food","alcohol","others"];
+  const bt = order.map(k=>({key:k,...BUCKETS[k],net:d.categories.filter(c=>c.bucket===k).reduce((s,c)=>s+c.net,0)}));
+  document.getElementById("dateLabel").textContent = d.dateLabel;
+
+  /* ---- metric cards ---- */
+  const icons = {
+    total:'<path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/>',
+    food:'<path d="M4 3v7a4 4 0 0 0 8 0V3M8 3v18"/><path d="M17 3c-1.5 2-1.5 6 0 8v10"/>',
+    alcohol:'<path d="M6 3h12l-1 6a5 5 0 0 1-10 0Z"/><path d="M12 14v5M8 21h8"/>',
+    others:'<path d="M6 8h12l-1 12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1Z"/><path d="M9 8V5a3 3 0 0 1 6 0v3"/>',
+    charges:'<path d="M6 2h9l3 3v15l-2.5-1.5L13 20l-2.5-1.5L8 20l-2-1.5V2Z"/><path d="M9 8h6M9 12h5"/>',
+    gp:'<path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'
+  };
+  const cards = [
+    {k:"total", label:"Total Net Sales", color:"linear-gradient(160deg,#2f6b45,#173a24)", val:money(total), cur:true,
+       chipStat: d.yesterdayNet ? deltaHTML(total,d.yesterdayNet) : `<span class="pct">${d.transactions} bills</span>`},
+    {k:"food",    label:"Food Sales",    color:"var(--food)",    val:money(bt[0].net), cur:true, chipStat:`<span class="pct">${p1(bt[0].net,total)}</span>`},
+    {k:"alcohol", label:"Alcohol Sales", color:"var(--alcohol)", val:money(bt[1].net), cur:true, chipStat:`<span class="pct">${p1(bt[1].net,total)}</span>`},
+    {k:"others",  label:"Other Sales",   color:"var(--others)",  val:money(bt[2].net), cur:true, chipStat:`<span class="pct">${p1(bt[2].net,total)}</span>`},
+  ];
+  if(d.charges){
+    cards.push({k:"charges", label:"Net + Charges", color:"linear-gradient(160deg,#4d9a34,#2f6b45)",
+      val:money(total + d.charges), cur:true, chipStat:`<span class="pct">+RM ${money(d.charges)}</span>`});
+  }
+  if(d.grossProfit!=null){
+    cards.push({k:"gp", label:"Gross Profit", color:"linear-gradient(160deg,#b9791b,#8a5a12)",
+      val:money(d.grossProfit), cur:true, chipStat:`<span class="pct">${d.grossProfitPct}% margin</span>`,
+      note: d.costCoverage!=null ? `costed items · ${d.costCoverage}% of sales` : "costed items"});
+  }
+  const metricsEl=document.getElementById("metrics");
+  metricsEl.classList.toggle("five", cards.length===5);
+  metricsEl.classList.toggle("six", cards.length===6);
+  metricsEl.innerHTML = cards.map(c=>`
+    <div class="metric card">
+      <div class="top">
+        <span class="chip" style="background:${c.color}"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icons[c.k]}</svg></span>
+        ${c.chipStat}
+      </div>
+      <div class="val">${c.cur?'<span class="cur">RM</span>':''}${c.val}</div>
+      <div class="lbl">${c.label}${c.note?`<span class="sublbl">${c.note}</span>`:''}</div>
+    </div>`).join("");
+
+  /* ---- analytics: single trend (Day) or weekday-over-week (Month) ---- */
+  const aLeg=document.getElementById("analyticsLegend"), aWk=document.getElementById("analyticsWkLegend");
+  if(currentView==="mtd"){
+    const md=currentMonthDaily();
+    aLeg.innerHTML = `<span class="k">net sales · week over week</span>`;
+    aWk.hidden=false;
+    aWk.innerHTML = WD_NAMES.map((nm,i)=>`<span class="k"><i style="background:${WD_COLORS[i]}"></i>${nm}</span>`).join("");
+    multiLineChart(document.getElementById("chartwrap"), weekdaySeries(md,"net"),
+                   {yfmt:v=> v>=1000 ? (v/1000).toFixed(0)+"k" : money(v), label:"Net sales"});
+  } else {
+    aWk.hidden=true;
+    aLeg.innerHTML = `<span class="k"><span class="sw" style="background:var(--accent)"></span>Net sales / day</span>`
+      + ((DATA.history||[]).some(h=>h.gp!=null) ? `<span class="k"><span class="sw" style="background:#b9791b"></span>Gross profit / day (costed items)</span>` : "");
+    renderTrend(DATA.history||[]);
+  }
+
+  /* ---- category table ---- */
+  const maxNet = Math.max(...d.categories.map(c=>c.net));
+  const rows = [...d.categories].sort((a,b)=>b.net-a.net);
+  document.getElementById("catSub").textContent = `${rows.length} categories · RM ${money(total)} total`;
+  document.getElementById("catBody").innerHTML = rows.map(c=>{
+    const b=BUCKETS[c.bucket];
+    return `<tr>
+      <td><span class="name"><span class="dotc" style="background:${b.color}"></span>${c.name}</span></td>
+      <td><span class="pill" style="background:var(--${c.bucket}-soft);color:${b.color}">${b.emo} ${b.label}</span></td>
+      <td><div class="tbar"><i class="grow" style="width:${Math.max(pct(c.net,maxNet),2)}%;background:${b.color}"></i></div></td>
+      <td class="rt num">RM ${money(c.net)}</td>
+      <td class="rt">${p1(c.net,total)}</td>
+    </tr>`;
+  }).join("");
+
+  /* ---- donut ---- */
+  const donut=document.getElementById("donut"); const R=54,SW=16,C=2*Math.PI*R; let off=0;
+  let svg=`<circle cx="66" cy="66" r="${R}" fill="none" stroke="var(--border)" stroke-width="${SW}"/>`;
+  bt.forEach(b=>{const frac=pct(b.net,total)/100, len=frac*C;
+    svg+=`<circle cx="66" cy="66" r="${R}" fill="none" stroke="${b.color}" stroke-width="${SW}"
+      stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 66 66)"
+      stroke-linecap="butt"/>`; off+=len;});
+  donut.innerHTML=svg;
+  document.getElementById("donutTop").textContent="RM "+ (total>=1000? (total/1000).toFixed(1)+"k" : money(total));
+  document.getElementById("dlegend").innerHTML = bt.map(b=>`
+    <div class="row"><span class="dotc" style="background:${b.color}"></span>${b.emo} ${b.label}
+      <span class="v">${p1(b.net,total)}</span></div>`).join("");
+
+  /* ---- sales mix gauge ---- */
+  document.getElementById("gaugePct").textContent = Math.round(pct(bt[1].net,total))+"%";
+  document.getElementById("mixBars").innerHTML = bt.map(b=>`
+    <div class="barrow"><span>${b.emo} ${b.label}</span>
+      <div class="track"><i class="grow" style="width:${pct(b.net,total)}%;background:${b.color}"></i></div>
+      <span class="p">${p1(b.net,total)}</span></div>`).join("");
+
+  /* ---- top 5 tables (view-aware) ---- */
+  renderTables(d);
+
+  /* ---- highlights ---- */
+  const top = rows[0];
+  const avgBill = d.transactions? total/d.transactions : 0;
+  const paxAct = d.pax
+    ? {c:"var(--food)", ic:'<circle cx="9" cy="7" r="3"/><path d="M2 21v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1"/><circle cx="18" cy="8" r="2.2"/>', t:`Avg spend <b>RM ${money2(d.avgPerPax)}</b> / pax`, s:`${money(d.pax)} guests (excl. no-shows) · RM ${money2(avgBill)} per bill`}
+    : {c:"var(--muted)", ic:'<circle cx="9" cy="7" r="3"/><path d="M2 21v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1"/>', t:`Avg spend <b>RM ${money2(avgBill)}</b> / bill`, s:`Add a Pax column to your export to see spend per guest`};
+  const depCat = d.categories.find(c=>/deposit/i.test(c.name));
+  const depVal = depCat ? depCat.net : 0;
+  const depAct = {c:"var(--others)", ic:'<path d="M12 2v20M2 12h20"/>',
+    t:`Deposits included`,
+    s: depVal>=0 ? `RM ${money(depVal)} in booking deposits, counted in sales`
+                 : `RM ${money(Math.abs(depVal))} net refunded, counted in sales`};
+  const acts = [
+    {c:"var(--alcohol)", ic:'<path d="M7 14l4-4 3 3 5-6"/>', t:`<b>${top.name}</b> led sales`, s:`RM ${money(top.net)} · ${p1(top.net,total)} of total`},
+    paxAct,
+    depAct,
+    {c:"#2f6b45", ic:'<path d="M20 6L9 17l-5-5"/>', t:`Reconciled to Zeoniq`, s:`Total matches your Daily Summary net`},
+  ];
+  document.getElementById("activity").innerHTML = acts.map(a=>`
+    <div class="act"><span class="ic" style="background:${a.c}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${a.ic}</svg></span>
+      <div class="tx">${a.t}<small>${a.s}</small></div></div>`).join("");
+
+  document.getElementById("footNote").textContent = d.source + " · Total net sales includes deposits and matches your Zeoniq Daily Summary (net, excl. tax).";
+}
+
+function deltaHTML(now,prev){const diff=now-prev,up=diff>=0;return `<span class="pct"><span class="delta ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(pct(diff,prev)).toFixed(1)}%</span></span>`;}
+
+/* ---- top-5 tables, adapts to Day (guests) vs Month-to-date (aggregate) ---- */
+function renderTables(d){
+  const tt = d.topTables || [];
+  const isMonth = d.scope === "mtd";
+  const wrap = document.getElementById("tablesWrap");
+  const sub  = document.getElementById("tablesSub");
+  const note = document.getElementById("tablesNote");
+  document.getElementById("tablesTitle").textContent = isMonth ? "Top 5 Spenders" : "Top 5 Tables by Sales";
+  sub.textContent = isMonth ? "highest-spending guests this period" : "highest-spending tables today";
+  const hasContact = tt.some(t=>t.name || t.phone);
+  const tableHdr = isMonth ? "Top table" : "Table";
+  const netHdr   = isMonth ? "Net (period)" : "Net sales";
+  wrap.innerHTML = `<table class="tbl"><thead><tr><th>#</th><th>${tableHdr}</th><th>Guest &amp; contact</th><th class="rt">Pax</th><th class="rt">${netHdr}</th></tr></thead><tbody>`
+    + tt.map((t,i)=>{
+        const tag = t.status ? `<span class="tag ${/walk/i.test(t.status)?'walk':'book'}">${t.status}</span>` : "";
+        const extra = isMonth
+          ? (t.visits ? `<div class="ph">${t.visits} visit${t.visits>1?'s':''}</div>` : "")
+          : (t.more ? `<span class="ph">+${t.more} more part${t.more>1?'ies':'y'}</span>` : "");
+        const guest = (t.name || t.phone)
+          ? `<b>${t.name||"—"}</b> ${tag}${t.phone?`<div class="ph">📞 ${t.phone}</div>`:""}${isMonth?"":extra}`
+          : `<span class="none">—</span>`;
+        const tableCell = `<span class="name">🪑 ${t.table||"—"}</span>${isMonth?extra:""}`;
+        return `<tr>
+          <td><span class="rank ${i===0?'g1':''}">${i+1}</span></td>
+          <td>${tableCell}</td>
+          <td class="guest">${guest}</td>
+          <td class="rt num">${t.pax||"—"}</td>
+          <td class="rt num">RM ${money(t.net)}</td></tr>`;
+      }).join("")
+    + `</tbody></table>`;
+  const maskNote = `🔒 <span>Contacts shown as <b>first name + last 4 digits</b> for privacy — full records are in your Zeoniq reservation files.</span>`;
+  const attrNote = `📅 <span>Each table's daily sales credited to the guest who reserved it; “Top table” is where they spent most.</span>`;
+  note.innerHTML = DATA.contactsMasked
+    ? (isMonth ? maskNote + " " + attrNote : maskNote)
+    : isMonth ? attrNote
+    : hasContact ? ""
+    : `🔒 <span>Guest <b>name &amp; phone</b> appear once your Reservations export is present.</span>`;
+}
+
+/* ---- trend area chart (SVG), grows with history ---- */
+function renderTrend(hist){
+  const wrap=document.getElementById("chartwrap");
+  const W=680,H=190,pad={l:8,r:8,t:16,b:26};
+  const pts=hist.map(h=>({date:h.date, net:h.net, gp:(h.gp==null?null:h.gp)}));
+  const hasGP=pts.some(p=>p.gp!=null);
+  const GPC="#b9791b";
+  if(!pts.length){wrap.innerHTML="<p style='color:var(--muted);padding:20px;font-weight:700'>No data yet.</p>";return;}
+  const maxV=Math.max(...pts.map(p=>p.net))*1.15, minV=0;
+  const n=pts.length;
+  const x=i=> pad.l + (n===1? (W-pad.l-pad.r)/2 : i*(W-pad.l-pad.r)/(n-1));
+  const y=v=> pad.t + (1-(v-minV)/(maxV-minV))*(H-pad.t-pad.b);
+  const acc=cssVar('--accent');
+  let line=pts.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(1)} ${y(p.net).toFixed(1)}`).join(" ");
+  const area=`${line} L${x(n-1).toFixed(1)} ${H-pad.b} L${x(0).toFixed(1)} ${H-pad.b} Z`;
+  // gridlines
+  let grid="";for(let g=0;g<=3;g++){const yy=pad.t+g*(H-pad.t-pad.b)/3;grid+=`<line x1="${pad.l}" y1="${yy}" x2="${W-pad.r}" y2="${yy}" stroke="var(--border)" stroke-width="1"/>`;}
+  let gpline=""; if(hasGP){let st=false; pts.forEach((p,i)=>{ if(p.gp==null){st=false;return;} gpline+=(st?"L":"M")+x(i).toFixed(1)+" "+y(p.gp).toFixed(1)+" "; st=true; });}
+  const gpdots = hasGP ? pts.map((p,i)=> p.gp==null?"":`<circle cx="${x(i).toFixed(1)}" cy="${y(p.gp).toFixed(1)}" r="${i===n-1?4:3}" fill="var(--surface)" stroke="${GPC}" stroke-width="2.5"/>`).join("") : "";
+  const dots=pts.map((p,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(p.net).toFixed(1)}" r="${i===n-1?5:3.5}" fill="var(--surface)" stroke="${acc}" stroke-width="3" data-i="${i}"/>`).join("");
+  const note = n<2 ? `<text x="${W/2}" y="${pad.t+22}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--muted)">🌱 Trend line grows as each day’s export is collected</text>` : "";
+  const stride=Math.max(1,Math.ceil(n/7));
+  const labels=pts.map((p,i)=>{
+    if(n>1 && i%stride!==0 && i!==n-1) return "";
+    const dt=new Date(p.date+"T00:00");
+    return `<text x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--muted)">${dt.toLocaleDateString('en-MY',{day:'numeric',month:'short'})}</text>`;
+  }).join("");
+  wrap.innerHTML=`
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily net sales trend">
+      <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${acc}" stop-opacity=".45"/><stop offset="1" stop-color="${acc}" stop-opacity="0"/>
+      </linearGradient></defs>
+      ${grid}
+      <path d="${area}" fill="url(#ag)"/>
+      <path d="${line}" fill="none" stroke="${acc}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+      ${hasGP?`<path d="${gpline}" fill="none" stroke="${GPC}" stroke-width="2.5" stroke-dasharray="5 4" stroke-linejoin="round" stroke-linecap="round"/>`:""}
+      ${gpdots}${dots}${labels}${note}
+    </svg>
+    <div class="tip" id="tip"></div>`;
+  // hover
+  const svg=wrap.querySelector("svg"), tip=wrap.querySelector("#tip");
+  svg.querySelectorAll("circle").forEach(c=>{
+    const i=+c.dataset.i, p=pts[i];
+    const show=()=>{const r=c.getBoundingClientRect(),wr=wrap.getBoundingClientRect();
+      tip.style.left=(r.left-wr.left+r.width/2)+"px";tip.style.top=(r.top-wr.top)+"px";
+      tip.innerHTML=`<b>RM ${money2(p.net)}</b>`+(p.gp!=null?`<small style="color:${GPC};font-weight:800">GP RM ${money2(p.gp)}</small>`:"")+`<small>${new Date(p.date+'T00:00').toLocaleDateString('en-MY',{weekday:'short',day:'numeric',month:'short'})}</small>`;
+      tip.style.opacity=1;c.setAttribute("r","6");};
+    const hide=()=>{tip.style.opacity=0;c.setAttribute("r",i===n-1?"5":"3.5");};
+    c.style.cursor="pointer";c.addEventListener("mouseenter",show);c.addEventListener("mouseleave",hide);
+  });
+}
+
+/* ---- 3-month Food vs Drinks comparison view ---- */
+function renderComparison(){
+  const cmp = DATA.comparison || [];
+  document.getElementById("dateLabel").textContent =
+    cmp.length ? `${cmp[0].month} – ${cmp[cmp.length-1].month}` : "3-month";
+  const food=cssVar('--food'), drink=cssVar('--alcohol');
+  const W=680,H=250,pad={l:36,r:12,t:18,b:36};
+  const plotW=W-pad.l-pad.r, plotH=H-pad.t-pad.b, n=cmp.length;
+  const groupW=plotW/Math.max(n,1), barW=Math.min(48,groupW/3.2);
+  const yb=v=> pad.t + (1-v/100)*plotH;
+  let grid="";
+  for(let t=0;t<=100;t+=25){const yy=yb(t);
+    grid+=`<line x1="${pad.l}" y1="${yy.toFixed(1)}" x2="${W-pad.r}" y2="${yy.toFixed(1)}" stroke="var(--border)" stroke-width="1"/>`
+        + `<text x="${pad.l-8}" y="${(yy+4).toFixed(1)}" text-anchor="end" font-size="10" font-weight="700" fill="var(--muted)">${t}%</text>`;}
+  let bars="";
+  cmp.forEach((m,i)=>{
+    const cx=pad.l+groupW*i+groupW/2, fx=cx-barW-3, dx=cx+3;
+    bars+=`<rect x="${fx.toFixed(1)}" y="${yb(m.foodPct).toFixed(1)}" width="${barW.toFixed(1)}" height="${((m.foodPct/100)*plotH).toFixed(1)}" rx="5" fill="${food}"/>`
+        + `<text x="${(fx+barW/2).toFixed(1)}" y="${(yb(m.foodPct)-6).toFixed(1)}" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--ink)">${m.foodPct}%</text>`
+        + `<rect x="${dx.toFixed(1)}" y="${yb(m.drinksPct).toFixed(1)}" width="${barW.toFixed(1)}" height="${((m.drinksPct/100)*plotH).toFixed(1)}" rx="5" fill="${drink}"/>`
+        + `<text x="${(dx+barW/2).toFixed(1)}" y="${(yb(m.drinksPct)-6).toFixed(1)}" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--ink)">${m.drinksPct}%</text>`
+        + `<text x="${cx.toFixed(1)}" y="${H-13}" text-anchor="middle" font-size="12.5" font-weight="800" fill="var(--ink-soft)">${m.month}${m.partial?' *':''}</text>`;
+  });
+  document.getElementById("cmpChart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Food vs Drinks percentage by month">${grid}${bars}</svg>`;
+  document.getElementById("cmpTable").innerHTML =
+    `<table class="tbl"><thead><tr><th>Month</th><th class="rt">Food</th><th class="rt">Food %</th><th class="rt">Drinks</th><th class="rt">Drinks %</th><th class="rt">Total</th><th class="rt">Spend/pax</th></tr></thead><tbody>`
+    + cmp.map(m=>`<tr>
+        <td><span class="name">${m.month}${m.partial?' <span class="tag walk">partial</span>':''}</span></td>
+        <td class="rt num">RM ${money(m.food)}</td>
+        <td class="rt" style="color:var(--food);font-weight:800">${m.foodPct}%</td>
+        <td class="rt num">RM ${money(m.drinks)}</td>
+        <td class="rt" style="color:var(--alcohol);font-weight:800">${m.drinksPct}%</td>
+        <td class="rt num">RM ${money(m.total)}</td>
+        <td class="rt num">${m.avgPerPax?('RM '+money2(m.avgPerPax)):'—'}</td></tr>`).join("")
+    + `</tbody></table>`;
+  const anyPartial = cmp.some(m=>m.partial);
+  document.getElementById("cmpNote").innerHTML =
+    (anyPartial ? `📅 <span><b>*</b> partial month (data so far, not the full month). ` : `<span>`)
+    + `“Drinks” = all beverages (beer, spirits, cocktails, wine, soft drinks); Food = kitchen. Spend/pax = net sales ÷ guests (excl. no-shows).</span>`;
+
+  renderCategoryTrend();
+  renderDailyLines();
+  renderWeekday();
+  renderTopSpenders3m();
+}
+
+const CAT_COLORS = {
+  "Food (Kitchen)":"#3f8f5b", "Beer — Bottled & Bucket":"#e0a94b", "Beer — Draught":"#b5843b",
+  "Spirits & Liquor":"#c0563f", "Wine & Champagne":"#9a5b8f", "Cocktails":"#2b7fb8",
+  "Soft Drinks & Mixers":"#6cbf4a", "Other Drinks":"#4d7d9a", "Others (Misc)":"#7a7a55", "Deposits":"#9aa0a6",
+};
+function catColor(name, i){ return CAT_COLORS[name] || ["#3f8f5b","#d9932f","#9a5b8f","#2b7fb8","#c0563f","#6cbf4a"][i%6]; }
+
+/* ---- item category sales trend, split into two readable charts ---- */
+function drawCatSeries(el, series, months, partial){
+  if(!series || !series.length){ el.innerHTML=""; return; }
+  const n=months.length;
+  const W=680,H=200,pad={l:56,r:12,t:12,b:26};
+  const plotW=W-pad.l-pad.r, plotH=H-pad.t-pad.b;
+  const maxV=Math.max(...series.flatMap(s=>s.values))*1.12 || 1;
+  const x=i=> pad.l + (n<=1?plotW/2 : i/(n-1)*plotW);
+  const y=v=> pad.t + (1-v/maxV)*plotH;
+  const kMoney=v=> v>=1000 ? (v/1000).toFixed(0)+"k" : money(v);
+  let grid="";
+  for(let g=0;g<=3;g++){const yy=pad.t+(1-g/3)*plotH, val=maxV*g/3;
+    grid+=`<line x1="${pad.l}" y1="${yy.toFixed(1)}" x2="${W-pad.r}" y2="${yy.toFixed(1)}" stroke="var(--border)"/>`
+        + `<text x="${pad.l-6}" y="${(yy+3).toFixed(1)}" text-anchor="end" font-size="9.5" font-weight="700" fill="var(--muted)">RM ${kMoney(val)}</text>`;}
+  let xl="";
+  months.forEach((m,i)=>{ xl+=`<text x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--ink-soft)">${m}${partial[i]?' *':''}</text>`; });
+  let lines="";
+  series.forEach(s=>{
+    const col=catColor(s.name);
+    const dpath=s.values.map((v,i)=>`${i?'L':'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
+    lines+=`<path d="${dpath}" fill="none" stroke="${col}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>`
+         + s.values.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="2.8" fill="${col}"/>`).join("");
+  });
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="category sales">${grid}${xl}${lines}</svg>`;
+}
+function catLegend(id, series){
+  document.getElementById(id).innerHTML = series.map(s=>`<span class="k"><i style="background:${catColor(s.name)}"></i>${s.name}</span>`).join("");
+}
+function renderCategoryTrend(){
+  const ct = DATA.categoryTrend;
+  if(!ct || !ct.series || !ct.series.length){
+    ["catMajorChart","catMinorChart","catMajorLegend","catMinorLegend"].forEach(id=>document.getElementById(id).innerHTML="");
+    return;
+  }
+  const peak = s => Math.max(...s.values);
+  const maxOverall = Math.max(...ct.series.map(peak));
+  const thr = Math.max(50000, maxOverall*0.25);
+  const major = ct.series.filter(s=>peak(s)>=thr);
+  const minor = ct.series.filter(s=>peak(s)<thr);
+  drawCatSeries(document.getElementById("catMajorChart"), major, ct.months, ct.partial);
+  drawCatSeries(document.getElementById("catMinorChart"), minor, ct.months, ct.partial);
+  catLegend("catMajorLegend", major);
+  catLegend("catMinorLegend", minor);
+  document.getElementById("catMinorTitle").parentElement.style.display = minor.length ? "" : "none";
+  const anyPartial = ct.partial.some(Boolean);
+  document.getElementById("catTrendNote").innerHTML = anyPartial
+    ? `📅 <span><b>*</b> partial month — its lower values reflect fewer days so far, not necessarily a real drop. The two charts use different scales so smaller categories stay readable.</span>`
+    : `<span>The two charts use different scales so smaller categories stay readable.</span>`;
+}
+
+/* ---- reusable daily line chart (one metric, own y-scale) ---- */
+function lineChart(el, pts, key, opts){
+  opts = opts || {};
+  const color = opts.color || cssVar('--accent');
+  const yfmt = opts.yfmt || (v=>money(v));
+  const W=680, H=150, pad={l:46,r:10,t:12,b:22};
+  const n=pts.length;
+  if(!n){ el.innerHTML=""; return; }
+  const plotW=W-pad.l-pad.r, plotH=H-pad.t-pad.b;
+  const cap = opts.ymax || (Math.max(...pts.map(p=>p[key]))*1.12 || 1);
+  const x=i=> pad.l + (n===1?plotW/2:i*plotW/(n-1));
+  const y=v=> pad.t + (1-Math.min(v,cap)/cap)*plotH;   // clamp outliers to the top
+  let grid="";
+  for(let g=0;g<=3;g++){const yy=pad.t+(1-g/3)*plotH, val=cap*g/3;
+    grid+=`<line x1="${pad.l}" y1="${yy.toFixed(1)}" x2="${W-pad.r}" y2="${yy.toFixed(1)}" stroke="var(--border)"/>`
+        + `<text x="${pad.l-6}" y="${(yy+3).toFixed(1)}" text-anchor="end" font-size="9.5" font-weight="700" fill="var(--muted)">${yfmt(val)}</text>`;}
+  let months=""; let last=null;
+  pts.forEach((p,i)=>{const mo=p.date.slice(0,7);
+    if(mo!==last){ last=mo; const xx=x(i);
+      if(i>0) months+=`<line x1="${xx.toFixed(1)}" y1="${pad.t}" x2="${xx.toFixed(1)}" y2="${H-pad.b}" stroke="var(--border-strong)" stroke-dasharray="3 3"/>`;
+      months+=`<text x="${(xx+3).toFixed(1)}" y="${H-8}" font-size="10.5" font-weight="800" fill="var(--ink-soft)">${new Date(p.date+'T00:00').toLocaleDateString('en-MY',{month:'short'})}</text>`;}});
+  const line=pts.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(1)} ${y(p[key]).toFixed(1)}`).join(" ");
+  const area=`${line} L${x(n-1).toFixed(1)} ${H-pad.b} L${x(0).toFixed(1)} ${H-pad.b} Z`;
+  const gid="lg"+Math.random().toString(36).slice(2,8);
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${opts.label||key} per day">
+    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity=".26"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+    ${grid}${months}<path d="${area}" fill="url(#${gid})"/><path d="${line}" fill="none" stroke="${color}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+}
+
+const WD_NAMES  = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const WD_COLORS = ["#2f6b45","#6cbf4a","#d9932f","#c65a4e","#9a5b8f","#2b7fb8","#8a8f7a"];
+
+function mondayOf(dstr){ const d=new Date(dstr+'T00:00'); const wd=(d.getDay()+6)%7; d.setDate(d.getDate()-wd); d.setHours(0,0,0,0); return d; }
+
+function currentMonthDaily(){
+  const d=DATA.daily3m||[];
+  if(!d.length) return [];
+  const mo=d[d.length-1].date.slice(0,7);   // latest month (YYYY-MM)
+  return d.filter(p=>p.date.slice(0,7)===mo);
+}
+
+function weekdaySeries(daily, key){
+  if(!daily.length) return {series:[], weeks:[]};
+  const anchor = mondayOf(daily[0].date);
+  const map = {}; let maxWk = 0;
+  daily.forEach(p=>{
+    const dt=new Date(p.date+'T00:00');
+    const wd=(dt.getDay()+6)%7;
+    const wk=Math.round((dt-anchor)/(7*864e5));
+    maxWk=Math.max(maxWk,wk);
+    (map[wd]=map[wd]||[]).push({x:wk, y:p[key], date:p.date});
+  });
+  const series = WD_NAMES.map((nm,wd)=>({name:nm, color:WD_COLORS[wd], points:(map[wd]||[]).sort((a,b)=>a.x-b.x)}));
+  const weeks=[]; for(let w=0;w<=maxWk;w++) weeks.push(new Date(anchor.getTime()+w*7*864e5));
+  return {series, weeks};
+}
+
+/* multi-series line chart: one line per weekday, x = week */
+function multiLineChart(el, data, opts){
+  opts=opts||{};
+  const {series, weeks}=data, nW=weeks.length;
+  const allY=series.flatMap(s=>s.points.map(p=>p.y)).filter(v=>v>0);
+  if(!allY.length){ el.innerHTML=""; return; }
+  const cap=opts.ymax || Math.max(...allY)*1.1;
+  const yfmt=opts.yfmt || (v=>money(v));
+  const W=680,H=190,pad={l:46,r:10,t:12,b:26};
+  const plotW=W-pad.l-pad.r, plotH=H-pad.t-pad.b;
+  const x=w=> pad.l + (nW<=1?plotW/2 : w/(nW-1)*plotW);
+  const y=v=> pad.t + (1-Math.min(v,cap)/cap)*plotH;
+  let grid="";
+  for(let g=0;g<=3;g++){const yy=pad.t+(1-g/3)*plotH, val=cap*g/3;
+    grid+=`<line x1="${pad.l}" y1="${yy.toFixed(1)}" x2="${W-pad.r}" y2="${yy.toFixed(1)}" stroke="var(--border)"/>`
+        + `<text x="${pad.l-6}" y="${(yy+3).toFixed(1)}" text-anchor="end" font-size="9.5" font-weight="700" fill="var(--muted)">${yfmt(val)}</text>`;}
+  let xl=""; const stride=Math.max(1,Math.ceil(nW/7));
+  weeks.forEach((md,w)=>{ if(w%stride!==0 && w!==nW-1) return;
+    xl+=`<text x="${x(w).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--muted)">${md.toLocaleDateString('en-MY',{day:'numeric',month:'short'})}</text>`;});
+  let lines="";
+  series.forEach(s=>{
+    if(!s.points.length) return;
+    const dpath=s.points.map((p,i)=>`${i?'L':'M'}${x(p.x).toFixed(1)} ${y(p.y).toFixed(1)}`).join(" ");
+    lines+=`<path d="${dpath}" fill="none" stroke="${s.color}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" opacity=".92"/>`
+         + s.points.map(p=>`<circle cx="${x(p.x).toFixed(1)}" cy="${y(p.y).toFixed(1)}" r="2.3" fill="${s.color}"/>`).join("");
+  });
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${opts.label||''} by weekday, week over week">${grid}${xl}${lines}</svg>`;
+}
+
+function renderDailyLines(){
+  const d = DATA.daily3m || [];
+  const sub = document.getElementById("dailySub");
+  if(d.length && sub){
+    const f=new Date(d[0].date+'T00:00'), l=new Date(d[d.length-1].date+'T00:00');
+    const fmt=x=>x.toLocaleDateString('en-MY',{day:'numeric',month:'short'});
+    sub.textContent = `${fmt(f)} – ${fmt(l)} · one line per weekday`;
+  }
+  const legend=document.getElementById("dailyLegend");
+  if(legend) legend.innerHTML = WD_NAMES.map((nm,i)=>`<span class="k"><i style="background:${WD_COLORS[i]}"></i>${nm}</span>`).join("");
+  const kMoney = v => v>=1000 ? (v/1000).toFixed(0)+"k" : money(v);
+  multiLineChart(document.getElementById("dNet"), weekdaySeries(d,"net"),  {yfmt:kMoney,       label:"Net sales"});
+  multiLineChart(document.getElementById("dPax"), weekdaySeries(d,"pax"),  {yfmt:v=>money(v),  label:"Pax"});
+  // spend/pax: cap axis to the normal range so one under-logged day doesn't flatten it
+  const spp=d.map(p=>p.spendPerPax).filter(v=>v>0).sort((a,b)=>a-b);
+  const p90=spp.length? spp[Math.floor(spp.length*0.9)] : 0;
+  const cap=Math.max(120, Math.ceil(p90*1.4/10)*10);
+  multiLineChart(document.getElementById("dSpp"), weekdaySeries(d,"spendPerPax"), {yfmt:v=>money(v), label:"Spend per pax", ymax:cap});
+  const over=d.filter(p=>p.spendPerPax>cap);
+  const fmtD=x=>new Date(x+'T00:00').toLocaleDateString('en-MY',{day:'numeric',month:'short'});
+  document.getElementById("dSppNote").innerHTML = over.length
+    ? `⚠ <span>${over.map(o=>`<b>${fmtD(o.date)}</b> RM ${money(o.spendPerPax)}`).join(", ")} is off-scale (capped at RM ${cap}) — few <b>reserved</b> pax logged that day vs actual covers, so per-pax reads high.</span>`
+    : "";
+}
+
+/* ---- average spend per pax by day of week (last 3 months) ---- */
+function renderWeekday(){
+  const wk = DATA.weekday || [];
+  const chart = document.getElementById("cmpWeekChart");
+  if(!wk.length){ chart.innerHTML=""; return; }
+  const acc=cssVar('--accent'), deep=cssVar('--accent-deep');
+  const W=680,H=210,pad={l:40,r:12,t:16,b:30};
+  const plotW=W-pad.l-pad.r, plotH=H-pad.t-pad.b, n=wk.length;
+  const maxV=Math.max(...wk.map(w=>w.spendPerPax))*1.18 || 1;
+  const bw=Math.min(52, plotW/n*0.62);
+  const yb=v=> pad.t + (1-v/maxV)*plotH;
+  const best=Math.max(...wk.map(w=>w.spendPerPax));
+  let grid="";
+  for(let g=0;g<=3;g++){const yy=pad.t+g*plotH/3;grid+=`<line x1="${pad.l}" y1="${yy.toFixed(1)}" x2="${W-pad.r}" y2="${yy.toFixed(1)}" stroke="var(--border)"/>`;}
+  let bars="";
+  wk.forEach((w,i)=>{
+    const cx=pad.l+plotW/n*(i+0.5), x=cx-bw/2, h=(w.spendPerPax/maxV)*plotH;
+    const fill = w.spendPerPax===best ? deep : acc;
+    bars+=`<rect x="${x.toFixed(1)}" y="${yb(w.spendPerPax).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="5" fill="${fill}"/>`
+        + `<text x="${cx.toFixed(1)}" y="${(yb(w.spendPerPax)-6).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">${money(w.spendPerPax)}</text>`
+        + `<text x="${cx.toFixed(1)}" y="${H-11}" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink-soft)">${w.day}</text>`;
+  });
+  chart.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Average spend per pax by day of week">${grid}${bars}</svg>`;
+  document.getElementById("cmpWeekTable").innerHTML =
+    `<table class="tbl"><thead><tr><th>Day</th><th class="rt">Avg net sales</th><th class="rt">Avg pax</th><th class="rt">Spend/pax</th></tr></thead><tbody>`
+    + wk.map(w=>`<tr>
+        <td><span class="name">${w.day}</span></td>
+        <td class="rt num">RM ${money(w.avgNet)}</td>
+        <td class="rt">${money(w.avgPax)}</td>
+        <td class="rt num">RM ${money2(w.spendPerPax)}</td></tr>`).join("")
+    + `</tbody></table>`;
+}
+
+/* ---- top 10 spenders over the last 3 months (masked guest format) ---- */
+function renderTopSpenders3m(){
+  const sp = DATA.topSpenders3m || [];
+  const wrap = document.getElementById("cmp3mSpenders");
+  if(!sp.length){ wrap.innerHTML="<p style='color:var(--muted);padding:16px;font-weight:700'>No reservation data to attribute spend.</p>"; return; }
+  wrap.innerHTML =
+    `<table class="tbl"><thead><tr><th>#</th><th>Guest &amp; contact</th><th class="rt">Visits</th><th class="rt">Pax</th><th class="rt">Total spend</th></tr></thead><tbody>`
+    + sp.map((t,i)=>`<tr>
+        <td><span class="rank ${i===0?'g1':''}">${i+1}</span></td>
+        <td class="guest"><b>${t.name||"—"}</b>${t.phone?`<div class="ph">📞 ${t.phone}</div>`:""}</td>
+        <td class="rt num">${t.visits||"—"}</td>
+        <td class="rt num">${t.pax||"—"}</td>
+        <td class="rt num">RM ${money(t.net)}</td></tr>`).join("")
+    + `</tbody></table>`;
+  document.getElementById("cmp3mNote").innerHTML =
+    `🔒 <span>Identified guests only (with a phone), across all months on file. Spend credited to the guest who reserved each table each day. Contacts shown as first name + last 4 digits.</span>`;
+}
+
+/* ---- Day / Month / 3-Month toggle ---- */
+(function(){
+  const tg = document.getElementById("viewToggle");
+  const hasMtd = !!(DATA.views && DATA.views.mtd);
+  const hasCmp = (DATA.comparison || []).length >= 2;
+  const mtdBtn = tg.querySelector('[data-v="mtd"]'), cmpBtn = tg.querySelector('[data-v="cmp"]');
+  if(mtdBtn && !hasMtd) mtdBtn.remove();
+  if(cmpBtn && !hasCmp) cmpBtn.remove();
+  if(!hasMtd && !hasCmp) return;                 // only 'day' → no toggle needed
+  tg.hidden = false;
+  function setView(v){
+    currentView = v;
+    tg.querySelectorAll("button").forEach(x=>x.classList.toggle("on", x.dataset.v===v));
+    const dash=document.getElementById("dashView"), cmp=document.getElementById("cmpView");
+    if(v==="cmp"){ dash.hidden=true; cmp.hidden=false; renderComparison(); }
+    else{ cmp.hidden=true; dash.hidden=false; render(); }
+  }
+  tg.querySelectorAll("button").forEach(b=>b.addEventListener("click", ()=>{ if(b.dataset.v!==currentView) setView(b.dataset.v); }));
+})();
+
+render();
+
+/* ================= Falling leaves animation ================= */
+(function(){
+  if(window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+  const cv=document.getElementById("leaves"),ctx=cv.getContext("2d");
+  let w,h,leaves=[];const COLORS=["#5fae4e","#3f8f5b","#7ac74f","#c9a24b","#8fd06a"];
+  function size(){w=cv.width=innerWidth*devicePixelRatio;h=cv.height=innerHeight*devicePixelRatio;}
+  size();addEventListener("resize",size);
+  function mk(){return{x:Math.random()*w,y:Math.random()*-h,r:(7+Math.random()*8)*devicePixelRatio,
+    s:(.4+Math.random()*.8)*devicePixelRatio,sway:Math.random()*Math.PI*2,sw:.01+Math.random()*.02,
+    rot:Math.random()*Math.PI,vr:(-.03+Math.random()*.06),c:COLORS[(Math.random()*COLORS.length)|0],o:.5+Math.random()*.4};}
+  for(let i=0;i<16;i++){const L=mk();L.y=Math.random()*h;leaves.push(L);}
+  function leaf(L){ctx.save();ctx.translate(L.x,L.y);ctx.rotate(L.rot);ctx.globalAlpha=L.o;ctx.fillStyle=L.c;
+    ctx.beginPath();ctx.moveTo(0,-L.r);ctx.quadraticCurveTo(L.r,0,0,L.r);ctx.quadraticCurveTo(-L.r,0,0,-L.r);ctx.fill();
+    ctx.strokeStyle="rgba(0,0,0,.12)";ctx.lineWidth=devicePixelRatio;ctx.beginPath();ctx.moveTo(0,-L.r);ctx.lineTo(0,L.r);ctx.stroke();ctx.restore();}
+  function tick(){ctx.clearRect(0,0,w,h);
+    leaves.forEach(L=>{L.sway+=L.sw;L.x+=Math.sin(L.sway)*.6*devicePixelRatio;L.y+=L.s;L.rot+=L.vr;
+      if(L.y>h+30){Object.assign(L,mk());L.y=-20;}leaf(L);});
+    requestAnimationFrame(tick);}
+  tick();
+})();
+</script>
+
+</div>
+<script>
+(function(){
+  // NOTE: casual access gate only. The dashboard data is embedded in this page,
+  // so this login is a convenience barrier, not real security. Change AUTH_USER /
+  // AUTH_PASS below to update the credentials.
+  var AUTH_USER = "tangping";
+  var AUTH_PASS = "TangPing2026!";
+  var KEY = "tp_admin_ok";
+  function reveal(){
+    document.getElementById("tp-login").style.display="none";
+    document.getElementById("tp-app").classList.add("on");
+    window.scrollTo(0,0);
+    window.dispatchEvent(new Event("resize"));
+  }
+  try{ if(sessionStorage.getItem(KEY)==="1") reveal(); }catch(e){}
+  document.getElementById("tp-form").addEventListener("submit",function(ev){
+    ev.preventDefault();
+    var u=document.getElementById("tp-user").value.trim();
+    var p=document.getElementById("tp-pass").value;
+    if(u===AUTH_USER && p===AUTH_PASS){
+      try{ sessionStorage.setItem(KEY,"1"); }catch(e){}
+      document.getElementById("tp-err").textContent="";
+      reveal();
+    } else {
+      document.getElementById("tp-err").textContent="Incorrect username or password.";
+      document.getElementById("tp-pass").value="";
+    }
+  });
+})();
+</script>
+</body>
+</html>
