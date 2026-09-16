@@ -1,36 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tang Ping Sales Admin</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Tang Ping Sales Admin</title>
 <style>
-  #tp-login{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(160deg,#1b3a26,#0f2417);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-  #tp-login .box{background:#fff;border-radius:18px;padding:34px 30px;width:min(360px,90vw);box-shadow:0 24px 60px rgba(0,0,0,.35);text-align:center}
-  #tp-login .logo{width:52px;height:52px;border-radius:14px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#2f6b45,#173a24);color:#fff;font-size:26px}
-  #tp-login h1{font-size:18px;margin:0 0 4px;color:#173a24;font-weight:800}
-  #tp-login p{font-size:12.5px;color:#6b7280;margin:0 0 20px}
-  #tp-login input{width:100%;box-sizing:border-box;padding:11px 13px;margin:6px 0;border:1px solid #d7dde2;border-radius:10px;font-size:14px;outline:none}
-  #tp-login input:focus{border-color:#2f6b45;box-shadow:0 0 0 3px rgba(47,107,69,.15)}
-  #tp-login button{width:100%;padding:12px;margin-top:12px;border:0;border-radius:10px;cursor:pointer;background:linear-gradient(160deg,#2f6b45,#173a24);color:#fff;font-size:14.5px;font-weight:700}
-  #tp-login button:hover{filter:brightness(1.06)}
-  #tp-err{color:#c0392b;font-size:12.5px;min-height:16px;margin-top:10px}
-  #tp-app{display:none} #tp-app.on{display:block}
-</style>
-</head>
-<body>
-<div id="tp-login">
-  <form class="box" id="tp-form" autocomplete="off">
-    <div class="logo">🌿</div>
-    <h1>Tang Ping Sales Admin</h1>
-    <p>Please sign in to view the dashboard</p>
-    <input id="tp-user" type="text" placeholder="Username" autocomplete="username">
-    <input id="tp-pass" type="password" placeholder="Password" autocomplete="current-password">
-    <button type="submit">Sign in</button>
-    <div id="tp-err"></div>
-  </form>
-</div>
+ #tp-login{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#1b3a26,#0f2417);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+ #tp-login .box{background:#fff;border-radius:18px;padding:34px 30px;width:min(360px,90vw);box-shadow:0 24px 60px rgba(0,0,0,.35);text-align:center}
+ #tp-login .logo{width:52px;height:52px;border-radius:14px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#2f6b45,#173a24);color:#fff;font-size:26px}
+ #tp-login h1{font-size:18px;margin:0 0 4px;color:#173a24;font-weight:800} #tp-login p{font-size:12.5px;color:#6b7280;margin:0 0 20px}
+ #tp-login input{width:100%;box-sizing:border-box;padding:11px 13px;margin:6px 0;border:1px solid #d7dde2;border-radius:10px;font-size:14px;outline:none}
+ #tp-login input:focus{border-color:#2f6b45;box-shadow:0 0 0 3px rgba(47,107,69,.15)}
+ #tp-login button{width:100%;padding:12px;margin-top:12px;border:0;border-radius:10px;cursor:pointer;background:linear-gradient(160deg,#2f6b45,#173a24);color:#fff;font-size:14.5px;font-weight:700}
+ #tp-login button:hover{filter:brightness(1.06)} #tp-err{color:#c0392b;font-size:12.5px;min-height:16px;margin-top:10px}
+ #tp-app{display:none} #tp-app.on{display:block}
+</style></head><body>
+<div id="tp-login"><form class="box" id="tp-form" autocomplete="off"><div class="logo">🌿</div><h1>Tang Ping Sales Admin</h1><p>Please sign in to view the dashboard</p>
+<input id="tp-user" type="text" placeholder="Username" autocomplete="username"><input id="tp-pass" type="password" placeholder="Password" autocomplete="current-password">
+<button type="submit">Sign in</button><div id="tp-err"></div></form></div>
 <div id="tp-app">
 <title>Tang Ping Sales Admin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -172,6 +154,19 @@
   .metrics.many .metric{padding:13px}
   .metrics.many .metric .val{font-size:18px;letter-spacing:-.03em}
   .metrics.many .chip{width:32px;height:32px}
+  .pnl-est{font-size:10px;font-weight:700;color:#b9791b;background:#f6ecd8;padding:2px 7px;border-radius:20px;margin-left:8px}
+  :root:not([data-theme="light"]) .pnl-est,:root[data-theme="dark"] .pnl-est{background:#3a2f18;color:#e0b464}
+  #pnl{padding:2px 4px 4px}
+  .pnl-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 6px;border-bottom:1px solid var(--border)}
+  .pnl-row .lab{font-size:13.5px;color:var(--ink)}
+  .pnl-row .amt{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pnl-row.sub .lab{color:var(--muted);padding-left:16px;font-size:12.5px;font-weight:500}
+  .pnl-row.sub .amt{color:var(--muted);font-weight:600}
+  .pnl-row.tot{border-bottom:0;border-top:2px solid var(--border-strong);margin-top:3px}
+  .pnl-row.tot .lab{font-weight:800;font-size:14.5px}
+  .pnl-row.tot .amt{font-size:17px;font-weight:800}
+  .pnl-pos{color:#0e8a6b}.pnl-neg{color:#b1493a}
+  .pnl-note{font-size:11px;color:var(--muted);padding:9px 6px 2px;line-height:1.5}
   .metric{padding:16px;display:flex;flex-direction:column;gap:10px}
   .metric .top{display:flex;align-items:center;justify-content:space-between}
   .chip{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:#fff}
@@ -336,6 +331,12 @@
       <div class="col-l">
         <!-- metric cards -->
         <div class="metrics" id="metrics"></div>
+
+        <!-- P&L waterfall -->
+        <section class="card pnl" id="pnlCard">
+          <div class="card-h"><h3>Profit &amp; Loss <span class="pnl-est">estimated</span></h3><span class="sub" id="pnlSub">—</span></div>
+          <div id="pnl"></div>
+        </section>
 
         <!-- analytics -->
         <section class="card analytics">
@@ -638,7 +639,7 @@ const DASHBOARD_DATA = {
     "day": {
       "scope": "day",
       "dateLabel": "Tuesday, 15 September 2026",
-      "source": "Zeoniq daily export · 15 Sep 2026 · refreshed 16 sep 10:56am",
+      "source": "Zeoniq daily export · 15 Sep 2026 · refreshed 16 sep 11:05am",
       "transactions": 153,
       "depositAdj": 0.0,
       "pax": 523,
@@ -733,12 +734,18 @@ const DASHBOARD_DATA = {
       "grossProfitPct": 55.8,
       "costCoverage": 55.5,
       "stageCost": 3480.0,
-      "operatingProfit": 11481.1
+      "operatingProfit": 11481.1,
+      "estGrossProfit": 26958.42,
+      "estGrossProfitPct": 55.8,
+      "overheads": 5143.44,
+      "overheadsBasis": "1 day (1/30 of month)",
+      "netProfit": 18334.98,
+      "opexTotal": 8623.44
     },
     "mtd": {
       "scope": "mtd",
       "dateLabel": "Sep 1–15",
-      "source": "Zeoniq month-to-date · Sep 1–15 · refreshed 16 sep 10:56am",
+      "source": "Zeoniq month-to-date · Sep 1–15 · refreshed 16 sep 11:05am",
       "transactions": 1033,
       "depositAdj": 0.0,
       "pax": 3707,
@@ -799,7 +806,13 @@ const DASHBOARD_DATA = {
       "grossProfitPct": 56.8,
       "costCoverage": 58.6,
       "stageCost": 50140.0,
-      "operatingProfit": 54399.7
+      "operatingProfit": 54399.7,
+      "estGrossProfit": 178439.2,
+      "estGrossProfitPct": 56.8,
+      "overheads": 77151.65,
+      "overheadsBasis": "15/30 days elapsed",
+      "netProfit": 51147.55,
+      "opexTotal": 127291.65
     }
   },
   "comparison": [
@@ -1774,6 +1787,8 @@ function render(){
       <div class="lbl">${c.label}${c.note?`<span class="sublbl">${c.note}</span>`:''}</div>
     </div>`).join("");
 
+  renderPnl(d, total);
+
   /* ---- analytics: single trend (Day) or weekday-over-week (Month) ---- */
   const aLeg=document.getElementById("analyticsLegend"), aWk=document.getElementById("analyticsWkLegend");
   if(currentView==="mtd"){
@@ -1856,6 +1871,23 @@ function render(){
 function deltaHTML(now,prev){const diff=now-prev,up=diff>=0;return `<span class="pct"><span class="delta ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(pct(diff,prev)).toFixed(1)}%</span></span>`;}
 
 /* ---- top-5 tables, adapts to Day (guests) vs Month-to-date (aggregate) ---- */
+function renderPnl(d, total){
+  const card=document.getElementById("pnlCard");
+  if(d.netProfit==null){ card.style.display="none"; return; }
+  card.style.display="";
+  document.getElementById("pnlSub").textContent = currentView==="mtd" ? "month to date" : "this day";
+  const npCls = d.netProfit>=0 ? "pnl-pos" : "pnl-neg";
+  const neg = v => (v<0?"−":"") + "RM " + money(Math.abs(v));
+  const rows = [
+    `<div class="pnl-row"><span class="lab">Net sales</span><span class="amt">RM ${money(total)}</span></div>`,
+    `<div class="pnl-row"><span class="lab">Estimated gross profit <span class="pct">${d.estGrossProfitPct}%</span></span><span class="amt pnl-pos">RM ${money(d.estGrossProfit)}</span></div>`,
+    `<div class="pnl-row sub"><span class="lab">− Stage cost</span><span class="amt">−RM ${money(d.stageCost)}</span></div>`,
+    `<div class="pnl-row sub"><span class="lab">− Overheads <span style="opacity:.7">(${d.overheadsBasis})</span></span><span class="amt">−RM ${money(d.overheads)}</span></div>`,
+    `<div class="pnl-row tot"><span class="lab">Net profit</span><span class="amt ${npCls}">${neg(d.netProfit)}</span></div>`,
+  ].join("");
+  document.getElementById("pnl").innerHTML = rows +
+    `<div class="pnl-note">Gross profit is <b>estimated</b> — the costed margin (${d.estGrossProfitPct}%) scaled to all sales, since cocktails &amp; food aren't fully cost-mapped yet. Fixed overheads (RM 154,303/mo) are pro-rated (${d.overheadsBasis}); stage cost is exact.</div>`;
+}
 function renderTables(d){
   const tt = d.topTables || [];
   const isMonth = d.scope === "mtd";
@@ -2255,21 +2287,12 @@ render();
 })();
 </script>
 
-</div>
-<script>
-(function(){
-  var AUTH_USER="tangping", AUTH_PASS="TangPing2026!", KEY="tp_admin_ok";
-  function reveal(){document.getElementById("tp-login").style.display="none";
-    document.getElementById("tp-app").classList.add("on");window.scrollTo(0,0);window.dispatchEvent(new Event("resize"));}
-  try{ if(sessionStorage.getItem(KEY)==="1") reveal(); }catch(e){}
-  document.getElementById("tp-form").addEventListener("submit",function(ev){
-    ev.preventDefault();
-    var u=document.getElementById("tp-user").value.trim(), p=document.getElementById("tp-pass").value;
-    if(u===AUTH_USER&&p===AUTH_PASS){try{sessionStorage.setItem(KEY,"1");}catch(e){}
-      document.getElementById("tp-err").textContent="";reveal();}
-    else{document.getElementById("tp-err").textContent="Incorrect username or password.";document.getElementById("tp-pass").value="";}
-  });
-})();
-</script>
-</body>
-</html>
+</div><script>
+(function(){var AUTH_USER="tangping",AUTH_PASS="TangPing2026!",KEY="tp_admin_ok";
+function reveal(){document.getElementById("tp-login").style.display="none";document.getElementById("tp-app").classList.add("on");window.scrollTo(0,0);window.dispatchEvent(new Event("resize"));}
+try{if(sessionStorage.getItem(KEY)==="1")reveal();}catch(e){}
+document.getElementById("tp-form").addEventListener("submit",function(ev){ev.preventDefault();
+var u=document.getElementById("tp-user").value.trim(),p=document.getElementById("tp-pass").value;
+if(u===AUTH_USER&&p===AUTH_PASS){try{sessionStorage.setItem(KEY,"1");}catch(e){}document.getElementById("tp-err").textContent="";reveal();}
+else{document.getElementById("tp-err").textContent="Incorrect username or password.";document.getElementById("tp-pass").value="";}});})();
+</script></body></html>
