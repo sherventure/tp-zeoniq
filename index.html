@@ -639,7 +639,7 @@ const DASHBOARD_DATA = {
     "day": {
       "scope": "day",
       "dateLabel": "Tuesday, 15 September 2026",
-      "source": "Zeoniq daily export · 15 Sep 2026 · refreshed 16 sep 11:05am",
+      "source": "Zeoniq daily export · 15 Sep 2026 · refreshed 17 sep 6:38am",
       "transactions": 153,
       "depositAdj": 0.0,
       "pax": 523,
@@ -737,15 +737,16 @@ const DASHBOARD_DATA = {
       "operatingProfit": 11481.1,
       "estGrossProfit": 26958.42,
       "estGrossProfitPct": 55.8,
-      "overheads": 5143.44,
+      "overheads": 8263.52,
       "overheadsBasis": "1 day (1/30 of month)",
-      "netProfit": 18334.98,
-      "opexTotal": 8623.44
+      "netProfit": 15214.9,
+      "opexTotal": 11743.52,
+      "overheadsMonthly": 247905.55
     },
     "mtd": {
       "scope": "mtd",
       "dateLabel": "Sep 1–15",
-      "source": "Zeoniq month-to-date · Sep 1–15 · refreshed 16 sep 11:05am",
+      "source": "Zeoniq month-to-date · Sep 1–15 · refreshed 17 sep 6:38am",
       "transactions": 1033,
       "depositAdj": 0.0,
       "pax": 3707,
@@ -809,10 +810,11 @@ const DASHBOARD_DATA = {
       "operatingProfit": 54399.7,
       "estGrossProfit": 178439.2,
       "estGrossProfitPct": 56.8,
-      "overheads": 77151.65,
+      "overheads": 123952.77,
       "overheadsBasis": "15/30 days elapsed",
-      "netProfit": 51147.55,
-      "opexTotal": 127291.65
+      "netProfit": 4346.43,
+      "opexTotal": 174092.77,
+      "overheadsMonthly": 247905.55
     }
   },
   "comparison": [
@@ -1886,7 +1888,7 @@ function renderPnl(d, total){
     `<div class="pnl-row tot"><span class="lab">Net profit</span><span class="amt ${npCls}">${neg(d.netProfit)}</span></div>`,
   ].join("");
   document.getElementById("pnl").innerHTML = rows +
-    `<div class="pnl-note">Gross profit is <b>estimated</b> — the costed margin (${d.estGrossProfitPct}%) scaled to all sales, since cocktails &amp; food aren't fully cost-mapped yet. Fixed overheads (RM 154,303/mo) are pro-rated (${d.overheadsBasis}); stage cost is exact.</div>`;
+    `<div class="pnl-note">Gross profit is <b>estimated</b> — the costed margin (${d.estGrossProfitPct}%) scaled to all sales, since cocktails &amp; food aren't fully cost-mapped yet. Fixed overheads${d.overheadsMonthly?` (RM ${money(d.overheadsMonthly)}/mo)`:''} are pro-rated (${d.overheadsBasis}); stage cost is exact.</div>`;
 }
 function renderTables(d){
   const tt = d.topTables || [];
