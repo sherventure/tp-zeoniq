@@ -205,6 +205,16 @@
   .pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:800}
   .num{font-family:"Inter";font-weight:700;color:var(--ink)}
   .rt{text-align:right}
+  .pnltbl{font-variant-numeric:tabular-nums}
+  .pnltbl th{padding:7px 10px;font-size:10px}
+  .pnltbl td{padding:7px 10px;font-size:12px;font-weight:600;white-space:nowrap}
+  .pnltbl th.grp{text-align:center;color:#fff;border-radius:5px}
+  .pnltbl th.gsales{background:#2f6b45}.pnltbl th.gcost{background:#b1493a}.pnltbl th.gopex{background:#b9791b}
+  .pnltbl tbody tr:hover td{background:var(--surface-soft)}
+  .pnltbl tr.dimrow td{color:var(--muted);opacity:.7}
+  .pnltbl tr.totrow td{border-top:2px solid var(--border-strong);font-weight:800;color:var(--ink);background:var(--surface-soft)}
+  .pnltbl td.pnl-pos,.pnltbl td.pnl-pos.rt{color:#0e8a6b}
+  .pnltbl td.pnl-neg,.pnltbl td.pnl-neg.rt{color:#b1493a}
   .rank{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:7px;background:var(--accent-soft);color:var(--accent-deep);font-weight:800;font-size:12px}
   .rank.g1{background:var(--accent);color:#fff}
   .guest b{color:var(--ink)}
@@ -323,6 +333,7 @@
         <button type="button" data-v="day" class="on">Day</button>
         <button type="button" data-v="mtd">Month</button>
         <button type="button" data-v="cmp">3-Month</button>
+        <button type="button" data-v="pnl">Daily P&amp;L</button>
       </div>
       <span class="datebtn"><span class="dot"></span><span id="dateLabel">—</span></span>
     </div>
@@ -446,6 +457,14 @@
         <div class="card-h"><h3>Top 10 Spenders — last 3 months</h3><span class="sub">identified guests by total spend</span></div>
         <div style="overflow-x:auto" id="cmp3mSpenders"></div>
         <p class="hint-note" id="cmp3mNote"></p>
+      </section>
+    </div>
+
+    <div id="pnlView" class="content" hidden>
+      <section class="card">
+        <div class="card-h"><h3>Daily P&amp;L</h3><span class="sub" id="pnlTableSub">sales, cost &amp; profit per day</span></div>
+        <div style="overflow-x:auto" id="pnlTableWrap"></div>
+        <p class="hint-note" id="pnlTableNote"></p>
       </section>
     </div>
   </div>
@@ -639,7 +658,7 @@ const DASHBOARD_DATA = {
     "day": {
       "scope": "day",
       "dateLabel": "Tuesday, 15 September 2026",
-      "source": "Zeoniq daily export · 15 Sep 2026 · refreshed 18 sep 5:54am",
+      "source": "Zeoniq daily export · 15 Sep 2026 · refreshed 18 sep 6:53am",
       "transactions": 153,
       "depositAdj": 0.0,
       "pax": 523,
@@ -739,15 +758,18 @@ const DASHBOARD_DATA = {
       "estGrossProfitPct": 55.8,
       "overheads": 8263.52,
       "overheadsBasis": "1 day (1/30 of month)",
-      "partTime": 1084.67,
-      "netProfit": 14130.23,
-      "opexTotal": 12828.19,
-      "overheadsMonthly": 247905.55
+      "overheadsMonthly": 247905.55,
+      "net": 48336.0,
+      "productCost": 18495.1,
+      "grossProfitActual": 29840.9,
+      "grossProfitPctActual": 61.7,
+      "opexTotal": 11873.52,
+      "netProfit": 17967.38
     },
     "mtd": {
       "scope": "mtd",
       "dateLabel": "Sep 1–15",
-      "source": "Zeoniq month-to-date · Sep 1–15 · refreshed 18 sep 5:54am",
+      "source": "Zeoniq month-to-date · Sep 1–15 · refreshed 18 sep 6:53am",
       "transactions": 1033,
       "depositAdj": 0.0,
       "pax": 3707,
@@ -813,10 +835,13 @@ const DASHBOARD_DATA = {
       "estGrossProfitPct": 56.8,
       "overheads": 123952.77,
       "overheadsBasis": "15/30 days elapsed",
-      "partTime": 16270.0,
-      "netProfit": -11923.57,
-      "opexTotal": 190362.77,
-      "overheadsMonthly": 247905.55
+      "overheadsMonthly": 247905.55,
+      "net": 314273.4,
+      "productCost": 120013.79,
+      "grossProfitActual": 194259.61,
+      "grossProfitPctActual": 61.8,
+      "opexTotal": 182542.8,
+      "netProfit": 11716.81
     }
   },
   "comparison": [
@@ -1714,6 +1739,293 @@ const DASHBOARD_DATA = {
       }
     ]
   },
+  "dailyPnl": [
+    {
+      "date": "2026-09-01",
+      "wd": "Tue",
+      "open": false,
+      "gross": 0.0,
+      "net": 0.0,
+      "foodCost": 0.0,
+      "alcCost": 0.0,
+      "otherCost": 0.0,
+      "waiters": 2364.12,
+      "stage": 650.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 0.0,
+      "opex": 8393.52,
+      "profit": -8393.52
+    },
+    {
+      "date": "2026-09-02",
+      "wd": "Wed",
+      "open": true,
+      "gross": 8498.89,
+      "net": 7374.8,
+      "foodCost": 874.28,
+      "alcCost": 1370.9,
+      "otherCost": 635.47,
+      "waiters": 2364.12,
+      "stage": 3930.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 2880.65,
+      "opex": 11673.52,
+      "profit": -7179.37
+    },
+    {
+      "date": "2026-09-03",
+      "wd": "Thu",
+      "open": true,
+      "gross": 13651.26,
+      "net": 11607.0,
+      "foodCost": 1401.15,
+      "alcCost": 2930.6,
+      "otherCost": 132.45,
+      "waiters": 2364.12,
+      "stage": 4130.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 4464.2,
+      "opex": 11873.52,
+      "profit": -4730.72
+    },
+    {
+      "date": "2026-09-04",
+      "wd": "Fri",
+      "open": true,
+      "gross": 47502.22,
+      "net": 40335.9,
+      "foodCost": 4029.65,
+      "alcCost": 11052.78,
+      "otherCost": 524.45,
+      "waiters": 3924.12,
+      "stage": 5480.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 15606.88,
+      "opex": 14783.52,
+      "profit": 9945.5
+    },
+    {
+      "date": "2026-09-05",
+      "wd": "Sat",
+      "open": true,
+      "gross": 62608.11,
+      "net": 53313.2,
+      "foodCost": 5348.25,
+      "alcCost": 14072.61,
+      "otherCost": 1145.66,
+      "waiters": 4054.12,
+      "stage": 5380.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 20566.52,
+      "opex": 14813.52,
+      "profit": 17933.16
+    },
+    {
+      "date": "2026-09-06",
+      "wd": "Sun",
+      "open": true,
+      "gross": 10109.41,
+      "net": 8603.6,
+      "foodCost": 707.01,
+      "alcCost": 2140.27,
+      "otherCost": 198.72,
+      "waiters": 2364.12,
+      "stage": 4130.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 3046.0,
+      "opex": 11873.52,
+      "profit": -6315.92
+    },
+    {
+      "date": "2026-09-07",
+      "wd": "Mon",
+      "open": true,
+      "gross": 11354.74,
+      "net": 9662.7,
+      "foodCost": 912.69,
+      "alcCost": 2569.39,
+      "otherCost": 155.52,
+      "waiters": 2364.12,
+      "stage": 4180.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 3637.6,
+      "opex": 11923.52,
+      "profit": -5898.41
+    },
+    {
+      "date": "2026-09-08",
+      "wd": "Tue",
+      "open": true,
+      "gross": 20583.23,
+      "net": 17546.7,
+      "foodCost": 1226.32,
+      "alcCost": 4613.87,
+      "otherCost": 454.9,
+      "waiters": 2364.12,
+      "stage": 4130.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 6295.08,
+      "opex": 11873.52,
+      "profit": -621.9
+    },
+    {
+      "date": "2026-09-09",
+      "wd": "Wed",
+      "open": true,
+      "gross": 15241.01,
+      "net": 12949.9,
+      "foodCost": 1522.32,
+      "alcCost": 3720.1,
+      "otherCost": 239.76,
+      "waiters": 2364.12,
+      "stage": 3930.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 5482.18,
+      "opex": 11673.52,
+      "profit": -4205.8
+    },
+    {
+      "date": "2026-09-10",
+      "wd": "Thu",
+      "open": true,
+      "gross": 9835.9,
+      "net": 8406.6,
+      "foodCost": 1207.27,
+      "alcCost": 1368.09,
+      "otherCost": 350.78,
+      "waiters": 2364.12,
+      "stage": 4130.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 2926.14,
+      "opex": 11873.52,
+      "profit": -6393.06
+    },
+    {
+      "date": "2026-09-11",
+      "wd": "Fri",
+      "open": true,
+      "gross": 32590.88,
+      "net": 27782.5,
+      "foodCost": 3212.14,
+      "alcCost": 6556.17,
+      "otherCost": 648.86,
+      "waiters": 3924.12,
+      "stage": 5480.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 10417.17,
+      "opex": 14783.52,
+      "profit": 2581.81
+    },
+    {
+      "date": "2026-09-12",
+      "wd": "Sat",
+      "open": true,
+      "gross": 66018.36,
+      "net": 56197.2,
+      "foodCost": 5911.14,
+      "alcCost": 14703.36,
+      "otherCost": 1172.88,
+      "waiters": 4054.12,
+      "stage": 5380.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 21787.38,
+      "opex": 14813.52,
+      "profit": 19596.3
+    },
+    {
+      "date": "2026-09-13",
+      "wd": "Sun",
+      "open": false,
+      "gross": 0.0,
+      "net": 0.0,
+      "foodCost": 0.0,
+      "alcCost": 0.0,
+      "otherCost": 0.0,
+      "waiters": 2364.12,
+      "stage": 650.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 0.0,
+      "opex": 8393.52,
+      "profit": -8393.52
+    },
+    {
+      "date": "2026-09-14",
+      "wd": "Mon",
+      "open": true,
+      "gross": 14221.66,
+      "net": 12157.3,
+      "foodCost": 1376.48,
+      "alcCost": 2617.26,
+      "otherCost": 415.15,
+      "waiters": 2364.12,
+      "stage": 4180.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 4408.89,
+      "opex": 11923.52,
+      "profit": -4175.11
+    },
+    {
+      "date": "2026-09-15",
+      "wd": "Tue",
+      "open": true,
+      "gross": 56868.38,
+      "net": 48336.0,
+      "foodCost": 5829.41,
+      "alcCost": 11863.9,
+      "otherCost": 801.79,
+      "waiters": 2364.12,
+      "stage": 4130.0,
+      "mktcs": 827.42,
+      "hr": 157.3,
+      "upkeep": 633.33,
+      "otherOpex": 3761.33,
+      "productCost": 18495.1,
+      "opex": 11873.52,
+      "profit": 17967.38
+    }
+  ],
   "contactsMasked": true
 };
 /*DATA-END*/
@@ -1882,16 +2194,47 @@ function renderPnl(d, total){
   document.getElementById("pnlSub").textContent = currentView==="mtd" ? "month to date" : "this day";
   const npCls = d.netProfit>=0 ? "pnl-pos" : "pnl-neg";
   const neg = v => (v<0?"−":"") + "RM " + money(Math.abs(v));
+  const gp = d.grossProfitActual!=null ? d.grossProfitActual : ((total)-(d.productCost||0));
+  const gppct = d.grossProfitPctActual!=null ? d.grossProfitPctActual : (total?Math.round(gp/total*1000)/10:0);
   const rows = [
     `<div class="pnl-row"><span class="lab">Net sales</span><span class="amt">RM ${money(total)}</span></div>`,
-    `<div class="pnl-row"><span class="lab">Estimated gross profit <span class="pct">${d.estGrossProfitPct}%</span></span><span class="amt pnl-pos">RM ${money(d.estGrossProfit)}</span></div>`,
-    `<div class="pnl-row sub"><span class="lab">− Stage cost</span><span class="amt">−RM ${money(d.stageCost)}</span></div>`,
-    `<div class="pnl-row sub"><span class="lab">− Overheads <span style="opacity:.7">(${d.overheadsBasis})</span></span><span class="amt">−RM ${money(d.overheads)}</span></div>`,
-    (d.partTime!=null ? `<div class="pnl-row sub"><span class="lab">− Part-time waiters</span><span class="amt">−RM ${money(d.partTime)}</span></div>` : ''),
+    `<div class="pnl-row sub"><span class="lab">− Product cost <span style="opacity:.7">(food, alcohol, other)</span></span><span class="amt">−RM ${money(d.productCost||0)}</span></div>`,
+    `<div class="pnl-row"><span class="lab">Gross profit <span class="pct">${gppct}%</span></span><span class="amt pnl-pos">RM ${money(gp)}</span></div>`,
+    `<div class="pnl-row sub"><span class="lab">− Operating costs <span style="opacity:.7">(waiters, stage, overheads…)</span></span><span class="amt">−RM ${money(d.opexTotal||0)}</span></div>`,
     `<div class="pnl-row tot"><span class="lab">Net profit</span><span class="amt ${npCls}">${neg(d.netProfit)}</span></div>`,
   ].join("");
   document.getElementById("pnl").innerHTML = rows +
-    `<div class="pnl-note">Gross profit is <b>estimated</b> — the costed margin (${d.estGrossProfitPct}%) scaled to all sales, since cocktails &amp; food aren't fully cost-mapped yet. Fixed overheads${d.overheadsMonthly?` (RM ${money(d.overheadsMonthly)}/mo)`:''} are pro-rated (${d.overheadsBasis}); stage cost is exact.</div>`;
+    `<div class="pnl-note">Alcohol cost is actual (stock-count); food &amp; other estimated at ${Math.round((1-0.568)*100)}% of net (until recipe costing). Fixed overheads spread per calendar day. See the <b>Daily P&amp;L</b> tab for the full day-by-day breakdown.</div>`;
+}
+function renderPnlTable(){
+  const rows = DATA.dailyPnl || [];
+  const wrap = document.getElementById("pnlTableWrap");
+  if(!rows.length){ wrap.innerHTML = "<p class='hint-note'>No daily data available.</p>"; return; }
+  const m = x => (x<0?"−":"") + money(Math.abs(x));
+  const fmtd = iso => { const dt=new Date(iso+"T00:00"); return dt.toLocaleDateString("en-MY",{weekday:"short",day:"numeric",month:"short"}); };
+  const S = k => rows.reduce((a,r)=>a+(r[k]||0),0);
+  let html = `<table class="tbl pnltbl"><thead>
+    <tr><th rowspan="2">Date</th><th colspan="2" class="grp gsales">Sales</th><th colspan="3" class="grp gcost">Product Cost</th><th colspan="6" class="grp gopex">Operation Costing</th><th rowspan="2" class="rt">Profit</th></tr>
+    <tr><th class="rt">Gross</th><th class="rt">Net</th><th class="rt">Food</th><th class="rt">Alcohol</th><th class="rt">Other</th><th class="rt">Waiters</th><th class="rt">Stage</th><th class="rt">Mktg&amp;CS</th><th class="rt">HR</th><th class="rt">Upkeep</th><th class="rt">Other</th></tr>
+  </thead><tbody>`;
+  html += rows.map(r=>{
+    const cls = r.profit<0 ? "pnl-neg" : "pnl-pos";
+    return `<tr${r.open?"":' class="dimrow"'}><td>${fmtd(r.date)}${r.open?"":" ·closed"}</td>
+      <td class="rt">${m(r.gross)}</td><td class="rt">${m(r.net)}</td>
+      <td class="rt">${m(r.foodCost)}</td><td class="rt">${m(r.alcCost)}</td><td class="rt">${m(r.otherCost)}</td>
+      <td class="rt">${m(r.waiters)}</td><td class="rt">${m(r.stage)}</td><td class="rt">${m(r.mktcs)}</td><td class="rt">${m(r.hr)}</td><td class="rt">${m(r.upkeep)}</td><td class="rt">${m(r.otherOpex)}</td>
+      <td class="rt ${cls}" style="font-weight:700">${m(r.profit)}</td></tr>`;
+  }).join("");
+  const tcls = S("profit")<0 ? "pnl-neg" : "pnl-pos";
+  html += `<tr class="totrow"><td>TOTAL</td>
+    <td class="rt">${m(S("gross"))}</td><td class="rt">${m(S("net"))}</td>
+    <td class="rt">${m(S("foodCost"))}</td><td class="rt">${m(S("alcCost"))}</td><td class="rt">${m(S("otherCost"))}</td>
+    <td class="rt">${m(S("waiters"))}</td><td class="rt">${m(S("stage"))}</td><td class="rt">${m(S("mktcs"))}</td><td class="rt">${m(S("hr"))}</td><td class="rt">${m(S("upkeep"))}</td><td class="rt">${m(S("otherOpex"))}</td>
+    <td class="rt ${tcls}" style="font-weight:800">${m(S("profit"))}</td></tr>`;
+  html += "</tbody></table>";
+  wrap.innerHTML = html;
+  document.getElementById("pnlTableSub").textContent = rows.length + " days";
+  document.getElementById("pnlTableNote").innerHTML = "Gross = Net + service charge + tax. Alcohol cost = actual (stock-count); Food &amp; Other estimated at 43.2% of net (until recipe costing). Waiters = full-time payroll (÷30/day) + daily waiter RM130 + Fri/Sat part-timers (12 / 13 × RM130). Stage = performers + 2 stage full-timers. Other Opex includes the RM15,000 director fee. Fixed overheads are spread per calendar day, so closed days carry cost with no sales. Profit = Net − Product Cost − Operation Costing.";
 }
 function renderTables(d){
   const tt = d.topTables || [];
@@ -2253,17 +2596,21 @@ function renderTopSpenders3m(){
   const tg = document.getElementById("viewToggle");
   const hasMtd = !!(DATA.views && DATA.views.mtd);
   const hasCmp = (DATA.comparison || []).length >= 2;
-  const mtdBtn = tg.querySelector('[data-v="mtd"]'), cmpBtn = tg.querySelector('[data-v="cmp"]');
+  const hasPnl = (DATA.dailyPnl || []).length > 0;
+  const mtdBtn = tg.querySelector('[data-v="mtd"]'), cmpBtn = tg.querySelector('[data-v="cmp"]'), pnlBtn = tg.querySelector('[data-v="pnl"]');
   if(mtdBtn && !hasMtd) mtdBtn.remove();
   if(cmpBtn && !hasCmp) cmpBtn.remove();
-  if(!hasMtd && !hasCmp) return;                 // only 'day' → no toggle needed
+  if(pnlBtn && !hasPnl) pnlBtn.remove();
+  if(!hasMtd && !hasCmp && !hasPnl) return;       // only 'day' → no toggle needed
   tg.hidden = false;
   function setView(v){
     currentView = v;
     tg.querySelectorAll("button").forEach(x=>x.classList.toggle("on", x.dataset.v===v));
-    const dash=document.getElementById("dashView"), cmp=document.getElementById("cmpView");
-    if(v==="cmp"){ dash.hidden=true; cmp.hidden=false; renderComparison(); }
-    else{ cmp.hidden=true; dash.hidden=false; render(); }
+    const dash=document.getElementById("dashView"), cmp=document.getElementById("cmpView"), pnl=document.getElementById("pnlView");
+    dash.hidden=true; cmp.hidden=true; pnl.hidden=true;
+    if(v==="cmp"){ cmp.hidden=false; renderComparison(); }
+    else if(v==="pnl"){ pnl.hidden=false; renderPnlTable(); }
+    else{ dash.hidden=false; render(); }
   }
   tg.querySelectorAll("button").forEach(b=>b.addEventListener("click", ()=>{ if(b.dataset.v!==currentView) setView(b.dataset.v); }));
 })();
