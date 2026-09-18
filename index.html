@@ -639,7 +639,7 @@ const DASHBOARD_DATA = {
     "day": {
       "scope": "day",
       "dateLabel": "Tuesday, 15 September 2026",
-      "source": "Zeoniq daily export · 15 Sep 2026 · refreshed 17 sep 6:38am",
+      "source": "Zeoniq daily export · 15 Sep 2026 · refreshed 18 sep 5:54am",
       "transactions": 153,
       "depositAdj": 0.0,
       "pax": 523,
@@ -739,14 +739,15 @@ const DASHBOARD_DATA = {
       "estGrossProfitPct": 55.8,
       "overheads": 8263.52,
       "overheadsBasis": "1 day (1/30 of month)",
-      "netProfit": 15214.9,
-      "opexTotal": 11743.52,
+      "partTime": 1084.67,
+      "netProfit": 14130.23,
+      "opexTotal": 12828.19,
       "overheadsMonthly": 247905.55
     },
     "mtd": {
       "scope": "mtd",
       "dateLabel": "Sep 1–15",
-      "source": "Zeoniq month-to-date · Sep 1–15 · refreshed 17 sep 6:38am",
+      "source": "Zeoniq month-to-date · Sep 1–15 · refreshed 18 sep 5:54am",
       "transactions": 1033,
       "depositAdj": 0.0,
       "pax": 3707,
@@ -812,8 +813,9 @@ const DASHBOARD_DATA = {
       "estGrossProfitPct": 56.8,
       "overheads": 123952.77,
       "overheadsBasis": "15/30 days elapsed",
-      "netProfit": 4346.43,
-      "opexTotal": 174092.77,
+      "partTime": 16270.0,
+      "netProfit": -11923.57,
+      "opexTotal": 190362.77,
       "overheadsMonthly": 247905.55
     }
   },
@@ -1885,6 +1887,7 @@ function renderPnl(d, total){
     `<div class="pnl-row"><span class="lab">Estimated gross profit <span class="pct">${d.estGrossProfitPct}%</span></span><span class="amt pnl-pos">RM ${money(d.estGrossProfit)}</span></div>`,
     `<div class="pnl-row sub"><span class="lab">− Stage cost</span><span class="amt">−RM ${money(d.stageCost)}</span></div>`,
     `<div class="pnl-row sub"><span class="lab">− Overheads <span style="opacity:.7">(${d.overheadsBasis})</span></span><span class="amt">−RM ${money(d.overheads)}</span></div>`,
+    (d.partTime!=null ? `<div class="pnl-row sub"><span class="lab">− Part-time waiters</span><span class="amt">−RM ${money(d.partTime)}</span></div>` : ''),
     `<div class="pnl-row tot"><span class="lab">Net profit</span><span class="amt ${npCls}">${neg(d.netProfit)}</span></div>`,
   ].join("");
   document.getElementById("pnl").innerHTML = rows +
