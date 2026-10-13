@@ -213,7 +213,7 @@
   .pnltbl th:last-child,.pnltbl td:last-child{padding-right:6px}
   #pnlTableWrap{overflow-x:visible}
   .pnltbl th.grp{text-align:center;color:#fff;border-radius:5px}
-  .pnltbl th.gsales{background:#2f6b45}.pnltbl th.gcost{background:#b1493a}.pnltbl th.gopex{background:#b9791b}
+  .pnltbl th.gsales{background:#2f6b45}.pnltbl th.gcost{background:#b1493a}.pnltbl th.gopex{background:#b9791b}.pnltbl th.gmix{background:#3a6ea5}
   .pnltbl tbody tr:hover td{background:var(--surface-soft)}
   .pnltbl tr.dimrow td{color:var(--muted);opacity:.7}
   .pnltbl tr.totrow td{border-top:2px solid var(--border-strong);font-weight:800;color:var(--ink);background:var(--surface-soft)}
@@ -730,7 +730,7 @@ const DASHBOARD_DATA = {
     "day": {
       "scope": "day",
       "dateLabel": "Monday, 12 October 2026",
-      "source": "Zeoniq daily export · 12 Oct 2026 · refreshed 13 oct 6:53am",
+      "source": "Zeoniq daily export · 12 Oct 2026 · refreshed 13 oct 7:07am",
       "transactions": 57,
       "depositAdj": 0.0,
       "pax": 175,
@@ -862,7 +862,7 @@ const DASHBOARD_DATA = {
     "mtd": {
       "scope": "mtd",
       "dateLabel": "Oct 1–12",
-      "source": "Zeoniq month-to-date · Oct 1–12 · refreshed 13 oct 6:53am",
+      "source": "Zeoniq month-to-date · Oct 1–12 · refreshed 13 oct 7:07am",
       "transactions": 1129,
       "depositAdj": 0.0,
       "pax": 4128,
@@ -2072,6 +2072,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 8949.9,
+      "bevNet": 23315.2,
+      "pax": 480,
       "productCost": 12729.71,
       "opex": 11665.0,
       "profit": 14352.37,
@@ -2095,6 +2098,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 8492.9,
+      "bevNet": 46753.0,
+      "pax": 603,
       "productCost": 22342.36,
       "opex": 15875.0,
       "profit": 25589.23,
@@ -2118,6 +2124,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 10607.5,
+      "bevNet": 47150.2,
+      "pax": 700,
       "productCost": 22806.02,
       "opex": 14955.0,
       "profit": 29182.45,
@@ -2141,6 +2150,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 2072.3,
+      "bevNet": 11298.6,
+      "pax": 210,
       "productCost": 5413.39,
       "opex": 11665.0,
       "profit": -1354.7,
@@ -2164,6 +2176,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 2401.4,
+      "bevNet": 12757.6,
+      "pax": 197,
       "productCost": 5893.9,
       "opex": 11165.0,
       "profit": 107.0,
@@ -2187,6 +2202,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 0,
+      "bevNet": 0,
+      "pax": 0,
       "productCost": 0.0,
       "opex": 5836.39,
       "profit": -5836.39,
@@ -2210,6 +2228,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 1356.9,
+      "bevNet": 9180.4,
+      "pax": 98,
       "productCost": 4459.44,
       "opex": 11965.0,
       "profit": -4006.41,
@@ -2233,6 +2254,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 2024.4,
+      "bevNet": 9061.4,
+      "pax": 158,
       "productCost": 4556.48,
       "opex": 11665.0,
       "profit": -3036.29,
@@ -2256,6 +2280,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 8523.5,
+      "bevNet": 46081.0,
+      "pax": 640,
       "productCost": 20750.48,
       "opex": 15875.0,
       "profit": 25630.37,
@@ -2279,6 +2306,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 9274.2,
+      "bevNet": 46857.6,
+      "pax": 706,
       "productCost": 21747.73,
       "opex": 15905.0,
       "profit": 27185.45,
@@ -2302,6 +2332,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 2240.2,
+      "bevNet": 7840.2,
+      "pax": 161,
       "productCost": 3839.77,
       "opex": 11665.0,
       "profit": -3679.53,
@@ -2325,6 +2358,9 @@ const DASHBOARD_DATA = {
       "hr": 152.49,
       "upkeep": 612.9,
       "otherOpex": 3100.0,
+      "foodNet": 2671.0,
+      "bevNet": 9305.2,
+      "pax": 175,
       "productCost": 4730.75,
       "opex": 11715.0,
       "profit": -2417.72,
@@ -2520,14 +2556,17 @@ function renderPnlTable(){
   const m = x => (x<0?"−":"") + money(Math.abs(x));
   const fmtd = iso => { const dt=new Date(iso+"T00:00"); return dt.toLocaleDateString("en-MY",{weekday:"short",day:"numeric",month:"short"}); };
   const S = k => rows.reduce((a,r)=>a+(r[k]||0),0);
+  const pctMix = (a,b)=>{const t=(a||0)+(b||0); return t>0?(a/t*100).toFixed(1)+"%":"—";};
+  const spendPax = (net,pax)=> (pax>0 ? "RM "+money2(net/pax) : "—");
   let html = `<table class="tbl pnltbl"><thead>
-    <tr><th rowspan="2">Date</th><th colspan="3" class="grp gsales">Sales</th><th colspan="3" class="grp gcost">Product Cost</th><th colspan="6" class="grp gopex">Operation Costing</th><th rowspan="2" class="rt">Profit</th><th rowspan="2" class="rt">Cum. Profit</th></tr>
-    <tr><th class="rt">Net</th><th class="rt">Serv. Chg</th><th class="rt">Revenue</th><th class="rt">Food</th><th class="rt">Alcohol</th><th class="rt">Other</th><th class="rt">Waiters</th><th class="rt">Stage</th><th class="rt">Mktg&amp;CS</th><th class="rt">HR</th><th class="rt">Upkeep</th><th class="rt">Other</th></tr>
+    <tr><th rowspan="2">Date</th><th colspan="3" class="grp gsales">Sales</th><th colspan="3" class="grp gmix">Sales Mix</th><th colspan="3" class="grp gcost">Product Cost</th><th colspan="6" class="grp gopex">Operation Costing</th><th rowspan="2" class="rt">Profit</th><th rowspan="2" class="rt">Cum. Profit</th></tr>
+    <tr><th class="rt">Net</th><th class="rt">Serv. Chg</th><th class="rt">Revenue</th><th class="rt">Food %</th><th class="rt">Bev %</th><th class="rt">Spend/Pax</th><th class="rt">Food</th><th class="rt">Alcohol</th><th class="rt">Other</th><th class="rt">Waiters</th><th class="rt">Stage</th><th class="rt">Mktg&amp;CS</th><th class="rt">HR</th><th class="rt">Upkeep</th><th class="rt">Other</th></tr>
   </thead><tbody>`;
   html += rows.map(r=>{
     const cls = r.profit<0 ? "pnl-neg" : "pnl-pos";
     return `<tr${r.open?"":' class="dimrow"'}><td>${fmtd(r.date)}${r.open?"":" ·closed"}</td>
       <td class="rt">${m(r.net)}</td><td class="rt">${m(r.sc||0)}</td><td class="rt">${m(r.revenue!=null?r.revenue:(r.net+(r.sc||0)))}</td>
+      <td class="rt">${pctMix(r.foodNet,r.bevNet)}</td><td class="rt">${pctMix(r.bevNet,r.foodNet)}</td><td class="rt">${spendPax(r.net,r.pax)}</td>
       <td class="rt">${m(r.foodCost)}</td><td class="rt">${m(r.alcCost)}</td><td class="rt">${m(r.otherCost)}</td>
       <td class="rt">${m(r.waiters)}</td><td class="rt">${m(r.stage)}</td><td class="rt">${m(r.mktcs)}</td><td class="rt">${m(r.hr)}</td><td class="rt">${m(r.upkeep)}</td><td class="rt">${m(r.otherOpex)}</td>
       <td class="rt ${cls}" style="font-weight:700">${m(r.profit)}</td>
@@ -2536,6 +2575,7 @@ function renderPnlTable(){
   const tcls = S("profit")<0 ? "pnl-neg" : "pnl-pos";
   html += `<tr class="totrow"><td>TOTAL</td>
     <td class="rt">${m(S("net"))}</td><td class="rt">${m(S("sc"))}</td><td class="rt">${m(S("revenue"))}</td>
+    <td class="rt">${pctMix(S("foodNet"),S("bevNet"))}</td><td class="rt">${pctMix(S("bevNet"),S("foodNet"))}</td><td class="rt">${spendPax(S("net"),S("pax"))}</td>
     <td class="rt">${m(S("foodCost"))}</td><td class="rt">${m(S("alcCost"))}</td><td class="rt">${m(S("otherCost"))}</td>
     <td class="rt">${m(S("waiters"))}</td><td class="rt">${m(S("stage"))}</td><td class="rt">${m(S("mktcs"))}</td><td class="rt">${m(S("hr"))}</td><td class="rt">${m(S("upkeep"))}</td><td class="rt">${m(S("otherOpex"))}</td>
     <td class="rt ${tcls}" style="font-weight:800">${m(S("profit"))}</td>
@@ -2543,7 +2583,7 @@ function renderPnlTable(){
   html += "</tbody></table>";
   wrap.innerHTML = html;
   document.getElementById("pnlTableSub").textContent = rows.length + " days";
-  document.getElementById("pnlTableNote").innerHTML = "Revenue = Net sales + 10% service charge (the SC is your revenue; tax is excluded). Food cost = ACTUAL per-dish recipe cost (COGS × qty sold, from the recipe cost sheet); Alcohol = actual stock-count; Other estimated at 43.2% of net. Waiters = full-time payroll (÷30/day) + daily waiter RM130 + Fri/Sat part-timers (12 / 13 × RM130). Stage = performers + 2 stage full-timers. Other Opex includes the RM15,000 director fee. Fixed overheads are spread per calendar day, so closed days carry cost with no sales. Profit = Revenue − Product Cost − Operation Costing.";
+  document.getElementById("pnlTableNote").innerHTML = "Revenue = Net sales + 10% service charge (the SC is your revenue; tax is excluded). Food cost = ACTUAL per-dish recipe cost (COGS × qty sold, from the recipe cost sheet); Alcohol = actual stock-count; Other estimated at 43.2% of net. Waiters = full-time payroll (÷30/day) + daily waiter RM130 + Fri/Sat part-timers (12 / 13 × RM130). Stage = performers + 2 stage full-timers. Other Opex includes the RM15,000 director fee. Fixed overheads are spread per calendar day, so closed days carry cost with no sales. Profit = Revenue − Product Cost − Operation Costing. Sales Mix: Food % and Bev % are each category\u2019s share of food + beverage net sales (deposits / other excluded); Spend/Pax = net sales \u00f7 reservation pax (excl no-shows).";
 }
 function renderTables(d){
   const tt = d.topTables || [];
