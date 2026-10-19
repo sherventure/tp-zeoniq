@@ -730,7 +730,7 @@ const DASHBOARD_DATA = {
     "day": {
       "scope": "day",
       "dateLabel": "Sunday, 18 October 2026",
-      "source": "Zeoniq daily export · 18 Oct 2026 · refreshed 19 oct 7:09am",
+      "source": "Zeoniq daily export · 18 Oct 2026 · refreshed 19 oct 7:25am",
       "transactions": 49,
       "depositAdj": 0.0,
       "pax": 199,
@@ -864,7 +864,7 @@ const DASHBOARD_DATA = {
     "mtd": {
       "scope": "mtd",
       "dateLabel": "Oct 1–18",
-      "source": "Zeoniq month-to-date · Oct 1–18 · refreshed 19 oct 7:09am",
+      "source": "Zeoniq month-to-date · Oct 1–18 · refreshed 19 oct 7:25am",
       "transactions": 1549,
       "depositAdj": 0.0,
       "pax": 5847,
@@ -2808,8 +2808,8 @@ function renderPnlTable(){
   const spendPax = (net,pax)=> (pax>0 ? "RM "+money2(net/pax) : "—");
   const q = v => (v>0 ? v.toLocaleString("en-MY") : "—");
   let html = `<table class="tbl pnltbl"><thead>
-    <tr><th rowspan="2">Date</th><th colspan="3" class="grp gsales">Sales</th><th colspan="3" class="grp gcost">Product Cost</th><th colspan="6" class="grp gopex">Operation Costing</th><th rowspan="2" class="rt">Profit</th><th rowspan="2" class="rt">Cum. Profit</th><th colspan="6" class="grp gmix">Sales Mix</th></tr>
-    <tr><th class="rt">Net</th><th class="rt">Serv. Chg</th><th class="rt">Revenue</th><th class="rt">Food</th><th class="rt">Alcohol</th><th class="rt">Other</th><th class="rt">Waiters</th><th class="rt">Stage</th><th class="rt">Mktg&amp;CS</th><th class="rt">HR</th><th class="rt">Upkeep</th><th class="rt">Other</th><th class="rt">Food %</th><th class="rt">Bev %</th><th class="rt">Spend/Pax</th><th class="rt">Book</th><th class="rt">Walk-in</th><th class="rt">No-Show</th></tr>
+    <tr><th rowspan="2">Date</th><th colspan="3" class="grp gsales">Sales</th><th colspan="3" class="grp gcost">Product Cost</th><th colspan="6" class="grp gopex">Operation Costing</th><th rowspan="2" class="rt">Profit</th><th rowspan="2" class="rt">Cum. Profit</th><th colspan="4" class="grp gmix">Sales Mix</th></tr>
+    <tr><th class="rt">Net</th><th class="rt">Serv. Chg</th><th class="rt">Revenue</th><th class="rt">Food</th><th class="rt">Alcohol</th><th class="rt">Other</th><th class="rt">Waiters</th><th class="rt">Stage</th><th class="rt">Mktg&amp;CS</th><th class="rt">HR</th><th class="rt">Upkeep</th><th class="rt">Other</th><th class="rt">Food %</th><th class="rt">Bev %</th><th class="rt">Spend/Pax</th><th class="rt">Pax</th></tr>
   </thead><tbody>`;
   html += rows.map(r=>{
     const cls = r.profit<0 ? "pnl-neg" : "pnl-pos";
@@ -2819,7 +2819,7 @@ function renderPnlTable(){
       <td class="rt">${m(r.waiters)}</td><td class="rt">${m(r.stage)}</td><td class="rt">${m(r.mktcs)}</td><td class="rt">${m(r.hr)}</td><td class="rt">${m(r.upkeep)}</td><td class="rt">${m(r.otherOpex)}</td>
       <td class="rt ${cls}" style="font-weight:700">${m(r.profit)}</td>
       <td class="rt ${r.cumProfit<0?'pnl-neg':'pnl-pos'}" style="font-weight:700">${m(r.cumProfit)}</td>
-      <td class="rt">${pctMix(r.foodNet,r.bevNet)}</td><td class="rt">${pctMix(r.bevNet,r.foodNet)}</td><td class="rt">${spendPax(r.net,r.pax)}</td><td class="rt">${q(r.resvBook)}</td><td class="rt">${q(r.resvWalk)}</td><td class="rt">${q(r.resvNoShow)}</td></tr>`;
+      <td class="rt">${pctMix(r.foodNet,r.bevNet)}</td><td class="rt">${pctMix(r.bevNet,r.foodNet)}</td><td class="rt">${spendPax(r.net,r.pax)}</td><td class="rt">${q(r.pax)}</td></tr>`;
   }).join("");
   const tcls = S("profit")<0 ? "pnl-neg" : "pnl-pos";
   html += `<tr class="totrow"><td>TOTAL</td>
@@ -2828,11 +2828,11 @@ function renderPnlTable(){
     <td class="rt">${m(S("waiters"))}</td><td class="rt">${m(S("stage"))}</td><td class="rt">${m(S("mktcs"))}</td><td class="rt">${m(S("hr"))}</td><td class="rt">${m(S("upkeep"))}</td><td class="rt">${m(S("otherOpex"))}</td>
     <td class="rt ${tcls}" style="font-weight:800">${m(S("profit"))}</td>
     <td class="rt ${tcls}" style="font-weight:800">${m(rows[rows.length-1].cumProfit)}</td>
-    <td class="rt">${pctMix(S("foodNet"),S("bevNet"))}</td><td class="rt">${pctMix(S("bevNet"),S("foodNet"))}</td><td class="rt">${spendPax(S("net"),S("pax"))}</td><td class="rt">${q(S("resvBook"))}</td><td class="rt">${q(S("resvWalk"))}</td><td class="rt">${q(S("resvNoShow"))}</td></tr>`;
+    <td class="rt">${pctMix(S("foodNet"),S("bevNet"))}</td><td class="rt">${pctMix(S("bevNet"),S("foodNet"))}</td><td class="rt">${spendPax(S("net"),S("pax"))}</td><td class="rt">${q(S("pax"))}</td></tr>`;
   html += "</tbody></table>";
   wrap.innerHTML = html;
   document.getElementById("pnlTableSub").textContent = rows.length + " days";
-  document.getElementById("pnlTableNote").innerHTML = "Revenue = Net sales + 10% service charge (the SC is your revenue; tax is excluded). Food cost = ACTUAL per-dish recipe cost (COGS × qty sold, from the recipe cost sheet); Alcohol = actual stock-count; Other estimated at 43.2% of net. Waiters = full-time payroll (÷30/day) + daily waiter RM130 + Fri/Sat part-timers (12 / 13 × RM130). Stage = performers + 2 stage full-timers. Other Opex includes the RM15,000 director fee. Fixed overheads are spread per calendar day, so closed days carry cost with no sales. Profit = Revenue − Product Cost − Operation Costing. Sales Mix (far right): Food % / Bev % = each category\u2019s share of food + beverage net sales (deposits / other excluded); Spend/Pax = net sales \u00f7 reservation pax (excl no-shows); Book / Walk-in / No-Show = reservation pax by type that day.";
+  document.getElementById("pnlTableNote").innerHTML = "Revenue = Net sales + 10% service charge (the SC is your revenue; tax is excluded). Food cost = ACTUAL per-dish recipe cost (COGS × qty sold, from the recipe cost sheet); Alcohol = actual stock-count; Other estimated at 43.2% of net. Waiters = full-time payroll (÷30/day) + daily waiter RM130 + Fri/Sat part-timers (12 / 13 × RM130). Stage = performers + 2 stage full-timers. Other Opex includes the RM15,000 director fee. Fixed overheads are spread per calendar day, so closed days carry cost with no sales. Profit = Revenue − Product Cost − Operation Costing. Sales Mix (far right): Food % / Bev % = each category\u2019s share of food + beverage net sales (deposits / other excluded); Spend/Pax = net sales \u00f7 reservation pax (excl no-shows); Pax = total reservation pax that day (excl no-shows).";
 }
 function renderTables(d){
   const tt = d.topTables || [];
