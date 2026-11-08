@@ -334,10 +334,10 @@
         <input placeholder="Search category, item…" aria-label="Search">
       </label>
       <div class="vtoggle" id="viewToggle" hidden>
-        <button type="button" data-v="day" class="on">Day</button>
-        <button type="button" data-v="mtd">Month</button>
-        <button type="button" data-v="cmp">3-Month</button>
-        <button type="button" data-v="pnl">Daily P&amp;L</button>
+        <button type="button" data-v="pnl" class="on">Daily P&amp;L</button>
+        <button type="button" data-v="customers">客户</button>
+        <button type="button" data-v="items">Top 10</button>
+        <button type="button" data-v="marketing">Marketing</button>
       </div>
       <span class="datebtn"><span class="dot"></span><span id="dateLabel">—</span></span>
     </div>
@@ -471,6 +471,42 @@
         <p class="hint-note" id="pnlTableNote"></p>
       </section>
     </div>
+
+    <!-- ===== 客户数据 ===== -->
+    <div id="customersView" class="content" hidden>
+      <section class="card">
+        <div class="card-h"><h3>最常来的客户 · Top Customers</h3><span class="sub" id="custSub">—</span></div>
+        <div class="vtoggle period-toggle" data-for="cust" style="margin:12px 18px 0">
+          <button type="button" data-p="mtd">本月 MTD</button>
+          <button type="button" data-p="3mo" class="on">过去 3 个月</button>
+          <button type="button" data-p="all">全部历史</button>
+        </div>
+        <div style="overflow-x:auto" id="custWrap"></div>
+        <p class="hint-note" id="custNote"></p>
+      </section>
+    </div>
+
+    <!-- ===== Food / Drinks Top 10 ===== -->
+    <div id="itemsView" class="content" hidden>
+      <section class="card">
+        <div class="card-h"><h3>Food · Drinks 销售 Top 10</h3><span class="sub" id="itemsSub">—</span></div>
+        <div class="vtoggle period-toggle" data-for="items" style="margin:12px 18px 0">
+          <button type="button" data-p="mtd">本月 MTD</button>
+          <button type="button" data-p="3mo" class="on">过去 3 个月</button>
+          <button type="button" data-p="all">全部历史</button>
+        </div>
+        <div id="itemsWrap" style="display:grid;gap:18px;padding:16px 18px;grid-template-columns:1fr"></div>
+        <p class="hint-note" id="itemsNote">按净销售额排序（未含服务费 / SST）。套餐类以 set 计。</p>
+      </section>
+    </div>
+
+    <!-- ===== Marketing 转化 ===== -->
+    <div id="marketingView" class="content" hidden>
+      <section class="card">
+        <div class="card-h"><h3>Marketing 转化 Sales</h3><span class="sub">快照 · 社媒 → 询问 → 销售（8–10 月）</span></div>
+        <div id="mktWrap" style="padding:16px 18px"></div>
+      </section>
+    </div>
   </div>
 </div>
 
@@ -483,56 +519,8 @@
    ===================================================================== */
 /*DATA-START*/
 const DASHBOARD_DATA = {
-  "defaultView": "day",
+  "defaultView": "pnl",
   "history": [
-    {
-      "date": "2026-09-27",
-      "net": 16943.3,
-      "gp": 6391.16,
-      "cost": 3971.84,
-      "covrev": 10363.0,
-      "coverage": 61.2
-    },
-    {
-      "date": "2026-09-28",
-      "net": 15758.4,
-      "gp": 6797.61,
-      "cost": 3975.59,
-      "covrev": 10773.2,
-      "coverage": 68.4
-    },
-    {
-      "date": "2026-09-30",
-      "net": 18387.8,
-      "gp": 7274.55,
-      "cost": 4278.05,
-      "covrev": 11552.6,
-      "coverage": 62.8
-    },
-    {
-      "date": "2026-10-01",
-      "net": 35319.8,
-      "gp": 14295.25,
-      "cost": 9322.45,
-      "covrev": 23617.7,
-      "coverage": 66.9
-    },
-    {
-      "date": "2026-10-02",
-      "net": 58036.9,
-      "gp": 25420.94,
-      "cost": 19147.26,
-      "covrev": 44568.2,
-      "coverage": 76.8
-    },
-    {
-      "date": "2026-10-03",
-      "net": 60837.7,
-      "gp": 28048.8,
-      "cost": 19083.8,
-      "covrev": 47132.6,
-      "coverage": 77.5
-    },
     {
       "date": "2026-10-04",
       "net": 14297.9,
@@ -724,65 +712,111 @@ const DASHBOARD_DATA = {
       "cost": 24345.45,
       "covrev": 60665.8,
       "coverage": 81.6
+    },
+    {
+      "date": "2026-11-01",
+      "net": 10128.9,
+      "gp": 4377.9,
+      "cost": 2682.7,
+      "covrev": 7060.6,
+      "coverage": 69.7
+    },
+    {
+      "date": "2026-11-02",
+      "net": 16543.2,
+      "gp": 7428.63,
+      "cost": 4929.37,
+      "covrev": 12358.0,
+      "coverage": 74.7
+    },
+    {
+      "date": "2026-11-04",
+      "net": 11797.6,
+      "gp": 4225.9,
+      "cost": 2663.11,
+      "covrev": 6889.0,
+      "coverage": 58.4
+    },
+    {
+      "date": "2026-11-05",
+      "net": 15437.9,
+      "gp": 6888.35,
+      "cost": 5042.65,
+      "covrev": 11931.0,
+      "coverage": 77.3
+    },
+    {
+      "date": "2026-11-06",
+      "net": 43506.0,
+      "gp": 18157.53,
+      "cost": 12484.48,
+      "covrev": 30642.0,
+      "coverage": 70.4
+    },
+    {
+      "date": "2026-11-07",
+      "net": 60316.1,
+      "gp": 27171.15,
+      "cost": 18309.65,
+      "covrev": 45480.8,
+      "coverage": 75.4
     }
   ],
   "views": {
     "day": {
       "scope": "day",
-      "dateLabel": "Saturday, 31 October 2026",
-      "source": "Zeoniq daily export · 31 Oct 2026 · refreshed 1 nov 8:21am",
-      "transactions": 173,
+      "dateLabel": "Saturday, 7 November 2026",
+      "source": "Zeoniq daily export · 7 Nov 2026 · refreshed 8 nov 5:14am",
+      "transactions": 192,
       "depositAdj": 0.0,
-      "pax": 674,
-      "avgPerPax": 110.34,
-      "yesterdayNet": 52259.1,
+      "pax": 688,
+      "avgPerPax": 87.67,
+      "yesterdayNet": 43506.0,
       "tablesMode": "guests",
       "topTables": [
         {
-          "table": "S8",
-          "net": 1434.9,
-          "bills": 2,
-          "name": "Leonard",
-          "phone": "••••4553",
-          "pax": 6,
-          "status": "Walk in",
-          "more": 1
-        },
-        {
-          "table": "A5",
-          "net": 1418.6,
-          "bills": 2,
-          "name": "charlotte",
-          "phone": "••••9328",
-          "pax": 6,
-          "status": "Book",
-          "more": 1
-        },
-        {
-          "table": "M2",
-          "net": 1372.9,
-          "bills": 1,
-          "name": "Kristy",
-          "phone": "••••0900",
-          "pax": 8,
+          "table": "M4",
+          "net": 2227.9,
+          "bills": 3,
+          "name": "Bowie",
+          "phone": "••••7388",
+          "pax": 11,
           "status": "Book"
         },
         {
-          "table": "A12",
-          "net": 1322.9,
-          "bills": 1,
-          "name": "CY",
-          "phone": "••••2733",
-          "pax": 8,
-          "status": "Book"
-        },
-        {
-          "table": "M9A",
-          "net": 1310.6,
-          "bills": 1,
-          "name": "CINDY",
-          "phone": "••••3880",
+          "table": "A8",
+          "net": 1942.7,
+          "bills": 3,
+          "name": "FION",
+          "phone": "••••8808",
           "pax": 12,
+          "status": "Book"
+        },
+        {
+          "table": "F11",
+          "net": 1448.8,
+          "bills": 3,
+          "name": "Ang",
+          "phone": "••••9319",
+          "pax": 5,
+          "status": "Book"
+        },
+        {
+          "table": "M26",
+          "net": 1419.9,
+          "bills": 3,
+          "name": "TEN",
+          "phone": "••••8168",
+          "pax": 5,
+          "status": "Book"
+        },
+        {
+          "table": "M28",
+          "net": 1381.0,
+          "bills": 1,
+          "name": "Standy",
+          "phone": "••••9699",
+          "pax": 11,
           "status": "Book"
         }
       ],
@@ -790,22 +824,22 @@ const DASHBOARD_DATA = {
         {
           "name": "Food (Kitchen)",
           "bucket": "food",
-          "net": 9844.9
+          "net": 8779.1
         },
         {
           "name": "Beer — Bottled & Bucket",
           "bucket": "alcohol",
-          "net": 36782.0
+          "net": 21182.0
         },
         {
           "name": "Beer — Draught",
           "bucket": "alcohol",
-          "net": 11183.0
+          "net": 14825.0
         },
         {
           "name": "Spirits & Liquor",
           "bucket": "alcohol",
-          "net": 5452.0
+          "net": 2442.0
         },
         {
           "name": "Wine & Champagne",
@@ -815,199 +849,186 @@ const DASHBOARD_DATA = {
         {
           "name": "Cocktails",
           "bucket": "alcohol",
-          "net": 3840.0
+          "net": 3543.0
         },
         {
           "name": "Soft Drinks & Mixers",
           "bucket": "others",
-          "net": 2827.6
+          "net": 2892.0
         },
         {
           "name": "Others (Misc)",
           "bucket": "others",
-          "net": 270.0
+          "net": 148.0
         },
         {
           "name": "Combo (drink portion)",
           "bucket": "alcohol",
-          "net": 4510.6
+          "net": 4879.0
         },
         {
           "name": "Combo (food portion)",
           "bucket": "food",
-          "net": 1084.4
+          "net": 1050.0
         },
         {
           "name": "Deposits",
           "bucket": "others",
-          "net": -1800.0
+          "net": 200.0
         }
       ],
-      "grossProfit": 36320.35,
-      "cost": 24345.45,
-      "grossProfitPct": 59.9,
-      "costCoverage": 81.6,
-      "stageCost": 5890.0,
-      "operatingProfit": 30430.35,
-      "estGrossProfit": 44525.29,
-      "estGrossProfitPct": 59.9,
-      "overheads": 7998.45,
-      "overheadsBasis": "1 day (1/31 of month)",
+      "grossProfit": 27171.15,
+      "cost": 18309.65,
+      "grossProfitPct": 59.7,
+      "costCoverage": 75.4,
+      "stageCost": 5090.0,
+      "operatingProfit": 22081.15,
+      "estGrossProfit": 36034.06,
+      "estGrossProfitPct": 59.7,
+      "overheads": 8265.06,
+      "overheadsBasis": "1 day (1/30 of month)",
       "overheadsMonthly": 247951.86,
-      "net": 74370.5,
-      "sc": 7590.05,
-      "revenue": 81960.55,
-      "productCost": 27602.61,
-      "grossProfitActual": 46767.89,
-      "grossProfitPctActual": 62.9,
-      "opexTotal": 16028.75,
-      "netProfit": 38329.19
+      "net": 60316.1,
+      "sc": 5996.81,
+      "revenue": 66312.91,
+      "productCost": 22041.22,
+      "grossProfitActual": 38274.88,
+      "grossProfitPctActual": 63.5,
+      "opexTotal": 15547.42,
+      "netProfit": 28724.27
     },
     "mtd": {
       "scope": "mtd",
-      "dateLabel": "Oct 2026",
-      "source": "Zeoniq month-to-date · Oct 2026 · refreshed 1 nov 8:21am",
-      "transactions": 2607,
+      "dateLabel": "Nov 1–7",
+      "source": "Zeoniq month-to-date · Nov 1–7 · refreshed 8 nov 5:14am",
+      "transactions": 516,
       "depositAdj": 0.0,
-      "pax": 9477,
-      "avgPerPax": 86.89,
+      "pax": 1821,
+      "avgPerPax": 86.62,
       "yesterdayNet": 0,
       "tablesMode": "spenders",
       "topTables": [
         {
-          "table": "S1",
-          "name": "Daphne",
-          "phone": "••••1601",
-          "pax": 5,
-          "net": 7542.0,
+          "table": "M13",
+          "name": "Ang(MS)",
+          "phone": "••••9565",
+          "pax": 10,
+          "net": 3744.0,
           "visits": 1
         },
         {
-          "table": "F14",
-          "name": "WEN",
-          "phone": "••••2413",
-          "pax": 15,
-          "net": 4211.6,
-          "visits": 1
-        },
-        {
-          "table": "M8",
-          "name": "Andrew(Jun)",
-          "phone": "••••1919",
-          "pax": 31,
-          "net": 4070.9,
+          "table": "S9",
+          "name": "Tong",
+          "phone": "••••8086",
+          "pax": 14,
+          "net": 2460.9,
           "visits": 3
         },
         {
-          "table": "F8",
-          "name": "HE",
-          "phone": "••••9929",
-          "pax": 8,
-          "net": 3187.6,
+          "table": "M4",
+          "name": "Bowie",
+          "phone": "••••7388",
+          "pax": 11,
+          "net": 2227.9,
           "visits": 1
         },
         {
-          "table": "A12",
-          "name": "FOONG",
-          "phone": "••••8528",
-          "pax": 16,
-          "net": 3069.8,
-          "visits": 2
+          "table": "A8",
+          "name": "FION",
+          "phone": "••••8808",
+          "pax": 12,
+          "net": 1942.7,
+          "visits": 1
+        },
+        {
+          "table": "S9",
+          "name": "Jason",
+          "phone": "••••9803",
+          "pax": 10,
+          "net": 1738.7,
+          "visits": 1
         }
       ],
       "categories": [
         {
           "name": "Food (Kitchen)",
           "bucket": "food",
-          "net": 124212.5
+          "net": 25068.7
         },
         {
           "name": "Beer — Bottled & Bucket",
           "bucket": "alcohol",
-          "net": 274710.0
+          "net": 48508.0
         },
         {
           "name": "Beer — Draught",
           "bucket": "alcohol",
-          "net": 173682.0
+          "net": 35761.0
         },
         {
           "name": "Spirits & Liquor",
           "bucket": "alcohol",
-          "net": 81530.0
+          "net": 12076.0
         },
         {
           "name": "Wine & Champagne",
           "bucket": "alcohol",
-          "net": 14120.0
+          "net": 2952.0
         },
         {
           "name": "Cocktails",
           "bucket": "alcohol",
-          "net": 46383.0
+          "net": 8972.0
         },
         {
           "name": "Soft Drinks & Mixers",
           "bucket": "others",
-          "net": 39253.3
+          "net": 7442.0
         },
         {
           "name": "Others (Misc)",
           "bucket": "others",
-          "net": 1126.0
+          "net": 268.0
         },
         {
           "name": "Combo (drink portion)",
           "bucket": "alcohol",
-          "net": 57485.4
+          "net": 11598.8
         },
         {
           "name": "Combo (food portion)",
           "bucket": "food",
-          "net": 12259.6
+          "net": 2783.2
         },
         {
           "name": "Deposits",
           "bucket": "others",
-          "net": -1350.0
+          "net": 2300.0
         }
       ],
-      "charges": 82232.88,
-      "grossProfit": 371858.48,
-      "cost": 252534.22,
-      "grossProfitPct": 59.6,
-      "costCoverage": 75.8,
-      "stageCost": 115530.0,
-      "operatingProfit": 256328.48,
-      "estGrossProfit": 490384.75,
-      "estGrossProfitPct": 59.6,
-      "overheads": 247951.86,
-      "overheadsBasis": "31/31 days elapsed",
+      "charges": 15512.17,
+      "grossProfit": 68249.46,
+      "cost": 46111.96,
+      "grossProfitPct": 59.7,
+      "costCoverage": 72.5,
+      "stageCost": 25490.0,
+      "operatingProfit": 42759.46,
+      "estGrossProfit": 94131.12,
+      "estGrossProfitPct": 59.7,
+      "overheads": 57855.43,
+      "overheadsBasis": "7/30 days elapsed",
       "overheadsMonthly": 247951.86,
-      "net": 823411.8,
-      "sc": 82232.88,
-      "revenue": 905644.68,
-      "productCost": 301884.94,
-      "grossProfitActual": 521526.86,
-      "grossProfitPctActual": 63.3,
-      "opexTotal": 383241.81,
-      "netProfit": 220517.93
+      "net": 157729.7,
+      "sc": 15512.17,
+      "revenue": 173241.87,
+      "productCost": 57135.13,
+      "grossProfitActual": 100594.57,
+      "grossProfitPctActual": 63.8,
+      "opexTotal": 87375.46,
+      "netProfit": 28731.28
     }
   },
   "comparison": [
-    {
-      "month": "Aug 2026",
-      "food": 143153.34,
-      "drinks": 687368.6,
-      "other": 1531.2,
-      "total": 832053.14,
-      "foodPct": 17.2,
-      "drinksPct": 82.6,
-      "otherPct": 0.2,
-      "pax": 9539,
-      "avgPerPax": 87.23,
-      "partial": false
-    },
     {
       "month": "Sep 2026",
       "food": 117410.29,
@@ -1033,6 +1054,19 @@ const DASHBOARD_DATA = {
       "pax": 9477,
       "avgPerPax": 86.89,
       "partial": false
+    },
+    {
+      "month": "Nov 1–7",
+      "food": 27851.9,
+      "drinks": 127309.8,
+      "other": 2568.0,
+      "total": 157729.7,
+      "foodPct": 17.7,
+      "drinksPct": 80.7,
+      "otherPct": 1.6,
+      "pax": 1821,
+      "avgPerPax": 86.62,
+      "partial": true
     }
   ],
   "topSpenders3m": [
@@ -1069,20 +1103,20 @@ const DASHBOARD_DATA = {
       "visits": 2
     },
     {
+      "table": "L4",
+      "name": "Robin",
+      "phone": "••••7029",
+      "pax": 64,
+      "net": 6363.0,
+      "visits": 35
+    },
+    {
       "table": "S6",
       "name": "ALAN(JUN)",
       "phone": "••••7813",
       "pax": 34,
       "net": 6143.1,
       "visits": 4
-    },
-    {
-      "table": "L4",
-      "name": "Robin",
-      "phone": "••••7029",
-      "pax": 60,
-      "net": 5980.1,
-      "visits": 33
     },
     {
       "table": "M15",
@@ -1120,10 +1154,10 @@ const DASHBOARD_DATA = {
   "weekday": [
     {
       "day": "Mon",
-      "days": 19,
-      "avgNet": 13878.55,
+      "days": 18,
+      "avgNet": 14113.39,
       "avgPax": 174,
-      "spendPerPax": 79.67
+      "spendPerPax": 80.96
     },
     {
       "day": "Tue",
@@ -1135,37 +1169,37 @@ const DASHBOARD_DATA = {
     {
       "day": "Wed",
       "days": 22,
-      "avgNet": 12786.62,
-      "avgPax": 144,
-      "spendPerPax": 88.88
+      "avgNet": 12695.94,
+      "avgPax": 143,
+      "spendPerPax": 88.98
     },
     {
       "day": "Thu",
       "days": 21,
-      "avgNet": 16911.3,
-      "avgPax": 175,
-      "spendPerPax": 96.74
+      "avgNet": 15964.55,
+      "avgPax": 160,
+      "spendPerPax": 100.08
     },
     {
       "day": "Fri",
       "days": 22,
-      "avgNet": 46668.75,
-      "avgPax": 517,
-      "spendPerPax": 90.34
+      "avgNet": 46008.25,
+      "avgPax": 513,
+      "spendPerPax": 89.76
     },
     {
       "day": "Sat",
-      "days": 22,
-      "avgNet": 58679.79,
-      "avgPax": 692,
-      "spendPerPax": 84.86
+      "days": 23,
+      "avgNet": 58750.94,
+      "avgPax": 691,
+      "spendPerPax": 84.98
     },
     {
       "day": "Sun",
-      "days": 19,
-      "avgNet": 16188.65,
-      "avgPax": 207,
-      "spendPerPax": 78.11
+      "days": 20,
+      "avgNet": 15885.66,
+      "avgPax": 205,
+      "spendPerPax": 77.59
     }
   ],
   "daily3m": [
@@ -1873,15 +1907,15 @@ const DASHBOARD_DATA = {
     },
     {
       "date": "2026-10-01",
-      "net": 35319.8,
+      "net": 0.0,
       "pax": 480,
-      "spendPerPax": 73.58
+      "spendPerPax": 0.0
     },
     {
       "date": "2026-10-02",
-      "net": 58036.9,
+      "net": 0.0,
       "pax": 603,
-      "spendPerPax": 96.25
+      "spendPerPax": 0.0
     },
     {
       "date": "2026-10-03",
@@ -1939,9 +1973,9 @@ const DASHBOARD_DATA = {
     },
     {
       "date": "2026-10-12",
-      "net": 12754.2,
+      "net": 0.0,
       "pax": 175,
-      "spendPerPax": 72.88
+      "spendPerPax": 0.0
     },
     {
       "date": "2026-10-13",
@@ -1981,9 +2015,9 @@ const DASHBOARD_DATA = {
     },
     {
       "date": "2026-10-19",
-      "net": 13440.4,
+      "net": 0.0,
       "pax": 162,
-      "spendPerPax": 82.97
+      "spendPerPax": 0.0
     },
     {
       "date": "2026-10-20",
@@ -2035,9 +2069,9 @@ const DASHBOARD_DATA = {
     },
     {
       "date": "2026-10-28",
-      "net": 13792.5,
+      "net": 0.0,
       "pax": 164,
-      "spendPerPax": 84.1
+      "spendPerPax": 0.0
     },
     {
       "date": "2026-10-29",
@@ -2056,675 +2090,224 @@ const DASHBOARD_DATA = {
       "net": 74370.5,
       "pax": 684,
       "spendPerPax": 108.73
+    },
+    {
+      "date": "2026-11-01",
+      "net": 10128.9,
+      "pax": 157,
+      "spendPerPax": 64.52
+    },
+    {
+      "date": "2026-11-02",
+      "net": 16543.2,
+      "pax": 165,
+      "spendPerPax": 100.26
+    },
+    {
+      "date": "2026-11-03",
+      "net": 0.0,
+      "pax": 0,
+      "spendPerPax": 0
+    },
+    {
+      "date": "2026-11-04",
+      "net": 11797.6,
+      "pax": 138,
+      "spendPerPax": 85.49
+    },
+    {
+      "date": "2026-11-05",
+      "net": 15437.9,
+      "pax": 159,
+      "spendPerPax": 97.09
+    },
+    {
+      "date": "2026-11-06",
+      "net": 43506.0,
+      "pax": 514,
+      "spendPerPax": 84.64
+    },
+    {
+      "date": "2026-11-07",
+      "net": 60316.1,
+      "pax": 688,
+      "spendPerPax": 87.67
     }
   ],
   "categoryTrend": {
     "months": [
-      "Aug 2026",
       "Sep 2026",
-      "Oct 2026"
+      "Oct 2026",
+      "Nov 1–7"
     ],
     "partial": [
       false,
       false,
-      false
+      true
     ],
     "series": [
       {
         "name": "Beer — Bottled & Bucket",
         "bucket": "alcohol",
         "values": [
-          280477.4,
           205687.0,
-          274710.0
+          274710.0,
+          48508.0
         ]
       },
       {
         "name": "Beer — Draught",
         "bucket": "alcohol",
         "values": [
-          175101.0,
           160749.0,
-          173682.0
+          173682.0,
+          35761.0
         ]
       },
       {
         "name": "Food (Kitchen)",
         "bucket": "food",
         "values": [
-          125162.14,
           106609.89,
-          124212.5
+          124212.5,
+          25068.7
         ]
       },
       {
         "name": "Spirits & Liquor",
         "bucket": "alcohol",
         "values": [
-          64482.0,
           69702.0,
-          81530.0
+          81530.0,
+          12076.0
         ]
       },
       {
         "name": "Combo (drink portion)",
         "bucket": "alcohol",
         "values": [
-          70482.8,
           47680.6,
-          57485.4
+          57485.4,
+          11598.8
         ]
       },
       {
         "name": "Cocktails",
         "bucket": "alcohol",
         "values": [
-          44373.0,
           41585.0,
-          46383.0
+          46383.0,
+          8972.0
         ]
       },
       {
         "name": "Soft Drinks & Mixers",
         "bucket": "others",
         "values": [
-          40800.4,
           33412.0,
-          39253.3
-        ]
-      },
-      {
-        "name": "Combo (food portion)",
-        "bucket": "food",
-        "values": [
-          17991.2,
-          10800.4,
-          12259.6
+          39253.3,
+          7442.0
         ]
       },
       {
         "name": "Wine & Champagne",
         "bucket": "alcohol",
         "values": [
-          11652.0,
           10080.0,
-          14120.0
+          14120.0,
+          2952.0
+        ]
+      },
+      {
+        "name": "Combo (food portion)",
+        "bucket": "food",
+        "values": [
+          10800.4,
+          12259.6,
+          2783.2
         ]
       },
       {
         "name": "Others (Misc)",
         "bucket": "others",
         "values": [
-          1281.2,
           1445.6,
-          1126.0
+          1126.0,
+          268.0
         ]
       },
       {
         "name": "Deposits",
         "bucket": "others",
         "values": [
-          250.0,
           1150.0,
-          -1350.0
+          -1350.0,
+          2300.0
         ]
       }
     ]
   },
   "dailyPnl": [
     {
-      "date": "2026-10-01",
-      "wd": "Thu",
-      "open": true,
-      "gross": 41334.74,
-      "net": 35319.8,
-      "sc": 3427.28,
-      "tax": 2587.66,
-      "revenue": 38747.08,
-      "foodCost": 2087.63,
-      "alcCost": 9322.45,
-      "otherCost": 1319.63,
-      "waiters": 2612.36,
-      "stage": 4509.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 8949.9,
-      "bevNet": 23315.2,
-      "pax": 480,
-      "resvBook": 328,
-      "resvWalk": 152,
-      "resvNoShow": 0,
-      "productCost": 12729.71,
-      "opex": 11788.75,
-      "profit": 14228.62,
-      "cumProfit": 14228.62
-    },
-    {
-      "date": "2026-10-02",
-      "wd": "Fri",
-      "open": true,
-      "gross": 68176.99,
-      "net": 58036.9,
-      "sc": 5769.69,
-      "tax": 4370.4,
-      "revenue": 63806.59,
-      "foodCost": 1989.39,
-      "alcCost": 19147.26,
-      "otherCost": 1205.71,
-      "waiters": 4172.36,
-      "stage": 7159.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 8492.9,
-      "bevNet": 46753.0,
-      "pax": 603,
-      "resvBook": 310,
-      "resvWalk": 293,
-      "resvNoShow": 44,
-      "productCost": 22342.36,
-      "opex": 15998.75,
-      "profit": 25465.48,
-      "cumProfit": 39694.1
-    },
-    {
-      "date": "2026-10-03",
-      "wd": "Sat",
-      "open": true,
-      "gross": 71502.66,
-      "net": 60837.7,
-      "sc": 6105.77,
-      "tax": 4559.19,
-      "revenue": 66943.47,
-      "foodCost": 2391.66,
-      "alcCost": 19083.8,
-      "otherCost": 1330.56,
-      "waiters": 4302.36,
-      "stage": 6109.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 10607.5,
-      "bevNet": 47150.2,
-      "pax": 700,
-      "resvBook": 440,
-      "resvWalk": 260,
-      "resvNoShow": 150,
-      "productCost": 22806.02,
-      "opex": 15078.75,
-      "profit": 29058.7,
-      "cumProfit": 68752.8
-    },
-    {
-      "date": "2026-10-04",
+      "date": "2026-11-01",
       "wd": "Sun",
       "open": true,
-      "gross": 16805.77,
-      "net": 14297.9,
-      "sc": 1425.79,
-      "tax": 1082.08,
-      "revenue": 15723.69,
-      "foodCost": 523.13,
-      "alcCost": 4489.8,
-      "otherCost": 400.46,
-      "waiters": 2612.36,
-      "stage": 4509.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 2072.3,
-      "bevNet": 11298.6,
-      "pax": 210,
-      "resvBook": 100,
-      "resvWalk": 110,
-      "resvNoShow": 11,
-      "productCost": 5413.39,
-      "opex": 11788.75,
-      "profit": -1478.46,
-      "cumProfit": 67274.34
+      "gross": 11879.21,
+      "net": 10128.9,
+      "sc": 1011.29,
+      "tax": 739.02,
+      "revenue": 11140.19,
+      "foodCost": 445.22,
+      "alcCost": 2682.7,
+      "otherCost": 259.63,
+      "waiters": 2736.48,
+      "stage": 5048.0,
+      "mktcs": 828.7,
+      "hr": 157.57,
+      "upkeep": 633.33,
+      "otherOpex": 3203.33,
+      "foodNet": 1992.3,
+      "bevNet": 7535.6,
+      "pax": 157,
+      "resvBook": 77,
+      "resvWalk": 80,
+      "resvNoShow": 23,
+      "productCost": 3387.55,
+      "opex": 12607.42,
+      "profit": -4854.78,
+      "cumProfit": -4854.78
     },
     {
-      "date": "2026-10-05",
+      "date": "2026-11-02",
       "wd": "Mon",
       "open": true,
-      "gross": 18363.73,
-      "net": 15581.0,
-      "sc": 1584.9,
-      "tax": 1197.83,
-      "revenue": 17165.9,
-      "foodCost": 602.73,
-      "alcCost": 5108.87,
-      "otherCost": 182.3,
-      "waiters": 2612.36,
-      "stage": 4009.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 2401.4,
-      "bevNet": 12757.6,
-      "pax": 197,
-      "resvBook": 82,
-      "resvWalk": 115,
-      "resvNoShow": 13,
-      "productCost": 5893.9,
-      "opex": 11288.75,
-      "profit": -16.76,
-      "cumProfit": 67257.58
-    },
-    {
-      "date": "2026-10-06",
-      "wd": "Tue",
-      "open": false,
-      "gross": 0.0,
-      "net": 0.0,
-      "sc": 0.0,
-      "tax": 0.0,
-      "revenue": 0.0,
-      "foodCost": 0.0,
-      "alcCost": 0.0,
-      "otherCost": 0.0,
-      "waiters": 0.0,
-      "stage": 1169.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 0,
-      "bevNet": 0,
-      "pax": 0,
-      "resvBook": 0,
-      "resvWalk": 0,
-      "resvNoShow": 0,
-      "productCost": 0.0,
-      "opex": 5836.39,
-      "profit": -5836.39,
-      "cumProfit": 61421.19
-    },
-    {
-      "date": "2026-10-07",
-      "wd": "Wed",
-      "open": true,
-      "gross": 13253.0,
-      "net": 11319.3,
-      "sc": 1098.73,
-      "tax": 834.97,
-      "revenue": 12418.03,
-      "foodCost": 384.12,
-      "alcCost": 3737.5,
-      "otherCost": 337.82,
-      "waiters": 2612.36,
-      "stage": 4809.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 1356.9,
-      "bevNet": 9180.4,
-      "pax": 98,
-      "resvBook": 51,
-      "resvWalk": 47,
-      "resvNoShow": 10,
-      "productCost": 4459.44,
-      "opex": 12088.75,
-      "profit": -4130.17,
-      "cumProfit": 57291.02
-    },
-    {
-      "date": "2026-10-08",
-      "wd": "Thu",
-      "open": true,
-      "gross": 14061.34,
-      "net": 12013.8,
-      "sc": 1171.38,
-      "tax": 876.16,
-      "revenue": 13185.18,
-      "foodCost": 472.37,
-      "alcCost": 3683.21,
-      "otherCost": 400.9,
-      "waiters": 2612.36,
-      "stage": 4509.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 2024.4,
-      "bevNet": 9061.4,
-      "pax": 158,
-      "resvBook": 74,
-      "resvWalk": 84,
-      "resvNoShow": 7,
-      "productCost": 4556.48,
-      "opex": 11788.75,
-      "profit": -3160.05,
-      "cumProfit": 54130.97
-    },
-    {
-      "date": "2026-10-09",
-      "wd": "Fri",
-      "open": true,
-      "gross": 66541.11,
-      "net": 56603.5,
-      "sc": 5652.35,
-      "tax": 4285.26,
-      "revenue": 62255.85,
-      "foodCost": 2061.1,
-      "alcCost": 17825.81,
-      "otherCost": 863.57,
-      "waiters": 4172.36,
-      "stage": 7159.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 8523.5,
-      "bevNet": 46081.0,
-      "pax": 640,
-      "resvBook": 346,
-      "resvWalk": 294,
-      "resvNoShow": 37,
-      "productCost": 20750.48,
-      "opex": 15998.75,
-      "profit": 25506.62,
-      "cumProfit": 79637.59
-    },
-    {
-      "date": "2026-10-10",
-      "wd": "Sat",
-      "open": true,
-      "gross": 69277.55,
-      "net": 58933.8,
-      "sc": 5904.38,
-      "tax": 4439.37,
-      "revenue": 64838.18,
-      "foodCost": 2174.22,
-      "alcCost": 18363.05,
-      "otherCost": 1210.46,
-      "waiters": 4302.36,
-      "stage": 7059.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 9274.2,
-      "bevNet": 46857.6,
-      "pax": 706,
-      "resvBook": 428,
-      "resvWalk": 278,
-      "resvNoShow": 73,
-      "productCost": 21747.73,
-      "opex": 16028.75,
-      "profit": 27061.69,
-      "cumProfit": 106699.28
-    },
-    {
-      "date": "2026-10-11",
-      "wd": "Sun",
-      "open": true,
-      "gross": 12613.77,
-      "net": 10752.4,
-      "sc": 1072.84,
-      "tax": 788.53,
-      "revenue": 11825.24,
-      "foodCost": 575.71,
-      "alcCost": 2973.76,
-      "otherCost": 290.3,
-      "waiters": 2612.36,
-      "stage": 4509.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 2240.2,
-      "bevNet": 7840.2,
-      "pax": 161,
-      "resvBook": 73,
-      "resvWalk": 88,
-      "resvNoShow": 27,
-      "productCost": 3839.77,
-      "opex": 11788.75,
-      "profit": -3803.29,
-      "cumProfit": 102895.99
-    },
-    {
-      "date": "2026-10-12",
-      "wd": "Mon",
-      "open": true,
-      "gross": 14972.21,
-      "net": 12754.2,
-      "sc": 1273.82,
-      "tax": 944.19,
-      "revenue": 14028.02,
-      "foodCost": 618.5,
-      "alcCost": 3776.15,
-      "otherCost": 336.1,
-      "waiters": 2612.36,
-      "stage": 4559.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 2671.0,
-      "bevNet": 9305.2,
-      "pax": 175,
-      "resvBook": 76,
-      "resvWalk": 99,
-      "resvNoShow": 13,
-      "productCost": 4730.75,
-      "opex": 11838.75,
-      "profit": -2541.48,
-      "cumProfit": 100354.51
-    },
-    {
-      "date": "2026-10-13",
-      "wd": "Tue",
-      "open": false,
-      "gross": 0.0,
-      "net": 0.0,
-      "sc": 0.0,
-      "tax": 0.0,
-      "revenue": 0.0,
-      "foodCost": 0.0,
-      "alcCost": 0.0,
-      "otherCost": 0.0,
-      "waiters": 0.0,
-      "stage": 1169.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 0,
-      "bevNet": 0,
-      "pax": 4,
-      "resvBook": 4,
-      "resvWalk": 0,
-      "resvNoShow": 0,
-      "productCost": 0.0,
-      "opex": 5836.39,
-      "profit": -5836.39,
-      "cumProfit": 94518.12
-    },
-    {
-      "date": "2026-10-14",
-      "wd": "Wed",
-      "open": true,
-      "gross": 14268.33,
-      "net": 12158.8,
-      "sc": 1215.88,
-      "tax": 893.65,
-      "revenue": 13374.68,
-      "foodCost": 589.86,
-      "alcCost": 3216.53,
-      "otherCost": 293.33,
-      "waiters": 2612.36,
-      "stage": 4809.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 2469.8,
-      "bevNet": 9010.0,
-      "pax": 161,
-      "resvBook": 56,
-      "resvWalk": 105,
-      "resvNoShow": 0,
-      "productCost": 4099.72,
-      "opex": 12088.75,
-      "profit": -2813.79,
-      "cumProfit": 91704.33
-    },
-    {
-      "date": "2026-10-15",
-      "wd": "Thu",
-      "open": true,
-      "gross": 13315.83,
-      "net": 11489.9,
-      "sc": 1043.19,
-      "tax": 782.74,
-      "revenue": 12533.09,
-      "foodCost": 512.91,
-      "alcCost": 2891.88,
-      "otherCost": 646.27,
-      "waiters": 2612.36,
-      "stage": 4009.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 1860.9,
-      "bevNet": 8133.0,
-      "pax": 146,
-      "resvBook": 71,
-      "resvWalk": 75,
+      "gross": 19437.04,
+      "net": 16543.2,
+      "sc": 1651.92,
+      "tax": 1241.92,
+      "revenue": 18195.12,
+      "foodCost": 745.23,
+      "alcCost": 4929.37,
+      "otherCost": 356.83,
+      "waiters": 2736.48,
+      "stage": 5098.0,
+      "mktcs": 828.7,
+      "hr": 157.57,
+      "upkeep": 633.33,
+      "otherOpex": 3203.33,
+      "foodNet": 3091.0,
+      "bevNet": 12626.2,
+      "pax": 165,
+      "resvBook": 96,
+      "resvWalk": 69,
       "resvNoShow": 6,
-      "productCost": 4051.06,
-      "opex": 11288.75,
-      "profit": -2806.72,
-      "cumProfit": 88897.61
+      "productCost": 6031.43,
+      "opex": 12657.42,
+      "profit": -493.73,
+      "cumProfit": -5348.51
     },
     {
-      "date": "2026-10-16",
-      "wd": "Fri",
-      "open": true,
-      "gross": 52175.76,
-      "net": 44278.4,
-      "sc": 4498.04,
-      "tax": 3399.32,
-      "revenue": 48776.44,
-      "foodCost": 1688.47,
-      "alcCost": 14482.52,
-      "otherCost": 366.77,
-      "waiters": 4172.36,
-      "stage": 7159.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 7290.2,
-      "bevNet": 36139.2,
-      "pax": 482,
-      "resvBook": 311,
-      "resvWalk": 171,
-      "resvNoShow": 33,
-      "productCost": 16537.76,
-      "opex": 15998.75,
-      "profit": 16239.93,
-      "cumProfit": 105137.54
-    },
-    {
-      "date": "2026-10-17",
-      "wd": "Sat",
-      "open": true,
-      "gross": 58654.7,
-      "net": 49818.8,
-      "sc": 5043.68,
-      "tax": 3792.22,
-      "revenue": 54862.48,
-      "foodCost": 2158.53,
-      "alcCost": 14798.2,
-      "otherCost": 820.37,
-      "waiters": 4302.36,
-      "stage": 7059.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 8605.8,
-      "bevNet": 39314.0,
-      "pax": 715,
-      "resvBook": 421,
-      "resvWalk": 294,
-      "resvNoShow": 0,
-      "productCost": 17777.1,
-      "opex": 16028.75,
-      "profit": 21056.63,
-      "cumProfit": 126194.17
-    },
-    {
-      "date": "2026-10-18",
-      "wd": "Sun",
-      "open": true,
-      "gross": 24627.36,
-      "net": 20851.3,
-      "sc": 2144.33,
-      "tax": 1631.73,
-      "revenue": 22995.63,
-      "foodCost": 614.3,
-      "alcCost": 7174.64,
-      "otherCost": 28.51,
-      "waiters": 2612.36,
-      "stage": 5009.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 2912.9,
-      "bevNet": 17872.4,
-      "pax": 211,
-      "resvBook": 107,
-      "resvWalk": 104,
-      "resvNoShow": 15,
-      "productCost": 7817.45,
-      "opex": 12288.75,
-      "profit": 2889.43,
-      "cumProfit": 129083.6
-    },
-    {
-      "date": "2026-10-19",
-      "wd": "Mon",
-      "open": true,
-      "gross": 15792.23,
-      "net": 13440.4,
-      "sc": 1341.64,
-      "tax": 1010.19,
-      "revenue": 14782.04,
-      "foodCost": 468.58,
-      "alcCost": 4395.88,
-      "otherCost": 150.34,
-      "waiters": 2612.36,
-      "stage": 4559.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 2317.4,
-      "bevNet": 10775.0,
-      "pax": 162,
-      "resvBook": 64,
-      "resvWalk": 98,
-      "resvNoShow": 0,
-      "productCost": 5014.8,
-      "opex": 11838.75,
-      "profit": -2071.51,
-      "cumProfit": 127012.09
-    },
-    {
-      "date": "2026-10-20",
+      "date": "2026-11-03",
       "wd": "Tue",
       "open": false,
       "gross": 0.0,
@@ -2736,214 +2319,11 @@ const DASHBOARD_DATA = {
       "alcCost": 0.0,
       "otherCost": 0.0,
       "waiters": 0.0,
-      "stage": 1169.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 0,
-      "bevNet": 0,
-      "pax": 1,
-      "resvBook": 1,
-      "resvWalk": 0,
-      "resvNoShow": 0,
-      "productCost": 0.0,
-      "opex": 5836.39,
-      "profit": -5836.39,
-      "cumProfit": 121175.7
-    },
-    {
-      "date": "2026-10-21",
-      "wd": "Wed",
-      "open": true,
-      "gross": 19591.41,
-      "net": 16699.9,
-      "sc": 1636.79,
-      "tax": 1254.72,
-      "revenue": 18336.69,
-      "foodCost": 410.02,
-      "alcCost": 5719.0,
-      "otherCost": 402.62,
-      "waiters": 2612.36,
-      "stage": 4809.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 1826.7,
-      "bevNet": 13941.2,
-      "pax": 122,
-      "resvBook": 55,
-      "resvWalk": 67,
-      "resvNoShow": 18,
-      "productCost": 6531.64,
-      "opex": 12088.75,
-      "profit": -283.71,
-      "cumProfit": 120891.99
-    },
-    {
-      "date": "2026-10-22",
-      "wd": "Thu",
-      "open": true,
-      "gross": 13102.88,
-      "net": 11142.5,
-      "sc": 1114.25,
-      "tax": 846.13,
-      "revenue": 12256.75,
-      "foodCost": 361.68,
-      "alcCost": 3436.64,
-      "otherCost": 166.32,
-      "waiters": 2612.36,
-      "stage": 5009.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 1670.7,
-      "bevNet": 9086.8,
-      "pax": 136,
-      "resvBook": 54,
-      "resvWalk": 82,
-      "resvNoShow": 20,
-      "productCost": 3964.64,
-      "opex": 12288.75,
-      "profit": -3996.64,
-      "cumProfit": 116895.35
-    },
-    {
-      "date": "2026-10-23",
-      "wd": "Fri",
-      "open": true,
-      "gross": 53759.6,
-      "net": 45890.4,
-      "sc": 4525.04,
-      "tax": 3344.16,
-      "revenue": 50415.44,
-      "foodCost": 2227.1,
-      "alcCost": 11696.19,
-      "otherCost": 1288.22,
-      "waiters": 4172.36,
-      "stage": 7059.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 8954.2,
-      "bevNet": 33954.2,
-      "pax": 499,
-      "resvBook": 316,
-      "resvWalk": 183,
-      "resvNoShow": 36,
-      "productCost": 15211.51,
-      "opex": 15898.75,
-      "profit": 19305.17,
-      "cumProfit": 136200.52
-    },
-    {
-      "date": "2026-10-24",
-      "wd": "Sat",
-      "open": true,
-      "gross": 74892.44,
-      "net": 63517.1,
-      "sc": 6481.91,
-      "tax": 4893.43,
-      "revenue": 69999.01,
-      "foodCost": 2378.92,
-      "alcCost": 19831.28,
-      "otherCost": 798.77,
-      "waiters": 4302.36,
-      "stage": 6109.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 9774.1,
-      "bevNet": 51894.0,
-      "pax": 688,
-      "resvBook": 396,
-      "resvWalk": 292,
-      "resvNoShow": 59,
-      "productCost": 23008.97,
-      "opex": 15078.75,
-      "profit": 31911.29,
-      "cumProfit": 168111.81
-    },
-    {
-      "date": "2026-10-25",
-      "wd": "Sun",
-      "open": true,
-      "gross": 21893.35,
-      "net": 18656.3,
-      "sc": 1865.63,
-      "tax": 1371.42,
-      "revenue": 20521.93,
-      "foodCost": 1143.43,
-      "alcCost": 4693.59,
-      "otherCost": 665.28,
-      "waiters": 2612.36,
-      "stage": 4509.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 4237.5,
-      "bevNet": 12878.8,
-      "pax": 288,
-      "resvBook": 106,
-      "resvWalk": 182,
-      "resvNoShow": 32,
-      "productCost": 6502.3,
-      "opex": 11788.75,
-      "profit": 2230.88,
-      "cumProfit": 170342.69
-    },
-    {
-      "date": "2026-10-26",
-      "wd": "Mon",
-      "open": true,
-      "gross": 16071.45,
-      "net": 13814.0,
-      "sc": 1304.8,
-      "tax": 952.65,
-      "revenue": 15118.8,
-      "foodCost": 484.74,
-      "alcCost": 3702.72,
-      "otherCost": 696.82,
-      "waiters": 2612.36,
-      "stage": 4559.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 2377.8,
-      "bevNet": 9823.2,
-      "pax": 187,
-      "resvBook": 76,
-      "resvWalk": 111,
-      "resvNoShow": 0,
-      "productCost": 4884.28,
-      "opex": 11838.75,
-      "profit": -1604.23,
-      "cumProfit": 168738.46
-    },
-    {
-      "date": "2026-10-27",
-      "wd": "Tue",
-      "open": false,
-      "gross": 0.0,
-      "net": 0.0,
-      "sc": 0.0,
-      "tax": 0.0,
-      "revenue": 0.0,
-      "foodCost": 0.0,
-      "alcCost": 0.0,
-      "otherCost": 0.0,
-      "waiters": 0.0,
-      "stage": 1169.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
+      "stage": 1208.0,
+      "mktcs": 828.7,
+      "hr": 157.57,
+      "upkeep": 633.33,
+      "otherOpex": 3203.33,
       "foodNet": 0,
       "bevNet": 0,
       "pax": 0,
@@ -2951,127 +2331,1100 @@ const DASHBOARD_DATA = {
       "resvWalk": 0,
       "resvNoShow": 0,
       "productCost": 0.0,
-      "opex": 5836.39,
-      "profit": -5836.39,
-      "cumProfit": 162902.07
+      "opex": 6030.94,
+      "profit": -6030.94,
+      "cumProfit": -11379.45
     },
     {
-      "date": "2026-10-28",
+      "date": "2026-11-04",
       "wd": "Wed",
       "open": true,
-      "gross": 16136.9,
-      "net": 13792.5,
-      "sc": 1333.45,
-      "tax": 1010.95,
-      "revenue": 15125.95,
-      "foodCost": 505.65,
-      "alcCost": 4104.51,
-      "otherCost": 568.94,
-      "waiters": 2612.36,
-      "stage": 4809.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 2066.3,
-      "bevNet": 10409.2,
-      "pax": 164,
-      "resvBook": 65,
-      "resvWalk": 99,
-      "resvNoShow": 17,
-      "productCost": 5179.1,
-      "opex": 12088.75,
-      "profit": -2141.91,
-      "cumProfit": 160760.16
+      "gross": 13546.03,
+      "net": 11797.6,
+      "sc": 1013.16,
+      "tax": 735.27,
+      "revenue": 12810.76,
+      "foodCost": 600.17,
+      "alcCost": 2663.11,
+      "otherCost": 995.33,
+      "waiters": 2736.48,
+      "stage": 4848.0,
+      "mktcs": 828.7,
+      "hr": 157.57,
+      "upkeep": 633.33,
+      "otherOpex": 3203.33,
+      "foodNet": 2610.6,
+      "bevNet": 6883.0,
+      "pax": 138,
+      "resvBook": 55,
+      "resvWalk": 83,
+      "resvNoShow": 20,
+      "productCost": 4258.61,
+      "opex": 12407.42,
+      "profit": -3855.26,
+      "cumProfit": -15234.71
     },
     {
-      "date": "2026-10-29",
+      "date": "2026-11-05",
       "wd": "Thu",
       "open": true,
-      "gross": 17086.1,
-      "net": 14781.6,
-      "sc": 1311.56,
-      "tax": 992.94,
-      "revenue": 16093.16,
-      "foodCost": 415.08,
-      "alcCost": 3941.73,
-      "otherCost": 889.92,
-      "waiters": 2612.36,
-      "stage": 4509.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 1907.6,
-      "bevNet": 10814.0,
-      "pax": 160,
-      "resvBook": 60,
-      "resvWalk": 100,
+      "gross": 18120.23,
+      "net": 15437.9,
+      "sc": 1527.99,
+      "tax": 1154.34,
+      "revenue": 16965.89,
+      "foodCost": 509.35,
+      "alcCost": 5042.65,
+      "otherCost": 298.08,
+      "waiters": 2736.48,
+      "stage": 5048.0,
+      "mktcs": 828.7,
+      "hr": 157.57,
+      "upkeep": 633.33,
+      "otherOpex": 3203.33,
+      "foodNet": 2459.3,
+      "bevNet": 12288.6,
+      "pax": 159,
+      "resvBook": 78,
+      "resvWalk": 81,
       "resvNoShow": 0,
-      "productCost": 5246.73,
-      "opex": 11788.75,
-      "profit": -942.32,
-      "cumProfit": 159817.84
+      "productCost": 5850.08,
+      "opex": 12607.42,
+      "profit": -1491.61,
+      "cumProfit": -16726.32
     },
     {
-      "date": "2026-10-30",
+      "date": "2026-11-06",
       "wd": "Fri",
       "open": true,
-      "gross": 61550.63,
-      "net": 52259.1,
-      "sc": 5295.71,
-      "tax": 3995.82,
-      "revenue": 57554.81,
-      "foodCost": 1953.65,
-      "alcCost": 16591.8,
-      "otherCost": 639.79,
-      "waiters": 4172.36,
-      "stage": 7159.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 8656.7,
-      "bevNet": 42121.4,
-      "pax": 539,
-      "resvBook": 286,
-      "resvWalk": 253,
-      "resvNoShow": 0,
-      "productCost": 19185.24,
-      "opex": 15998.75,
-      "profit": 22370.82,
-      "cumProfit": 182188.66
+      "gross": 51052.83,
+      "net": 43506.0,
+      "sc": 4311.0,
+      "tax": 3235.83,
+      "revenue": 47817.0,
+      "foodCost": 2066.99,
+      "alcCost": 12484.48,
+      "otherCost": 1014.77,
+      "waiters": 4296.48,
+      "stage": 6398.0,
+      "mktcs": 828.7,
+      "hr": 157.57,
+      "upkeep": 633.33,
+      "otherOpex": 3203.33,
+      "foodNet": 7869.6,
+      "bevNet": 33287.4,
+      "pax": 514,
+      "resvBook": 303,
+      "resvWalk": 211,
+      "resvNoShow": 42,
+      "productCost": 15566.24,
+      "opex": 15517.42,
+      "profit": 16733.35,
+      "cumProfit": 7.03
     },
     {
-      "date": "2026-10-31",
+      "date": "2026-11-07",
       "wd": "Sat",
       "open": true,
-      "gross": 87730.34,
-      "net": 74370.5,
-      "sc": 7590.05,
-      "tax": 5769.79,
-      "revenue": 81960.55,
-      "foodCost": 2696.6,
-      "alcCost": 24345.45,
-      "otherCost": 560.56,
-      "waiters": 4302.36,
-      "stage": 7059.03,
-      "mktcs": 801.97,
-      "hr": 152.49,
-      "upkeep": 612.9,
-      "otherOpex": 3100.0,
-      "foodNet": 10929.3,
-      "bevNet": 62143.6,
-      "pax": 684,
-      "resvBook": 467,
-      "resvWalk": 217,
+      "gross": 70807.67,
+      "net": 60316.1,
+      "sc": 5996.81,
+      "tax": 4494.76,
+      "revenue": 66312.91,
+      "foodCost": 2331.89,
+      "alcCost": 18309.65,
+      "otherCost": 1399.68,
+      "waiters": 4426.48,
+      "stage": 6298.0,
+      "mktcs": 828.7,
+      "hr": 157.57,
+      "upkeep": 633.33,
+      "otherOpex": 3203.33,
+      "foodNet": 9829.1,
+      "bevNet": 47247.0,
+      "pax": 688,
+      "resvBook": 426,
+      "resvWalk": 262,
       "resvNoShow": 0,
-      "productCost": 27602.61,
-      "opex": 16028.75,
-      "profit": 38329.19,
-      "cumProfit": 220517.85
+      "productCost": 22041.22,
+      "opex": 15547.42,
+      "profit": 28724.27,
+      "cumProfit": 28731.3
     }
   ],
+  "customers": {
+    "mtd": [
+      {
+        "name": "Tong",
+        "phone": "••••8086",
+        "visits": 3,
+        "net": 2460.9,
+        "pax": 14,
+        "avg": 820.3
+      },
+      {
+        "name": "JW",
+        "phone": "••••7331",
+        "visits": 2,
+        "net": 1677.0,
+        "pax": 4,
+        "avg": 838.5
+      },
+      {
+        "name": "Ms Lim",
+        "phone": "••••1129",
+        "visits": 2,
+        "net": 905.7,
+        "pax": 8,
+        "avg": 452.85
+      },
+      {
+        "name": "Lee",
+        "phone": "••••5288",
+        "visits": 2,
+        "net": 883.9,
+        "pax": 14,
+        "avg": 441.95
+      },
+      {
+        "name": "Alhee",
+        "phone": "••••3118",
+        "visits": 2,
+        "net": 712.7,
+        "pax": 30,
+        "avg": 356.35
+      },
+      {
+        "name": "Weng",
+        "phone": "••••3468",
+        "visits": 2,
+        "net": 472.8,
+        "pax": 8,
+        "avg": 236.4
+      },
+      {
+        "name": "Robin",
+        "phone": "••••7029",
+        "visits": 2,
+        "net": 382.9,
+        "pax": 4,
+        "avg": 191.45
+      },
+      {
+        "name": "Ang(MS)",
+        "phone": "••••9565",
+        "visits": 1,
+        "net": 3744.0,
+        "pax": 10,
+        "avg": 3744.0
+      },
+      {
+        "name": "Bowie",
+        "phone": "••••7388",
+        "visits": 1,
+        "net": 2227.9,
+        "pax": 11,
+        "avg": 2227.9
+      },
+      {
+        "name": "FION",
+        "phone": "••••8808",
+        "visits": 1,
+        "net": 1942.7,
+        "pax": 12,
+        "avg": 1942.7
+      },
+      {
+        "name": "Jason",
+        "phone": "••••9803",
+        "visits": 1,
+        "net": 1738.7,
+        "pax": 10,
+        "avg": 1738.7
+      },
+      {
+        "name": "Desmond",
+        "phone": "••••4138",
+        "visits": 1,
+        "net": 1574.0,
+        "pax": 2,
+        "avg": 1574.0
+      },
+      {
+        "name": "Ang",
+        "phone": "••••9319",
+        "visits": 1,
+        "net": 1448.8,
+        "pax": 5,
+        "avg": 1448.8
+      },
+      {
+        "name": "Cheryl",
+        "phone": "••••5131",
+        "visits": 1,
+        "net": 1443.9,
+        "pax": 8,
+        "avg": 1443.9
+      },
+      {
+        "name": "TEN",
+        "phone": "••••8168",
+        "visits": 1,
+        "net": 1419.9,
+        "pax": 5,
+        "avg": 1419.9
+      },
+      {
+        "name": "Standy",
+        "phone": "••••9699",
+        "visits": 1,
+        "net": 1381.0,
+        "pax": 11,
+        "avg": 1381.0
+      },
+      {
+        "name": "Wong",
+        "phone": "••••6095",
+        "visits": 1,
+        "net": 1370.7,
+        "pax": 8,
+        "avg": 1370.7
+      },
+      {
+        "name": "Pow",
+        "phone": "••••3321",
+        "visits": 1,
+        "net": 1285.9,
+        "pax": 6,
+        "avg": 1285.9
+      },
+      {
+        "name": "Wai",
+        "phone": "••••0716",
+        "visits": 1,
+        "net": 1266.0,
+        "pax": 7,
+        "avg": 1266.0
+      },
+      {
+        "name": "Pei",
+        "phone": "••••8222",
+        "visits": 1,
+        "net": 1216.8,
+        "pax": 10,
+        "avg": 1216.8
+      },
+      {
+        "name": "ZI",
+        "phone": "••••3431",
+        "visits": 1,
+        "net": 1215.8,
+        "pax": 10,
+        "avg": 1215.8
+      },
+      {
+        "name": "TY",
+        "phone": "••••8143",
+        "visits": 1,
+        "net": 1171.9,
+        "pax": 12,
+        "avg": 1171.9
+      },
+      {
+        "name": "Jayden",
+        "phone": "••••5819",
+        "visits": 1,
+        "net": 1151.0,
+        "pax": 11,
+        "avg": 1151.0
+      },
+      {
+        "name": "Ivan",
+        "phone": "••••0581",
+        "visits": 1,
+        "net": 1097.0,
+        "pax": 1,
+        "avg": 1097.0
+      },
+      {
+        "name": "Joyce",
+        "phone": "••••1592",
+        "visits": 1,
+        "net": 1084.0,
+        "pax": 4,
+        "avg": 1084.0
+      }
+    ],
+    "3mo": [
+      {
+        "name": "Robin",
+        "phone": "••••7029",
+        "visits": 7,
+        "net": 1320.8,
+        "pax": 13,
+        "avg": 188.69
+      },
+      {
+        "name": "Nian",
+        "phone": "••••1352",
+        "visits": 7,
+        "net": 1216.7,
+        "pax": 17,
+        "avg": 173.81
+      },
+      {
+        "name": "Neo",
+        "phone": "••••5736",
+        "visits": 4,
+        "net": 1238.9,
+        "pax": 13,
+        "avg": 309.73
+      },
+      {
+        "name": "Michell",
+        "phone": "••••3502",
+        "visits": 4,
+        "net": 1010.7,
+        "pax": 7,
+        "avg": 252.67
+      },
+      {
+        "name": "Yuring",
+        "phone": "••••6520",
+        "visits": 4,
+        "net": 576.9,
+        "pax": 6,
+        "avg": 144.22
+      },
+      {
+        "name": "Sharon",
+        "phone": "••••8021",
+        "visits": 4,
+        "net": 196.9,
+        "pax": 6,
+        "avg": 49.23
+      },
+      {
+        "name": "ALAN(JUN)",
+        "phone": "••••7813",
+        "visits": 3,
+        "net": 4220.3,
+        "pax": 34,
+        "avg": 1406.77
+      },
+      {
+        "name": "Andrew(Jun)",
+        "phone": "••••1919",
+        "visits": 3,
+        "net": 4070.9,
+        "pax": 31,
+        "avg": 1356.97
+      },
+      {
+        "name": "Stella",
+        "phone": "••••4753",
+        "visits": 3,
+        "net": 3292.6,
+        "pax": 25,
+        "avg": 1097.53
+      },
+      {
+        "name": "Tong",
+        "phone": "••••8086",
+        "visits": 3,
+        "net": 2460.9,
+        "pax": 14,
+        "avg": 820.3
+      },
+      {
+        "name": "Xu",
+        "phone": "••••8373",
+        "visits": 3,
+        "net": 2418.4,
+        "pax": 14,
+        "avg": 806.13
+      },
+      {
+        "name": "Gary",
+        "phone": "••••4322",
+        "visits": 3,
+        "net": 2280.8,
+        "pax": 19,
+        "avg": 760.27
+      },
+      {
+        "name": "Stella",
+        "phone": "••••1691",
+        "visits": 3,
+        "net": 1749.9,
+        "pax": 8,
+        "avg": 583.3
+      },
+      {
+        "name": "FERDINAND",
+        "phone": "••••9190",
+        "visits": 3,
+        "net": 1694.9,
+        "pax": 14,
+        "avg": 564.97
+      },
+      {
+        "name": "Dickson",
+        "phone": "••••0299",
+        "visits": 3,
+        "net": 1304.8,
+        "pax": 16,
+        "avg": 434.93
+      },
+      {
+        "name": "SINNIE",
+        "phone": "••••8893",
+        "visits": 3,
+        "net": 1303.7,
+        "pax": 14,
+        "avg": 434.57
+      },
+      {
+        "name": "Jessica",
+        "phone": "••••2941",
+        "visits": 3,
+        "net": 1166.9,
+        "pax": 18,
+        "avg": 388.97
+      },
+      {
+        "name": "CHeris",
+        "phone": "••••2400",
+        "visits": 3,
+        "net": 962.9,
+        "pax": 6,
+        "avg": 320.97
+      },
+      {
+        "name": "Vernoh",
+        "phone": "••••1065",
+        "visits": 3,
+        "net": 914.8,
+        "pax": 10,
+        "avg": 304.93
+      },
+      {
+        "name": "ANN(JUN)",
+        "phone": "••••0909",
+        "visits": 3,
+        "net": 900.5,
+        "pax": 16,
+        "avg": 300.17
+      },
+      {
+        "name": "Jimmyy",
+        "phone": "••••2709",
+        "visits": 3,
+        "net": 858.9,
+        "pax": 6,
+        "avg": 286.3
+      },
+      {
+        "name": "Yew",
+        "phone": "••••3800",
+        "visits": 3,
+        "net": 484.9,
+        "pax": 6,
+        "avg": 161.63
+      },
+      {
+        "name": "Mia",
+        "phone": "••••3270",
+        "visits": 3,
+        "net": 479.9,
+        "pax": 6,
+        "avg": 159.97
+      },
+      {
+        "name": "Cheng",
+        "phone": "••••2966",
+        "visits": 3,
+        "net": 376.8,
+        "pax": 12,
+        "avg": 125.6
+      },
+      {
+        "name": "Samuel(F10)",
+        "phone": "••••8596",
+        "visits": 3,
+        "net": 366.6,
+        "pax": 11,
+        "avg": 122.2
+      }
+    ],
+    "all": [
+      {
+        "name": "Robin",
+        "phone": "••••7029",
+        "visits": 35,
+        "net": 6363.0,
+        "pax": 64,
+        "avg": 181.8
+      },
+      {
+        "name": "Jovian",
+        "phone": "••••7046",
+        "visits": 15,
+        "net": 755.4,
+        "pax": 20,
+        "avg": 50.36
+      },
+      {
+        "name": "Mr Tee",
+        "phone": "••••1065",
+        "visits": 10,
+        "net": 2583.5,
+        "pax": 29,
+        "avg": 258.35
+      },
+      {
+        "name": "Sharon",
+        "phone": "••••8021",
+        "visits": 9,
+        "net": 1233.1,
+        "pax": 18,
+        "avg": 137.01
+      },
+      {
+        "name": "Frank",
+        "phone": "••••3157",
+        "visits": 8,
+        "net": 3534.2,
+        "pax": 27,
+        "avg": 441.78
+      },
+      {
+        "name": "Cheris(Xiaobai)",
+        "phone": "••••2400",
+        "visits": 8,
+        "net": 2046.4,
+        "pax": 22,
+        "avg": 255.8
+      },
+      {
+        "name": "Samuel(F10)",
+        "phone": "••••8596",
+        "visits": 8,
+        "net": 1097.8,
+        "pax": 21,
+        "avg": 137.22
+      },
+      {
+        "name": "Evon",
+        "phone": "••••0880",
+        "visits": 7,
+        "net": 1527.0,
+        "pax": 19,
+        "avg": 218.14
+      },
+      {
+        "name": "Nian",
+        "phone": "••••1352",
+        "visits": 7,
+        "net": 1216.7,
+        "pax": 17,
+        "avg": 173.81
+      },
+      {
+        "name": "Bella",
+        "phone": "••••1036",
+        "visits": 7,
+        "net": 985.7,
+        "pax": 12,
+        "avg": 140.81
+      },
+      {
+        "name": "YEW",
+        "phone": "••••3800",
+        "visits": 7,
+        "net": 677.9,
+        "pax": 13,
+        "avg": 96.84
+      },
+      {
+        "name": "Kenzo(m35)",
+        "phone": "••••3224",
+        "visits": 6,
+        "net": 6989.6,
+        "pax": 40,
+        "avg": 1164.93
+      },
+      {
+        "name": "Xiao",
+        "phone": "••••1541",
+        "visits": 6,
+        "net": 3124.1,
+        "pax": 22,
+        "avg": 520.68
+      },
+      {
+        "name": "Alica",
+        "phone": "••••0882",
+        "visits": 6,
+        "net": 2755.0,
+        "pax": 21,
+        "avg": 459.17
+      },
+      {
+        "name": "TF",
+        "phone": "••••4690",
+        "visits": 6,
+        "net": 2473.4,
+        "pax": 21,
+        "avg": 412.23
+      },
+      {
+        "name": "Michell",
+        "phone": "••••3502",
+        "visits": 6,
+        "net": 1512.6,
+        "pax": 15,
+        "avg": 252.1
+      },
+      {
+        "name": "Yuring",
+        "phone": "••••6520",
+        "visits": 6,
+        "net": 798.8,
+        "pax": 8,
+        "avg": 133.13
+      },
+      {
+        "name": "Soon",
+        "phone": "••••1116",
+        "visits": 5,
+        "net": 5973.7,
+        "pax": 51,
+        "avg": 1194.74
+      },
+      {
+        "name": "Louis(Kel)",
+        "phone": "••••4386",
+        "visits": 5,
+        "net": 2768.9,
+        "pax": 18,
+        "avg": 553.78
+      },
+      {
+        "name": "FERDINAND",
+        "phone": "••••9190",
+        "visits": 5,
+        "net": 2636.7,
+        "pax": 26,
+        "avg": 527.34
+      },
+      {
+        "name": "SJ",
+        "phone": "••••1577",
+        "visits": 5,
+        "net": 2059.4,
+        "pax": 21,
+        "avg": 411.88
+      },
+      {
+        "name": "Dickson",
+        "phone": "••••0299",
+        "visits": 5,
+        "net": 1792.2,
+        "pax": 22,
+        "avg": 358.44
+      },
+      {
+        "name": "Jesse",
+        "phone": "••••3369",
+        "visits": 5,
+        "net": 1683.8,
+        "pax": 18,
+        "avg": 336.76
+      },
+      {
+        "name": "kang",
+        "phone": "••••9479",
+        "visits": 5,
+        "net": 1254.1,
+        "pax": 10,
+        "avg": 250.82
+      },
+      {
+        "name": "Zylen",
+        "phone": "••••0173",
+        "visits": 5,
+        "net": 1144.7,
+        "pax": 14,
+        "avg": 228.94
+      }
+    ]
+  },
+  "topItems": {
+    "mtd": {
+      "food": [
+        {
+          "item": "1 Bucket + Snacks Combo",
+          "net": 7936.0
+        },
+        {
+          "item": "超值吃到爽配套",
+          "net": 2990.0
+        },
+        {
+          "item": "1-Pork Skewers 豬肉串 X20",
+          "net": 2525.0
+        },
+        {
+          "item": "Two Cocktails Combo",
+          "net": 1980.0
+        },
+        {
+          "item": "Truffle Fries",
+          "net": 1810.9
+        },
+        {
+          "item": "1-Chicken Skewers 雞肉串 X20",
+          "net": 1364.0
+        },
+        {
+          "item": "Piggy Fries",
+          "net": 1276.0
+        },
+        {
+          "item": "Claypot Truffle Fried Rice with Pork Belly",
+          "net": 1248.0
+        },
+        {
+          "item": "Chicken Popcorn",
+          "net": 1242.8
+        },
+        {
+          "item": "Bucket + Shot Combo",
+          "net": 1036.0
+        }
+      ],
+      "drinks": [
+        {
+          "item": "Tiger x 1 Bucket",
+          "net": 10266.0
+        },
+        {
+          "item": "Guinness Draught （ BUY 10 FREE 1 ）",
+          "net": 10260.0
+        },
+        {
+          "item": "Tiger Draught ( BUY 10 FREE 1 )",
+          "net": 10000.0
+        },
+        {
+          "item": "Tiger x 5 Bucket Free 1 Bucket",
+          "net": 9684.0
+        },
+        {
+          "item": "Tiger Crystal x 1 Bucket",
+          "net": 8100.0
+        },
+        {
+          "item": "Tiger (5 Mug)",
+          "net": 5625.0
+        },
+        {
+          "item": "Heineken x 1 Bucket",
+          "net": 5244.0
+        },
+        {
+          "item": "Heineken x 5 Bucket Free 1 Bucket",
+          "net": 5104.0
+        },
+        {
+          "item": "Guinness (5 Glass)",
+          "net": 4590.0
+        },
+        {
+          "item": "Heineken Tower",
+          "net": 3570.0
+        }
+      ]
+    },
+    "3mo": {
+      "food": [
+        {
+          "item": "1 Bucket + Snacks Combo",
+          "net": 71808.0
+        },
+        {
+          "item": "超值吃到爽配套",
+          "net": 28704.0
+        },
+        {
+          "item": "1-Pork Skewers 豬肉串 X20",
+          "net": 24260.0
+        },
+        {
+          "item": "Truffle Fries",
+          "net": 20112.93
+        },
+        {
+          "item": "Bucket + Shot Combo",
+          "net": 19092.0
+        },
+        {
+          "item": "Two Cocktails Combo",
+          "net": 18780.0
+        },
+        {
+          "item": "Claypot Truffle Fried Rice with Pork Belly",
+          "net": 15408.0
+        },
+        {
+          "item": "Chicken Popcorn",
+          "net": 13097.2
+        },
+        {
+          "item": "1-Lamb Skewers 羊肉串 X20",
+          "net": 12087.9
+        },
+        {
+          "item": "1-Chicken Skewers 雞肉串 X20",
+          "net": 11044.0
+        }
+      ],
+      "drinks": [
+        {
+          "item": "Tiger x 5 Bucket Free 1 Bucket",
+          "net": 182920.0
+        },
+        {
+          "item": "Guinness Draught （ BUY 10 FREE 1 ）",
+          "net": 119070.0
+        },
+        {
+          "item": "Tiger Draught ( BUY 10 FREE 1 )",
+          "net": 111500.0
+        },
+        {
+          "item": "Tiger x 1 Bucket",
+          "net": 82600.0
+        },
+        {
+          "item": "Tiger Crystal x 5 Bucket Free 1 Bucket",
+          "net": 57584.0
+        },
+        {
+          "item": "Guinness (5 Glass)",
+          "net": 56025.0
+        },
+        {
+          "item": "Tiger Crystal x 1 Bucket",
+          "net": 54324.0
+        },
+        {
+          "item": "Heineken x 1 Bucket",
+          "net": 47748.0
+        },
+        {
+          "item": "Tiger (5 Mug)",
+          "net": 44000.0
+        },
+        {
+          "item": "Heineken Tower",
+          "net": 32368.0
+        }
+      ]
+    },
+    "all": {
+      "food": [
+        {
+          "item": "1 Bucket + Snacks Combo",
+          "net": 166144.0
+        },
+        {
+          "item": "超值吃到爽配套",
+          "net": 71162.0
+        },
+        {
+          "item": "1-Pork Skewers 豬肉串 X20",
+          "net": 63610.69
+        },
+        {
+          "item": "Truffle Fries",
+          "net": 46290.52
+        },
+        {
+          "item": "Bucket + Shot Combo",
+          "net": 45880.0
+        },
+        {
+          "item": "Two Cocktails Combo",
+          "net": 41460.0
+        },
+        {
+          "item": "Chicken Popcorn",
+          "net": 31883.96
+        },
+        {
+          "item": "1-Lamb Skewers 羊肉串 X20",
+          "net": 28927.8
+        },
+        {
+          "item": "Piggy Fries",
+          "net": 28553.8
+        },
+        {
+          "item": "1-Chicken Skewers 雞肉串 X20",
+          "net": 27075.4
+        }
+      ],
+      "drinks": [
+        {
+          "item": "Tiger x 5 Bucket Free 1 Bucket",
+          "net": 447616.0
+        },
+        {
+          "item": "Guinness Draught （ BUY 10 FREE 1 ）",
+          "net": 262980.0
+        },
+        {
+          "item": "Tiger x 1 Bucket",
+          "net": 235882.0
+        },
+        {
+          "item": "Guinness (5 Glass)",
+          "net": 171720.0
+        },
+        {
+          "item": "Tiger (5 Mug)",
+          "net": 158250.0
+        },
+        {
+          "item": "Tiger Crystal x 5 Bucket Free 1 Bucket",
+          "net": 156160.0
+        },
+        {
+          "item": "Tiger Draught ( BUY 10 FREE 1 )",
+          "net": 149250.0
+        },
+        {
+          "item": "Heineken x 1 Bucket",
+          "net": 142416.0
+        },
+        {
+          "item": "Tiger Crystal x 1 Bucket",
+          "net": 134206.95
+        },
+        {
+          "item": "Heineken x 5 Bucket Free 1 Bucket",
+          "net": 90596.0
+        }
+      ]
+    }
+  },
+  "marketing": {
+    "months": [
+      "Aug",
+      "Sep",
+      "Oct"
+    ],
+    "netSales": [
+      832053,
+      688901,
+      823412
+    ],
+    "pax": [
+      9539,
+      8006,
+      9477
+    ],
+    "igReach": [
+      863065,
+      1570742,
+      868834
+    ],
+    "igViews": [
+      2176395,
+      3092590,
+      1482075
+    ],
+    "igInteract": [
+      65997,
+      126224,
+      32280
+    ],
+    "igFollows": [
+      786,
+      1481,
+      618
+    ],
+    "dmTotal": [
+      625,
+      432,
+      480
+    ],
+    "dmIG": [
+      574,
+      401,
+      438
+    ],
+    "dmFB": [
+      51,
+      31,
+      42
+    ],
+    "viewsBy": {
+      "IG": [
+        2176395,
+        3092590,
+        1482075
+      ],
+      "FB": [
+        1081504,
+        142534,
+        347267
+      ],
+      "TikTok": [
+        128537,
+        354801,
+        133860
+      ],
+      "Douyin": [
+        94598,
+        375839,
+        99288
+      ]
+    },
+    "waLeads": {
+      "months": [
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov*"
+      ],
+      "vals": [
+        1311,
+        2299,
+        2234,
+        2245,
+        157,
+        0,
+        144,
+        530
+      ]
+    },
+    "finding": "9月社媒声量全场最高（触及157万、互动12.6万、涨粉1,481），销售却最低（净销售68.9万）。流量≠生意——缺把人带进店的转化动作。",
+    "note": "数据断层：WhatsApp/Wati lead 追踪 8–10 月基本停了，所以现在算不出「哪条内容→几条lead→几张单」。恢复每日 lead 追踪 + 订位标记来源，就能让这页变准、变自动。",
+    "recs": [
+      "每条高播放 IG Reel 加「预订召唤」：WhatsApp 链接 / DM 订位 / 限时配套。",
+      "恢复并标准化 lead 追踪 + 订位时记来源（IG / WhatsApp / 走进来）。",
+      "社媒配合落地促销提前预热——10 月证明促销才是销售引擎。",
+      "TikTok / 抖音补转化入口（主页链接、CTA），目前几乎 0 私讯。",
+      "用限定活动 / 熟客福利把庞大 IG 粉丝盘转成回头客。"
+    ]
+  },
   "contactsMasked": true
 };
 /*DATA-END*/
@@ -3646,31 +3999,97 @@ function renderTopSpenders3m(){
     `🔒 <span>Identified guests only (with a phone), across all months on file. Spend credited to the guest who reserved each table each day. Contacts shown as first name + last 4 digits.</span>`;
 }
 
-/* ---- Day / Month / 3-Month toggle ---- */
+/* ---- New tabs: Customers · Top items · Marketing (2026-11) ---- */
+const PERIOD_LABEL = {mtd:"本月 MTD", "3mo":"过去 3 个月", all:"全部历史"};
+let custPeriod = "3mo", itemsPeriod = "3mo";
+
+function renderCustomers(){
+  const list = (DATA.customers||{})[custPeriod] || [];
+  const wrap = document.getElementById("custWrap");
+  document.getElementById("custSub").textContent = PERIOD_LABEL[custPeriod] + " · 按到访次数排";
+  if(!list.length){
+    wrap.innerHTML = "<p style='color:var(--muted);padding:16px;font-weight:700'>这个时间段暂无可识别的客户数据。</p>";
+    document.getElementById("custNote").textContent = ""; return;
+  }
+  wrap.innerHTML =
+    `<table class="tbl"><thead><tr><th>#</th><th>客户 Guest</th><th class="rt">到访次数</th><th class="rt">Pax</th><th class="rt">累计消费</th><th class="rt">客单价/次</th></tr></thead><tbody>`
+    + list.map((c,i)=>`<tr>
+        <td><span class="rank ${i===0?'g1':''}">${i+1}</span></td>
+        <td class="guest"><b>${c.name||"—"}</b>${c.phone?`<div class="ph">📞 ${c.phone}</div>`:""}</td>
+        <td class="rt num">${c.visits}</td>
+        <td class="rt num">${c.pax||"—"}</td>
+        <td class="rt num">RM ${money(c.net)}</td>
+        <td class="rt num">RM ${money(c.avg)}</td></tr>`).join("")
+    + `</tbody></table>`;
+  document.getElementById("custNote").innerHTML =
+    "🔒 <span>仅统计有电话、可识别的客户；消费按当天该桌的预订人归属。联系方式显示为名 + 尾号 4 位。</span>";
+}
+
+function renderItems(){
+  const d = (DATA.topItems||{})[itemsPeriod] || {food:[],drinks:[]};
+  document.getElementById("itemsSub").textContent = PERIOD_LABEL[itemsPeriod];
+  const wrap = document.getElementById("itemsWrap");
+  wrap.style.gridTemplateColumns = "repeat(auto-fit,minmax(280px,1fr))";
+  function col(title, rows){
+    if(!rows || !rows.length) return `<div><h4 style="margin:0 0 8px;font-size:15px">${title}</h4><p style="color:var(--muted)">暂无数据</p></div>`;
+    return `<div><h4 style="margin:0 0 10px;font-size:15px">${title}</h4>`
+      + rows.map((r,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line2,rgba(0,0,0,.06))">
+          <span class="rank ${i===0?'g1':''}" style="flex:0 0 22px">${i+1}</span>
+          <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.item}</span>
+          <span class="num" style="font-weight:700;white-space:nowrap">RM ${money(r.net)}</span></div>`).join("")
+      + `</div>`;
+  }
+  wrap.innerHTML = col("🍺 Drinks Top 10", d.drinks) + col("🍜 Food Top 10", d.food);
+}
+
+function renderMarketing(){
+  const m = DATA.marketing; const el = document.getElementById("mktWrap");
+  if(!m){ el.innerHTML = ""; return; }
+  const wan = v => (v/10000).toFixed(v>=1000000?0:1) + "万";
+  const row = (label,arr,fmt) => `<tr><td>${label}</td>` + arr.map(v=>`<td class="rt num">${fmt?fmt(v):v}</td>`).join("") + `</tr>`;
+  let h = `<div style="border-left:4px solid var(--accent);background:rgba(127,127,127,.08);padding:12px 14px;border-radius:0 10px 10px 0;margin-bottom:16px"><b>核心发现：</b>${m.finding}</div>`;
+  h += `<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>指标（月）</th>` + m.months.map(x=>`<th class="rt">${x}</th>`).join("") + `</tr></thead><tbody>`
+    + row("IG 触及 Reach", m.igReach, wan)
+    + row("IG 互动 Interactions", m.igInteract, v=>(v/1000).toFixed(1)+"k")
+    + row("IG 新增粉丝", m.igFollows, v=>v.toLocaleString())
+    + row("私讯 DM 总数", m.dmTotal, v=>v.toLocaleString())
+    + row("到店 pax", m.pax, v=>v.toLocaleString())
+    + row("净销售 RM", m.netSales, v=>v.toLocaleString())
+    + `</tbody></table></div>`;
+  h += `<p class="hint-note" style="margin-top:12px">⚠ ${m.note}</p>`;
+  h += `<h4 style="margin:20px 0 8px;font-size:15px">提升销售的 5 个杠杆</h4><ol style="margin:0;padding-left:20px;line-height:1.75">`
+    + m.recs.map(r=>`<li>${r}</li>`).join("") + `</ol>`;
+  el.innerHTML = h;
+}
+
+/* ---- View toggle (Daily P&L · 客户 · Top 10 · Marketing) ---- */
 (function(){
   const tg = document.getElementById("viewToggle");
-  const hasMtd = !!(DATA.views && DATA.views.mtd);
-  const hasCmp = (DATA.comparison || []).length >= 2;
-  const hasPnl = (DATA.dailyPnl || []).length > 0;
-  const mtdBtn = tg.querySelector('[data-v="mtd"]'), cmpBtn = tg.querySelector('[data-v="cmp"]'), pnlBtn = tg.querySelector('[data-v="pnl"]');
-  if(mtdBtn && !hasMtd) mtdBtn.remove();
-  if(cmpBtn && !hasCmp) cmpBtn.remove();
-  if(pnlBtn && !hasPnl) pnlBtn.remove();
-  if(!hasMtd && !hasCmp && !hasPnl) return;       // only 'day' → no toggle needed
   tg.hidden = false;
+  const V = {pnl:"pnlView", customers:"customersView", items:"itemsView", marketing:"marketingView"};
   function setView(v){
     currentView = v;
     tg.querySelectorAll("button").forEach(x=>x.classList.toggle("on", x.dataset.v===v));
-    const dash=document.getElementById("dashView"), cmp=document.getElementById("cmpView"), pnl=document.getElementById("pnlView");
-    dash.hidden=true; cmp.hidden=true; pnl.hidden=true;
-    if(v==="cmp"){ cmp.hidden=false; renderComparison(); }
-    else if(v==="pnl"){ pnl.hidden=false; renderPnlTable(); }
-    else{ dash.hidden=false; render(); }
+    ["dashView","cmpView","pnlView","customersView","itemsView","marketingView"].forEach(id=>{
+      const e=document.getElementById(id); if(e) e.hidden=true;
+    });
+    const el=document.getElementById(V[v]||"pnlView"); if(el) el.hidden=false;
+    if(v==="pnl") renderPnlTable();
+    else if(v==="customers") renderCustomers();
+    else if(v==="items") renderItems();
+    else if(v==="marketing") renderMarketing();
   }
   tg.querySelectorAll("button").forEach(b=>b.addEventListener("click", ()=>{ if(b.dataset.v!==currentView) setView(b.dataset.v); }));
+  document.querySelectorAll(".period-toggle").forEach(pt=>{
+    pt.querySelectorAll("button").forEach(b=>b.addEventListener("click", ()=>{
+      pt.querySelectorAll("button").forEach(x=>x.classList.toggle("on", x===b));
+      const p=b.dataset.p, who=pt.dataset.for;
+      if(who==="cust"){ custPeriod=p; renderCustomers(); }
+      else if(who==="items"){ itemsPeriod=p; renderItems(); }
+    }));
+  });
+  setView("pnl");
 })();
-
-render();
 
 /* ================= Falling leaves animation ================= */
 (function(){
